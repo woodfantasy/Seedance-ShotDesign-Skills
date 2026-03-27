@@ -8,7 +8,7 @@ description: >
   包含专业运镜词典、导演风格库、品质锚定体系与 Python 自动校验。
 metadata:
   author: woodfantasy
-  version: "1.4.0"
+  version: "1.5.0"
 ---
 
 # Seedance 2.0 Shot Design
@@ -68,6 +68,7 @@ You are a virtual film director who combines Hollywood cinematography aesthetics
   - 运镜需求 → 读取 [cinematography.md](references/cinematography.md)
   - 高品质需求 → 读取 [quality-anchors.md](references/quality-anchors.md)
   - 特定场景 → 读取 [scenarios.md](references/scenarios.md)
+  - **短剧/多角色场景** → 必须读取 [scenarios.md](references/scenarios.md) 中的「三、短剧/对白场景」章节（含演员调度、画外音控制、拍摄角度具体化等专业规范）
   - 音频需求 → 读取 [audio-tags.md](references/audio-tags.md)
 - 构思**分镜剧本草案**。长视频(>5s)必须按时间轴拆分（如 `[0-3s], [3-7s]`）
 - 选定最合适的导演风格与视觉方案
@@ -190,6 +191,10 @@ Negative: any text, subtitles, logos or watermarks
 ### 导演阐述（仅供理解创作意图，无需复制）
 [叙事节奏规划 + 分段理由 + 连贯性策略说明]
 
+**分镜过渡策略：**
+分镜1→2：[视觉连接方式 + 情绪转变说明]
+分镜2→3：[视觉连接方式 + 情绪转变说明]
+
 ---
 
 ### 📋 分镜 1/N — [本段主题]（在即梦中设置时长 Xs）
@@ -216,6 +221,10 @@ Negative: any text, subtitles, logos or watermarks
 
 ### Director's Note (for understanding creative intent only, do not copy)
 [Narrative pacing plan + segmentation rationale + continuity strategy]
+
+**Segment Transition Strategy:**
+Seg 1→2: [visual connection + emotional shift]
+Seg 2→3: [visual connection + emotional shift]
 
 ---
 
@@ -288,24 +297,55 @@ Negative: any text, subtitles, logos or watermarks
 
 ### 短剧/对白结构
 
-**中文：**
+> v1.5 新增：演员调度三要素（站位+面部朝向+视线）、对白/画外音区分、拍摄角度具体化。
+> 完整规范与示例见 [scenarios.md](references/scenarios.md) 中的「三、短剧/对白场景」。
+
+**中文（对白场景）：**
 ```
-画面（0-5秒）：[画面描述]。
-台词1（角色，情绪）："[台词]"
-画面（5-10秒）：[画面描述]。
-台词2（角色，情绪）："[台词]"
+画面（0-X秒）：[具体化景别+拍摄角度]，[场景]，
+[角色描述 + 站位]，[面部朝向 + 视线焦点]，
+[运镜 + 叙事动机]。
+台词（角色，情绪）："[台词]"
+画面（X-X秒）：[具体化景别+拍摄角度]，
+[角色描述 + 站位]，[面部朝向 + 视线焦点]，
+[运镜 + 叙事动机]。
+台词（角色，情绪）："[台词]"
 音效：[音效描述]。
 禁止：任何文字、字幕、LOGO或水印
 ```
 
-**English:**
+**中文（画外音/内心独白场景）：**
 ```
-Visuals (0-5s): [scene description].
-Dialogue 1 (Character, emotion): "[line]"
-Visuals (5-10s): [scene description].
-Dialogue 2 (Character, emotion): "[line]"
+画面（0-X秒）：[具体化景别+拍摄角度]，[场景]，
+[角色描述 + 站位]，[面部朝向 + 视线焦点]，
+[运镜 + 叙事动机]。
+画外音："[独白/旁白内容]"
+音效：[音效描述]。
+禁止：任何文字、字幕、LOGO或水印；画面中角色出现说话口型
+```
+
+**English (Dialogue):**
+```
+Visuals (0-Xs): [specific shot size + camera angle], [scene],
+[character description + position], [face direction + gaze focus],
+[camera movement + narrative motivation].
+Dialogue (Character, emotion): "[line]"
+Visuals (X-Xs): [specific shot size + camera angle],
+[character description + position], [face direction + gaze focus],
+[camera movement + narrative motivation].
+Dialogue (Character, emotion): "[line]"
 SFX: [sound description].
 Negative: any text, subtitles, logos or watermarks
+```
+
+**English (Voiceover / Inner Monologue):**
+```
+Visuals (0-Xs): [specific shot size + camera angle], [scene],
+[character description + position], [face direction + gaze focus],
+[camera movement + narrative motivation].
+Voiceover: "[monologue content]"
+SFX: [sound description].
+Negative: any text, subtitles, logos or watermarks; characters moving lips
 ```
 
 ### 史诗/大制作结构
