@@ -2,7 +2,7 @@ English | [中文](README.zh-CN.md) | [日本語](README.ja.md) | [한국어](RE
 
 # 🎬 Seedance2.0 Shot Design — Cinematic Shot Language Designer
 
-[![Version](https://img.shields.io/badge/version-1.4.0-blue.svg)]()
+[![Version](https://img.shields.io/badge/version-1.5.0-blue.svg)]()
 [![License](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 
@@ -187,7 +187,7 @@ python scripts/validate_prompt.py --text "your prompt" --lang en
 python scripts/validate_prompt.py --text "your prompt" --json
 ```
 
-**Validation Checks (v1.4):**
+**Validation Checks (v1.5):**
 - ❌ Over word limit (Chinese >500 chars / English >1000 words)
 - ❌ Missing professional camera terminology
 - ❌ Filler word hard-block (masterpiece / ultra-clear, etc. → error)
@@ -235,6 +235,18 @@ Following Agent Skills best practices:
 ---
 
 ## 📋 Changelog
+
+### v1.5.0 (2026-03-27)
+- 🎭 **Actor Blocking System**: Three-element positioning (placement + face direction + gaze focus) with emotion modifier vocabulary for multi-character scenes
+- 🎙️ **Voiceover / Dialogue Split**: Distinct templates for on-screen dialogue vs. off-screen voiceover / inner monologue, with anti-lip-sync directive for VO scenes
+- 📐 **Camera Angle Specificity**: Vague → specific angle mapping (e.g., "close-up" → "over-shoulder medium close-up, focus on listener") with 5 comparison pairs
+- 🎬 **Narrative-Motivated Camera Movement**: Camera moves now paired with storytelling purpose (e.g., "slow push-in — revealing inner turmoil")
+- 🔀 **Segment Transition Strategy**: 6 transition types (gaze continuity / emotional escalation / contrast cut / spatial leap / temporal ellipsis / sensory bridge) for multi-shot coherence
+- 🎨 **Short Drama Style Quick-Selector**: 4-dimension combo system (visual type × render style × color tone × genre)
+- 📝 Short drama prompt templates expanded from 1 to 4 variants (CN dialogue / CN voiceover / EN dialogue / EN voiceover)
+- 📝 Multi-segment Director's Note template adds transition strategy declaration
+- 📝 5 complete short drama examples covering: plot-twist dialogue / voiceover monologue / action conflict / 2D anime / transition strategy
+- ✅ 54 tests pass
 
 ### v1.4.0 (2026-03-21)
 - 🎬 **Smart Multi-Segment Storyboard**: Videos >15s auto-split into multiple independent prompts (each ≤15s, min ≥8s)

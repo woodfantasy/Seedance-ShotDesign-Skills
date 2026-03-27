@@ -2,7 +2,7 @@
 
 # 🎬 Seedance2.0 Shot Design — Designer de Linguagem Cinematográfica
 
-[![Versão](https://img.shields.io/badge/version-1.4.0-blue.svg)]()
+[![Versão](https://img.shields.io/badge/version-1.5.0-blue.svg)]()
 [![Licença](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![Plataforma](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 
@@ -174,7 +174,7 @@ python scripts/validate_prompt.py --text "your prompt" --lang en
 python scripts/validate_prompt.py --text "seu prompt" --json
 ```
 
-**Verificações (v1.4):**
+**Verificações (v1.5):**
 - ❌ Excesso de palavras (Chinês >500 caracteres / Inglês >1000 palavras)
 - ❌ Terminologia profissional de câmera ausente
 - ❌ Bloqueio duro de enchimento (masterpiece / obra-prima / ultra-nítido → error)
@@ -220,6 +220,17 @@ python -m unittest scripts.test_validate -v
 ---
 
 ## 📋 Histórico de Versões
+
+### v1.5.0 (2026-03-27)
+- 🎭 **Sistema de Bloqueio de Atores**: Posicionamento de 3 elementos (posição + direção facial + foco do olhar) + vocabulário de modificadores emocionais
+- 🎙️ **Separação Narração/Diálogo**: Templates distintos para diálogos vs. narração/monólogo interior, com diretiva anti-lip-sync
+- 📐 **Especificidade do Ângulo de Câmera**: Mapeamento vago→específico com 5 pares comparativos
+- 🎬 **Movimento de Câmera com Motivação Narrativa**: Movimentos emparelhados com propósito narrativo
+- 🔀 **Estratégia de Transição entre Segmentos**: 6 tipos de transição para coerência multi-plano
+- 🎨 **Seletor Rápido de Estilo**: Combo de 4 dimensões (tipo visual × estilo de render × tom × gênero)
+- 📝 Templates de curta expandidos de 1 para 4 variantes (CN/EN × diálogo/narração)
+- 📝 5 exemplos completos de curta-metragem
+- ✅ 54 testes passam
 
 ### v1.4.0 (2026-03-21)
 - 🎬 **Storyboard Multi-Segmento Inteligente**: Vídeos >15s auto-divididos (cada ≤15s, mín ≥8s)

@@ -2,7 +2,7 @@
 
 # 🎬 Seedance2.0 Shot Design — Diseñador de Lenguaje Cinematográfico
 
-[![Versión](https://img.shields.io/badge/version-1.4.0-blue.svg)]()
+[![Versión](https://img.shields.io/badge/version-1.5.0-blue.svg)]()
 [![Licencia](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![Plataforma](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 
@@ -187,7 +187,7 @@ python scripts/validate_prompt.py --text "your prompt" --lang en
 python scripts/validate_prompt.py --text "tu prompt" --json
 ```
 
-**Comprobaciones de Validación (v1.4):**
+**Comprobaciones de Validación (v1.5):**
 - ❌ Exceso de palabras (Chino >500 caracteres / Inglés >1000 palabras)
 - ❌ Terminología profesional de cámara ausente
 - ❌ Bloqueo duro de palabras de relleno (masterpiece / obra maestra / ultra-nítido, etc. → error)
@@ -235,6 +235,18 @@ Siguiendo las mejores prácticas de Agent Skills:
 ---
 
 ## 📋 Historial de Versiones
+
+### v1.5.0 (2026-03-27)
+- 🎭 **Sistema de Bloqueo de Actores**: Posicionamiento de tres elementos (ubicación + dirección facial + foco de mirada) con vocabulario de modificadores emocionales para escenas multi-personaje
+- 🎙️ **Separación Voz en Off / Diálogos**: Plantillas distintas para diálogos en cámara vs. voz en off / monólogo interior, con directiva anti-lip-sync para escenas de VO
+- 📐 **Especificidad del Ángulo de Cámara**: Mapeo de ángulos vagos → específicos (ej: "primer plano" → "plano medio corto sobre el hombro, foco en el oyente") con 5 pares comparativos
+- 🎬 **Movimiento de Cámara con Motivación Narrativa**: Movimientos de cámara emparejados con propósito narrativo (ej: "empuje lento — revelando conflicto interno")
+- 🔀 **Estrategia de Transición entre Segmentos**: 6 tipos de transición (continuidad de mirada / escalada emocional / corte por contraste / salto espacial / elipsis temporal / puente sensorial)
+- 🎨 **Selector Rápido de Estilo para Cortometrajes**: Sistema combo de 4 dimensiones (tipo visual × estilo de render × tono de color × género)
+- 📝 Plantillas de cortometraje de 1 a 4 variantes (CN diálogo / CN voz en off / EN diálogo / EN voz en off)
+- 📝 Nota del Director multi-segmento añade declaración de estrategia de transición
+- 📝 5 ejemplos completos: diálogo con giro / monólogo voz en off / conflicto de acción / anime 2D / estrategia de transición
+- ✅ 54 tests pasan
 
 ### v1.4.0 (2026-03-21)
 - 🎬 **Storyboard Multi-Segmento Inteligente**: Vídeos de >15s se dividen automáticamente en múltiples prompts independientes (cada uno ≤15s, mínimo ≥8s)
