@@ -16,6 +16,7 @@ Un Claude Skill construido sobre la especificación [Agent Skills](https://agent
 
 | Capacidad | Descripción |
 |-----------|-------------|
+| 🎭 **Producción de Drama Cómic IA y Cortometraje IA** | Soporte completo para dramas cómicos IA (漫剧) y cortometrajes IA — diálogos / voz en off / bloqueo de actores / primeros planos con expresiones exageradas / movimiento de cámara con motivación narrativa / selector rápido de estilo / 4 variantes de plantilla (CN/EN × diálogo/voz en off), con plantillas de escenario y ejemplos completos |
 | 🎨 **28+ Presets de Directores y Estilos** | Nolan / Villeneuve / Fincher / Deakins / Kurosawa / Makoto Shinkai / Wong Kar-wai / Zhang Yimou / Xianxia / Cel-Shaded CG / Anime / Xiaohongshu… |
 | 🎬 **Diccionario Profesional de Movimientos de Cámara** | Sistema de cámara de 3 niveles + 14 distancias focales + 6 controles de enfoque + 7 montajes físicos, con referencias bilingües CN/EN |
 | 💡 **Estructura de Iluminación en Tres Capas** | Fuente de Luz → Comportamiento → Tono de Color — adiós al vago "pon una luz" |

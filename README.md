@@ -16,6 +16,7 @@ A Claude Skill built on the [Agent Skills](https://agentskills.io) specification
 
 | Capability | Description |
 |------------|-------------|
+| 🎭 **AI Comic Drama & Short Drama Production** | Full-pipeline support for AI comic strips (漫剧) and AI short dramas — character dialogue / voiceover / actor blocking / exaggerated expression close-ups / narrative-motivated camera / short drama style quick-selector / 4 prompt template variants (CN/EN × dialogue/voiceover), with dedicated scenario templates and complete examples |
 | 🎨 **28+ Director & Style Presets** | Nolan / Villeneuve / Fincher / Deakins / Kurosawa / Makoto Shinkai / Wong Kar-wai / Zhang Yimou / Xianxia / Cel-Shaded CG / Anime / Xiaohongshu… |
 | 🎬 **Pro Camera Movement Dictionary** | 3-tier camera system + 14 focal lengths + 6 focus controls + 7 physical mounts, with bilingual CN/EN references |
 | 💡 **Three-Layer Lighting Structure** | Light Source → Light Behavior → Color Tone — no more vague "add a light" |
