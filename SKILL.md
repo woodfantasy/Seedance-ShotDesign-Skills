@@ -8,7 +8,7 @@ description: >
   包含专业运镜词典、导演风格库、品质锚定体系与 Python 自动校验。
 metadata:
   author: woodfantasy
-  version: "1.5.0"
+  version: "1.6.0"
 ---
 
 # Seedance 2.0 Shot Design
@@ -57,19 +57,45 @@ You are a virtual film director who combines Hollywood cinematography aesthetics
 4. **风格偏好**（可选）：导演风格、情绪氛围、用途场景
 5. **参考素材情况**：用户是否有图片/视频/音频素材
 
+> **智能推理原则（v1.6 新增）：** 用户的一句话往往已隐含多个参数。你应 **主动从自然语言中推理**，而非逐条追问。例如用户说"15秒赛博朋克暴雨追逐"，你应直接推理出：时长=15s、风格=赛博朋克、场景=暴雨追逐，仅追问无法推断的参数（如画面比例、是否有素材）。**规则：能推理的不追问，不确定的简要确认，追问控制在 1-2 个问题内。**
+>
 > **超长视频自动分段：** 当目标时长 >15s 时，自动计算分段数（每段 ≤15s，最短段 ≥8s），并告知用户分段方案。分段计算规则见下方「智能分段」章节。
 >
 > **注意**：时长、比例、分辨率等参数由用户在即梦平台 UI 中自行设置，**最终输出的提示词中不包含这些设置项**，以避免与用户在平台中的选择产生矛盾。此步骤的目的是了解用户意图，以便提示词的分镜时间轴与目标时长匹配。
 
 ### Step 2: 视觉诊断与分镜构思 (Pre-production)
 
-- 根据用户意图，读取相关知识库：
-  - 风格需求 → 读取 [director-styles.md](references/director-styles.md)
-  - 运镜需求 → 读取 [cinematography.md](references/cinematography.md)
-  - 高品质需求 → 读取 [quality-anchors.md](references/quality-anchors.md)
-  - 特定场景 → 读取 [scenarios.md](references/scenarios.md)
-  - **短剧/多角色场景** → 必须读取 [scenarios.md](references/scenarios.md) 中的「三、短剧/对白场景」章节（含演员调度、画外音控制、拍摄角度具体化等专业规范）
-  - 音频需求 → 读取 [audio-tags.md](references/audio-tags.md)
+使用 **三层知识库路由** 加载参考资料（v1.6 新增）：
+
+**Layer 1 — Always-On（始终加载）：**
+
+无论用户说什么，以下知识库 **每次都必须读取**——它们是每条提示词的品质基底：
+- [cinematography.md](references/cinematography.md) — 运镜词典（无运镜 = 监控探头）
+- [quality-anchors.md](references/quality-anchors.md) — 品质锚定 + 光影三层（无品质锚定 = 塑料 AI 感）
+
+**Layer 2 — Semantic Intent Inference（语义推理自动加载）：**
+
+根据用户自然语言中的 **语义信号** 自动推理需要加载哪些知识库。用户不需要说出专业术语，你负责识别意图：
+
+| 语义信号（用户输入中的自然语言线索） | 自动加载 |
+|------|----------|
+| 提及风格关键词（赛博朋克/仙侠/水墨/复古/末世/二次元/某导演风格…） | [director-styles.md](references/director-styles.md) |
+| 提及动作/物理交互（追逐/奔跑/打斗/坠落/飞行/舞蹈…） | [scenarios.md](references/scenarios.md) 附录「动作物理阻尼词库」 |
+| 提及多角色/对话/剧情（对白/短剧/台词/漫剧/角色对话…） | [scenarios.md](references/scenarios.md)「三、短剧/对白场景」章节 |
+| 提及具体场景类型（电商/美食/宠物/恐怖/MV/游戏PV…） | [scenarios.md](references/scenarios.md) 对应章节 |
+| 提及高制作品质（电影感/大片/史诗/院线级…） | [quality-anchors.md](references/quality-anchors.md) 品质锚定 + 收束句 |
+| 提及特定画风/渲染（三渲二/Cel-Shaded/日漫/国漫/像素风…） | [director-styles.md](references/director-styles.md) 对应条目 |
+| 提及音频/配乐/音效需求 | [audio-tags.md](references/audio-tags.md) |
+
+> **核心原则：宁可多读不可少读。** 加载知识库的成本远低于生成低质量提示词的代价。若不确定是否需要某个知识库，加载它。
+
+**Layer 3 — Explicit Override（用户显式指定）：**
+
+当用户明确点名某导演风格、某场景模板或某知识库时，直接加载对应内容。
+
+---
+
+知识库加载完成后：
 - 构思**分镜剧本草案**。长视频(>5s)必须按时间轴拆分（如 `[0-3s], [3-7s]`）
 - 选定最合适的导演风格与视觉方案
 

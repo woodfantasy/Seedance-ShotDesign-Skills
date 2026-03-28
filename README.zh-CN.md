@@ -2,7 +2,7 @@
 
 # 🎬 Seedance2.0 Shot Design — 镜头语言设计师
 
-[![版本](https://img.shields.io/badge/version-1.5.0-blue.svg)]()
+[![版本](https://img.shields.io/badge/version-1.6.0-blue.svg)]()
 [![协议](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![平台](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 
@@ -218,7 +218,7 @@ python -m unittest scripts.test_validate -v
 遵循 Agent Skills 最佳实践：
 
 - **SKILL.md**（~4000 tokens）：核心工作流 + 结构模板 + 质量检查表
-- **references/**（按需加载）：仅在用户提及风格/运镜/品质等需求时才读取对应文件
+- **references/**（三层路由加载）：运镜词典和品质锚定始终加载（Always-On），其余知识库通过语义推理自动匹配或用户显式指定加载
 - **scripts/**（按需执行）：校验脚本仅在生成提示词后执行
 
 ### 竞品超越策略
@@ -236,6 +236,11 @@ python -m unittest scripts.test_validate -v
 ---
 
 ## 📋 版本记录
+
+### v1.6.0 (2026-03-28)
+- 🧠 **智能语义推理路由**：Step 2 知识库加载从"显式触发"升级为三层路由——Always-On 始终加载运镜词典与品质锚定、Semantic Intent Inference 从用户自然语言自动推理所需知识库、Explicit Override 保留用户显式指定
+- 🎯 **Step 1 智能推理原则**：Agent 主动从用户一句话中推理参数（时长/风格/场景），仅追问无法推断的信息，追问控制在 1-2 个问题内
+- 📝 设计理念更新：从"按需加载"升级为"三层路由加载"，确保每条提示词都有品质基底保障
 
 ### v1.5.0 (2026-03-27)
 - 🎭 **演员调度体系**：三要素定位（站位+面部朝向+视线焦点）+ 情绪修饰词库，为多角色场景提供编剧级角色调度

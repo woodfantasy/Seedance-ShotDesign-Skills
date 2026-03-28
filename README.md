@@ -2,7 +2,7 @@ English | [中文](README.zh-CN.md) | [日本語](README.ja.md) | [한국어](RE
 
 # 🎬 Seedance2.0 Shot Design — Cinematic Shot Language Designer
 
-[![Version](https://img.shields.io/badge/version-1.5.0-blue.svg)]()
+[![Version](https://img.shields.io/badge/version-1.6.0-blue.svg)]()
 [![License](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 
@@ -218,7 +218,7 @@ python -m unittest scripts.test_validate -v
 Following Agent Skills best practices:
 
 - **SKILL.md** (~4000 tokens): Core workflow + structural templates + quality checklist
-- **references/** (loaded on demand): Only read when the user mentions style / camera / quality needs
+- **references/** (three-layer routing): Camera dictionary and quality anchors are always loaded (Always-On); other knowledge bases auto-matched via semantic inference or loaded on explicit user request
 - **scripts/** (executed on demand): Validation runs only after prompt generation
 
 ### Competitive Advantages
@@ -236,6 +236,11 @@ Following Agent Skills best practices:
 ---
 
 ## 📋 Changelog
+
+### v1.6.0 (2026-03-28)
+- 🧠 **Smart Semantic Intent Routing**: Step 2 knowledge base loading upgraded from "explicit trigger" to three-layer routing — Always-On loads camera dictionary & quality anchors every time, Semantic Intent Inference auto-detects needed knowledge bases from user's natural language, Explicit Override preserves direct user specification
+- 🎯 **Step 1 Smart Inference Principle**: Agent proactively infers parameters (duration / style / scene) from a single user sentence, only asking about genuinely unknown info, limiting follow-up questions to 1-2
+- 📝 Design philosophy updated from "loaded on demand" to "three-layer routing" ensuring every prompt has a quality foundation
 
 ### v1.5.0 (2026-03-27)
 - 🎭 **Actor Blocking System**: Three-element positioning (placement + face direction + gaze focus) with emotion modifier vocabulary for multi-character scenes
