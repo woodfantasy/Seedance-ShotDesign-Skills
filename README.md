@@ -2,7 +2,7 @@ English | [中文](README.zh-CN.md) | [日本語](README.ja.md) | [한국어](RE
 
 # 🎬 Seedance2.0 Shot Design — Cinematic Shot Language Designer
 
-[![Version](https://img.shields.io/badge/version-1.6.0-blue.svg)]()
+[![Version](https://img.shields.io/badge/version-1.7.0-blue.svg)]()
 [![License](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 
@@ -236,6 +236,12 @@ Following Agent Skills best practices:
 ---
 
 ## 📋 Changelog
+
+### v1.7.0 (2026-03-28)
+- 🚨 **Step 3 Mandatory Assembly Rules**: Three-layer lighting must be on its own line with all three layers complete; SFX line must start with `SFX:`; prohibition line standardized (no custom additions); freestyle non-template sections forbidden
+- ⛔ **Step 4 Validation Blocking**: Prompts failing validation are now forbidden from being shown to users; clear 5-step validation flow
+- 📋 **Step 5 Format Enforcement**: Output must follow template exactly (Theme + Director's Note + code-block-wrapped prompt); missing any section = non-compliant
+- 🎯 **Step 2 Parameter Extraction Directive**: Knowledge bases must not just be "loaded" — specific parameters must be extracted and embedded into the prompt
 
 ### v1.6.0 (2026-03-28)
 - 🧠 **Smart Semantic Intent Routing**: Step 2 knowledge base loading upgraded from "explicit trigger" to three-layer routing — Always-On loads camera dictionary & quality anchors every time, Semantic Intent Inference auto-detects needed knowledge bases from user's natural language, Explicit Override preserves direct user specification

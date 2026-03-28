@@ -2,7 +2,7 @@
 
 # 🎬 Seedance2.0 Shot Design — 镜头语言设计师
 
-[![版本](https://img.shields.io/badge/version-1.6.0-blue.svg)]()
+[![版本](https://img.shields.io/badge/version-1.7.0-blue.svg)]()
 [![协议](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![平台](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 
@@ -236,6 +236,12 @@ python -m unittest scripts.test_validate -v
 ---
 
 ## 📋 版本记录
+
+### v1.7.0 (2026-03-28)
+- 🚨 **Step 3 强制组装规则**：光影三层结构必须独占一行且三层完整、音效行必须以`音效：`开头、禁止项标准化不得自行添加、禁止自创非模板段落
+- ⛔ **Step 4 校验阻断升级**：未通过校验的提示词禁止向用户展示，明确校验流程 5 步
+- 📋 **Step 5 格式硬约束**：必须按模板输出（主题 + 导演阐述 + 代码块包裹提示词），缺少任何区块视为不合格
+- 🎯 **Step 2 参数提取指令**：知识库不只是"加载"，必须从中提取具体参数嵌入提示词
 
 ### v1.6.0 (2026-03-28)
 - 🧠 **智能语义推理路由**：Step 2 知识库加载从"显式触发"升级为三层路由——Always-On 始终加载运镜词典与品质锚定、Semantic Intent Inference 从用户自然语言自动推理所需知识库、Explicit Override 保留用户显式指定
