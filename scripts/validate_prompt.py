@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 """
-Seedance 2.0 提示词工业级校验脚本
-用于在 Agent 生成提示词后进行自动化质量审查。
+Seedance 2.0 提示词工业级校验模块
+供 Agent 在生成提示词后进行自动化质量审查。
 
-用法:
-    python scripts/validate_prompt.py --text "你的提示词内容"
-    python scripts/validate_prompt.py --file prompt.txt
+用法（函数调用）:
+    from validate_prompt import validate_prompt
+    result = validate_prompt("你的提示词内容")
+    # result["passed"] == True 表示校验通过
 """
 
-import argparse
 import re
-import sys
 import json
 
 
@@ -631,39 +630,3 @@ def format_report(validation):
 
     return "\n".join(lines)
 
-
-def main():
-    parser = argparse.ArgumentParser(
-        description="Seedance 2.0 提示词校验工具"
-    )
-    group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("--text", type=str, help="提示词文本内容")
-    group.add_argument("--file", type=str, help="包含提示词的文件路径")
-
-    parser.add_argument("--lang", type=str, choices=["cn", "en", "auto"],
-                        default="auto",
-                        help="提示词语言 (auto=自动检测, cn=中文, en=英文)")
-    parser.add_argument("--json", action="store_true",
-                        help="以 JSON 格式输出结果")
-
-    args = parser.parse_args()
-
-    if args.file:
-        with open(args.file, 'r', encoding='utf-8') as f:
-            text = f.read()
-    else:
-        text = args.text
-
-    lang = None if args.lang == "auto" else args.lang
-    validation = validate_prompt(text, lang=lang)
-
-    if args.json:
-        print(json.dumps(validation, ensure_ascii=False, indent=2))
-    else:
-        print(format_report(validation))
-
-    raise SystemExit(0 if validation["passed"] else 1)
-
-
-if __name__ == "__main__":
-    main()

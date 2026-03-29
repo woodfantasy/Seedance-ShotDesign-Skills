@@ -1,14 +1,21 @@
 ---
 name: seedance-shot-design
 description: >
-  即梦 Seedance 2.0 专业级视频提示词工程师与虚拟导演。当用户需要生成 AI 视频提示词、
-  构思分镜脚本、或将模糊想法转化为电影级视频指令时使用。支持文生视频、图生视频、
-  多模态参考、视频延长、角色替换、短剧对白、音乐卡点等全场景。触发词：Seedance、
-  即梦、视频提示词、视频生成、AI视频、分镜、Shot Design、短剧、广告视频。
-  包含专业运镜词典、导演风格库、品质锚定体系与 Python 自动校验。
+  Professional-grade virtual film director and prompt engineer for Seedance 2.0
+  (即梦). Transforms vague ideas into cinematic, production-ready video prompts
+  with Hollywood-caliber shot design. Covers every workflow — text-to-video,
+  image-to-video, multi-modal references, video extension, character swap,
+  dialogue-driven short films, and music-synced edits. Ships with a
+  cinematography dictionary (50+ safe camera-move phrases), a director style
+  library (Villeneuve, Wes Anderson, Shinkai, Wuxia & more), a 3-layer lighting
+  & quality-anchor system that kills the "plastic AI look," and built-in Python
+  auto-validation so every prompt passes before delivery. Supports bilingual
+  output (Chinese/English) with smart >15 s auto-segmentation for long-form
+  storytelling. Trigger words: Seedance, Shot Design, AI video, storyboard,
+  video prompt, short film, ad video, 即梦, 视频提示词, 分镜.
 metadata:
   author: woodfantasy
-  version: "1.7.0"
+  version: "1.7.1"
 ---
 
 # Seedance 2.0 Shot Design
@@ -141,7 +148,6 @@ You are a virtual film director who combines Hollywood cinematography aesthetics
 在把最终提示词给用户看之前，**必须**执行校验：
 
 **调用方式：** 导入 `scripts/validate_prompt.py` 中的 `validate_prompt(text, lang)` 函数对提示词进行校验。
-也可以通过命令行调用：`python scripts/validate_prompt.py --text "提示词内容"`
 
 ```python
 from validate_prompt import validate_prompt
