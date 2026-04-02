@@ -2,7 +2,7 @@
 
 # 🎬 Seedance2.0 Shot Design — 镜头语言设计师
 
-[![版本](https://img.shields.io/badge/version-1.7.0-blue.svg)]()
+[![版本](https://img.shields.io/badge/version-1.7.2-blue.svg)]()
 [![协议](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![平台](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 
@@ -236,6 +236,12 @@ python -m unittest scripts.test_validate -v
 ---
 
 ## 📋 版本记录
+
+### v1.7.2 (2026-04-02)
+- 🎯 **触发词大幅扩展**：显著提升 Skill 自动激活覆盖率——新增 20+ 中文口语化触发词（帮我写个视频、拍一个、做分镜、短视频、AI视频、抖音视频、vlog、运镜……）和 10+ 英文日常触发词（generate a video、make a clip、shoot a scene、video script、drone shot、camera movement……），使 Skill 在用户日常口语表达下也能自动激活，不再局限于专业术语
+
+### v1.7.1 (2026-03-29)
+- 🔒 **安全合规优化**：解决 ClawHub 安全审核中 shell 执行、进程控制、文件访问模式的标记问题，在保持完整功能的同时满足安全合规要求
 
 ### v1.7.0 (2026-03-28)
 - 🚨 **Step 3 强制组装规则**：光影三层结构必须独占一行且三层完整、音效行必须以`音效：`开头、禁止项标准化不得自行添加、禁止自创非模板段落

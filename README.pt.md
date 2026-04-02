@@ -2,7 +2,7 @@
 
 # 🎬 Seedance2.0 Shot Design — Designer de Linguagem Cinematográfica
 
-[![Versão](https://img.shields.io/badge/version-1.5.0-blue.svg)]()
+[![Versão](https://img.shields.io/badge/version-1.7.2-blue.svg)]()
 [![Licença](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![Plataforma](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 

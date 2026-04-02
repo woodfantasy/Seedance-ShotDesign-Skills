@@ -2,7 +2,7 @@ English | [中文](README.zh-CN.md) | [日本語](README.ja.md) | [한국어](RE
 
 # 🎬 Seedance2.0 Shot Design — Cinematic Shot Language Designer
 
-[![Version](https://img.shields.io/badge/version-1.7.0-blue.svg)]()
+[![Version](https://img.shields.io/badge/version-1.7.2-blue.svg)]()
 [![License](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 
@@ -236,6 +236,12 @@ Following Agent Skills best practices:
 ---
 
 ## 📋 Changelog
+
+### v1.7.2 (2026-04-02)
+- 🎯 **Trigger Word Expansion**: Massively expanded Skill activation coverage — added 20+ colloquial Chinese triggers (帮我写个视频, 拍一个, 做分镜, 短视频, AI视频, 抖音视频, vlog, 运镜...) and 10+ English triggers (generate a video, make a clip, shoot a scene, video script, drone shot, camera movement...) so the Skill auto-activates on natural, everyday user expressions — not just professional terminology
+
+### v1.7.1 (2026-03-29)
+- 🔒 **Security Compliance Optimization**: Resolved ClawHub security flagging issues for shell execution, process control, and file access patterns while maintaining full functionality
 
 ### v1.7.0 (2026-03-28)
 - 🚨 **Step 3 Mandatory Assembly Rules**: Three-layer lighting must be on its own line with all three layers complete; SFX line must start with `SFX:`; prohibition line standardized (no custom additions); freestyle non-template sections forbidden

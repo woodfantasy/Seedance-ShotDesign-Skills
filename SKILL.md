@@ -12,10 +12,15 @@ description: >
   auto-validation so every prompt passes before delivery. Supports bilingual
   output (Chinese/English) with smart >15 s auto-segmentation for long-form
   storytelling. Trigger words: Seedance, Shot Design, AI video, storyboard,
-  video prompt, short film, ad video, 即梦, 视频提示词, 分镜.
+  video prompt, short film, ad video, film prompt, cinematic prompt, generate
+  a video, make a clip, shoot a scene, video script, vlog script, create
+  video prompt, music video, product video, drone shot, camera movement,
+  即梦, 视频提示词, 分镜, 帮我写个视频, 帮我拍, 做个视频脚本, 写一段视频,
+  生成视频, 视频文案, 短视频, 拍一个, 做分镜, 视频脚本, AI视频, 抖音视频,
+  短片脚本, 广告视频, 宣传片, 产品视频, vlog, 运镜, 镜头设计.
 metadata:
   author: woodfantasy
-  version: "1.7.1"
+  version: "1.7.2"
 ---
 
 # Seedance 2.0 Shot Design
