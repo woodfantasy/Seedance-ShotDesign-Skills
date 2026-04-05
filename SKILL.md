@@ -20,7 +20,7 @@ description: >
   短片脚本, 广告视频, 宣传片, 产品视频, vlog, 运镜, 镜头设计.
 metadata:
   author: woodfantasy
-  version: "1.7.2"
+  version: "1.8.0"
 ---
 
 # Seedance 2.0 Shot Design
@@ -97,7 +97,10 @@ You are a virtual film director who combines Hollywood cinematography aesthetics
 | 提及具体场景类型（电商/美食/宠物/恐怖/MV/游戏PV…） | [scenarios.md](references/scenarios.md) 对应章节 |
 | 提及高制作品质（电影感/大片/史诗/院线级…） | [quality-anchors.md](references/quality-anchors.md) 品质锚定 + 收束句 |
 | 提及特定画风/渲染（三渲二/Cel-Shaded/日漫/国漫/像素风…） | [director-styles.md](references/director-styles.md) 对应条目 |
-| 提及音频/配乐/音效需求 | [audio-tags.md](references/audio-tags.md) |
+| 提及音频/配乐/音效/音色/方言/多语言 | [audio-tags.md](references/audio-tags.md)（含音色与语言控制） |
+| 提及视频参考/运镜复刻/动作模仿/特效参考 | [scenarios.md](references/scenarios.md) 对应章节 + 本文件「多模态参考指南」 |
+| 提及延长/续拍/补拍/接续 | [scenarios.md](references/scenarios.md)「十八、视频延长」 |
+| 提及剧情补全/漫画演绎/分镜图转视频/情绪发散 | [scenarios.md](references/scenarios.md)「十九、剧情补全与分镜图转视频」 |
 
 > **核心原则：宁可多读不可少读。** 加载知识库的成本远低于生成低质量提示词的代价。若不确定是否需要某个知识库，加载它。
 
@@ -470,21 +473,60 @@ Seedance 单次生成上限 **4-15秒**。当用户目标时长超过 15秒时�
 
 ---
 
-## 多模态组合技巧
+## 多模态参考指南（v1.8 升级）
+
+> 用户上传参考素材时，必须在提示词中用 @引用 明确声明每个素材的用途。以下为 6 种核心参考模式，可自由组合。
+
+### 6 种核心参考模式
+
+| 模式 | 写法（中文） | 写法（English） |
+|------|------------|----------------|
+| **首帧锚定** | `@图片1为首帧` | `@Image1 as first frame` |
+| **运镜复刻** | `完全参考@视频1的所有运镜效果` | `Fully reference all camera movements from @Video1` |
+| **动作复刻** | `参考@视频1的人物动作` | `Reference character actions from @Video1` |
+| **运镜+动作分离** | `参考@视频1的动作，参考@视频2的运镜` | `Reference actions from @Video1, camera from @Video2` |
+| **音色/语气参考** | `语气和音色参考@视频1` | `Voice tone and timbre reference @Video1` |
+| **特效复刻** | `完全参考@视频1的特效` | `Fully reference visual effects from @Video1` |
+
+### 多素材角色控制
+
+多图指定角色时，必须明确每张图的用途，不要让模型猜测：
+
+**中文：**
+```
+参考@图片1的角色五官，@图片2的服装，@图片3的场景
+```
+**English:**
+```
+Reference facial features from @Image1, costume from @Image2, scene from @Image3
+```
+
+### 一致性保持
+
+多场景/多角度素材中保持角色外貌一致：
+- 中文：`保持角色外貌与@图片1完全一致`
+- English: `Maintain character appearance exactly consistent with @Image1`
+- 上传同一角色的多角度图片可显著提升一致性
+
+### 常用组合模式
 
 **中文：**
 - **首帧+参考视频** → `@图片1为首帧，参考@视频1的动作/运镜`
 - **角色替换** → `将@视频1中的[A]换成@图片1 + 保持动作时序`
 - **一镜到底** → `一镜到底 + @图片1@图片2... + 全程不切镜头`
 - **音乐卡点** → `@音频1 + 参考@视频1的画面节奏/卡点`
+- **视频延长** → `将@视频1延长[X]秒 + [续接内容描述]`
+- **特效复刻** → `完全参考@视频1的特效和转场`
 
 **English:**
-- **First frame + reference video** → `@Image1 as first frame, reference @Video1 for motion/camera`
+- **First frame + ref video** → `@Image1 as first frame, reference @Video1 for motion/camera`
 - **Character swap** → `Replace [A] in @Video1 with @Image1 + keep action timing`
 - **One-take** → `One continuous shot + @Image1@Image2... + no cuts throughout`
 - **Music sync** → `@Audio1 + reference @Video1 for visual rhythm/beat sync`
+- **Video extension** → `Extend @Video1 by [X]s + [continuation description]`
+- **Effect replication** → `Fully reference effects and transitions from @Video1`
 
-素材优先级：优先上传对画面或节奏影响最大的素材。
+素材优先级：优先上传对画面或节奏影响最大的素材。参考视频是最精准的"提示词"——有参考视频时，优先使用视频参考而非纯文字描述。
 
 ---
 

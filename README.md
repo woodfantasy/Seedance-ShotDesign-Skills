@@ -2,7 +2,7 @@ English | [中文](README.zh-CN.md) | [日本語](README.ja.md) | [한국어](RE
 
 # 🎬 Seedance2.0 Shot Design — Cinematic Shot Language Designer
 
-[![Version](https://img.shields.io/badge/version-1.7.2-blue.svg)]()
+[![Version](https://img.shields.io/badge/version-1.8.0-blue.svg)]()
 [![License](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 
@@ -23,8 +23,10 @@ A Claude Skill built on the [Agent Skills](https://agentskills.io) specification
 | 📐 **Timestamped Storyboarding** | `0-3s / 3-8s / …` precise timeline control to prevent visual bleeding between shots |
 | 🎯 **Six-Element Precision Assembly** | Subject / Action / Scene / Lighting / Camera / Sound — a structured, high-conversion formula |
 | 🎬 **Smart Multi-Segment Storyboard** | Videos >15s are automatically split into independent prompt segments with unified style, lighting, sound, and seamless transition frames |
-| 📦 **17 Scenario Templates** | E-commerce / Xianxia / Short Drama / Food / MV / One-Take / Automotive / Macro / Nature / Game PV / Horror / Travel / Pets / Transformation / Loop / Video Editing |
+| 📦 **19 Scenario Templates** | E-commerce / Xianxia / Short Drama / Food / MV / One-Take / Automotive / Macro / Nature / Game PV / Horror / Travel / Pets / Transformation / Loop / Video Editing / Video Extension / Story Completion |
 | 🎵 **Sound & ASMR Vocabulary** | Physics-based onomatopoeia library covering ambient / action / vocal / music sounds |
+| 🎤 **Voice & Language Control** | Timbre cloning via video reference, dialect/accent control (Sichuan/Cantonese/Northeast/Taiwanese etc.), multilingual dialogue mixing, special voice styles (documentary/stand-up/opera/ASMR) |
+| 📹 **Multimodal Reference Guide** | 6 core reference patterns (first frame / camera replication / action replication / camera+action separation / timbre reference / effect replication), multi-asset character control, consistency preservation |
 | 🌐 **Bilingual Prompt Output** | Chinese users → Chinese prompts, non-Chinese users → English prompts, auto-detected |
 | 🛡️ **Copyright-Safe IP Fallback** | Three-tier progressive IP fallback strategy to prevent platform content blocks |
 | 🔍 **Python Hard Validation** | Word count / camera moves / temporal logic / filler detection / optical physics conflicts / style conflict matrix — more reliable than "suggestions" |
@@ -236,6 +238,14 @@ Following Agent Skills best practices:
 ---
 
 ## 📋 Changelog
+
+### v1.8.0 (2026-04-05)
+- 🎤 **Voice & Language Control System**: New timbre cloning via video reference (`语气和音色参考@视频1`), dialect/accent control (Sichuan/Cantonese/Northeast/Taiwanese etc.), multilingual dialogue mixing, special voice styles (documentary narration / stand-up comedy / opera / ASMR)
+- 📹 **Multimodal Reference Guide**: Upgraded from 4 brief tips to a structured guide with 6 core reference patterns (first frame / camera replication / action replication / camera+action separation / timbre reference / effect replication), plus multi-asset character control and consistency preservation guidance
+- 📏 **Video Extension Scenario**: New forward/backward extension templates, seamless continuation techniques, duration cognition correction (generation duration = added seconds, not total)
+- 📋 **Story Completion Scenario**: New storyboard-to-video, comic panel animation, and image-to-emotion-video creative modes
+- 🎬 **Creative Effects Quick Reference**: New VFX trigger keywords — Hitchcock zoom, fisheye lens, particle effects, speed ramp, freeze transition, ink wash style, morphing effects (bilingual)
+- 🎭 **Emotion Performance Guidance**: New emotion specificity table, emotion transition trigger words, emotion reference video usage in short drama chapter
 
 ### v1.7.2 (2026-04-02)
 - 🎯 **Trigger Word Expansion**: Massively expanded Skill activation coverage — added 20+ colloquial Chinese triggers (帮我写个视频, 拍一个, 做分镜, 短视频, AI视频, 抖音视频, vlog, 运镜...) and 10+ English triggers (generate a video, make a clip, shoot a scene, video script, drone shot, camera movement...) so the Skill auto-activates on natural, everyday user expressions — not just professional terminology

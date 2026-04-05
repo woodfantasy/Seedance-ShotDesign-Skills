@@ -223,3 +223,32 @@ Steadicam follow behind character walking through dimly lit hotel corridor, subt
 # Crash Cam 碾压视角
 Crash cam ground level, motorcycle tire spinning inches from lens, gravel spraying, extreme low angle
 ```
+
+## 八、创意特效运镜速查（v1.8 新增）
+
+> 以下为 Seedance 2.0 可通过关键词触发的特殊视觉效果，可与常规运镜自由组合使用。
+
+| 效果 | 中文触发词 | English Trigger | 适用场景 |
+|------|-----------|----------------|---------|
+| 希区柯克变焦 | `希区柯克变焦` / `滑动变焦` | `Hitchcock zoom` / `dolly zoom` | 惊恐/顿悟/空间扭曲 |
+| 鱼眼镜头 | `鱼眼镜头透过[形状]窥视` | `Fisheye lens peering through [shape]` | 偷窥/夸张/喜剧 |
+| 粒子特效 | `金色沙砾飘散` / `粒子吹散效果` | `Golden sand particles scattering` / `Particle dispersion effect` | 魔法/转场/片头 |
+| 速度渐变 | `过山车般速度逐渐加快` | `Speed accelerates like roller coaster` | 追逐/紧迫/高潮 |
+| 定格转场 | `画面定格后碎裂转场` | `Frame freezes then shatters into transition` | 闪回/转场/MV |
+| 水墨化 | `黑白水墨风格` | `Black-and-white ink wash style` | 东方美学/功夫/禅意 |
+| 变身/变装 | `裂纹蔓延后粒子消散变形` | `Cracks spreading then particles dissolve and morph` | 变身/超能力/Before-After |
+| 遮罩文字 | `主体背后通过遮罩出现文字` | `Text appears behind subject through masking` | 广告/片头/品牌 |
+
+**组合范例：**
+
+```
+# 希区柯克变焦 + 情绪
+主角在惊恐时希区柯克变焦，背景急速远离，面部保持在画面中央
+
+# 粒子特效 + 片头
+以黑幕开场，金色鎏金材质的沙砾从画面左边飘出并向右覆盖，粒子吹散效果，@图片1的字体逐渐出现在画面中心
+
+# 水墨风格 + 动作
+黑白水墨风格，人物参考@视频1的特效和动作，上演一段水墨太极功夫
+```
+
