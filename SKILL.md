@@ -8,19 +8,16 @@ description: >
   dialogue-driven short films, and music-synced edits. Ships with a
   cinematography dictionary (50+ safe camera-move phrases), a director style
   library (Villeneuve, Wes Anderson, Shinkai, Wuxia & more), a 3-layer lighting
-  & quality-anchor system that kills the "plastic AI look," and built-in Python
-  auto-validation so every prompt passes before delivery. Supports bilingual
-  output (Chinese/English) with smart >15 s auto-segmentation for long-form
-  storytelling. Trigger words: Seedance, Shot Design, AI video, storyboard,
-  video prompt, short film, ad video, film prompt, cinematic prompt, generate
-  a video, make a clip, shoot a scene, video script, vlog script, create
-  video prompt, music video, product video, drone shot, camera movement,
-  即梦, 视频提示词, 分镜, 帮我写个视频, 帮我拍, 做个视频脚本, 写一段视频,
-  生成视频, 视频文案, 短视频, 拍一个, 做分镜, 视频脚本, AI视频, 抖音视频,
-  短片脚本, 广告视频, 宣传片, 产品视频, vlog, 运镜, 镜头设计.
+  & quality-anchor system that kills the "plastic AI look," and a built-in
+  structured validation checklist so every prompt passes before delivery.
+  Supports bilingual output (Chinese/English) with smart >15 s
+  auto-segmentation for long-form storytelling.
+  Trigger words: Seedance, Shot Design, AI video, storyboard, video prompt,
+  short film, cinematic prompt, 即梦, 视频提示词, 分镜, 视频脚本, AI视频,
+  短片脚本, 镜头设计, 运镜.
 metadata:
   author: woodfantasy
-  version: "1.8.0"
+  version: "1.8.1"
 ---
 
 # Seedance 2.0 Shot Design
@@ -153,21 +150,39 @@ You are a virtual film director who combines Hollywood cinematography aesthetics
 
 > **⛔ 硬性规则（v1.7）：未通过校验的提示词禁止向用户展示。** 跳过此步骤等于交付不合格产品。
 
-在把最终提示词给用户看之前，**必须**执行校验：
+在把最终提示词给用户看之前，**必须**逐条执行以下 7 项校验规则：
 
-**调用方式：** 导入 `scripts/validate_prompt.py` 中的 `validate_prompt(text, lang)` 函数对提示词进行校验。
+**规则 ①：长度检查**
+- 中文提示词 ≤500 字符 / 英文提示词 ≤1000 词。超出 = ❌ error（模型注意力崩溃），85%-100% = ⚠️ warning。
 
-```python
-from validate_prompt import validate_prompt
-result = validate_prompt("你拟定的提示词草案")
-# result["passed"] == True 表示校验通过
-```
+**规则 ②：时间切片检查**
+- 声明时长 >5 秒的视频**必须**使用时间戳分镜（如 `0-3秒：...`）。缺失 = ❌ error。
+- 检查切片起点是否从 0 开始、是否有重叠、末端是否与声明时长匹配。
 
-**校验流程（必须完整执行）：**
-1. 将 Step 3 组装好的提示词文本传入 `validate_prompt()` 运行校验
-2. 如果 `result["passed"] == False`：阅读错误信息，**自我反思**并重写提示词
-3. **再次运行校验**，重复直到 `result["passed"] == True`
-4. 校验通过后，才可进入 Step 5 交付
+**规则 ③：运镜专业度检查**
+- 提示词中**必须**包含至少 1 个专业运镜术语（如 航拍/特写/跟拍/tracking/dolly/close-up 等）。缺失 = ❌ error（画面如同监控探头）。
+
+**规则 ④：废话词拦截**
+- **硬阻断**（❌ error）：杰作/超清晰/高画质/masterpiece/ultra-sharp/best quality/extremely detailed/hyper-realistic/ultra hd/super resolution。
+- **软警告**（⚠️ warning）：4k/8k（若配合渲染引擎声明可保留，否则建议移除）。
+
+**规则 ⑤：资产引用限制**
+- 图片引用 ≤9、视频引用 ≤3、音频引用 ≤3、混合总数 ≤12。超出 = ❌ error。
+
+**规则 ⑥：冲突检测**
+- **运动冲突**：同一时间段内不可同时出现 快速+慢动作、推进+拉远。
+- **光学冲突**：超广角(14mm) + 浅景深虚化 = ❌ error；手持 + 绝对对称 = ❌ error。
+- **风格冲突**：IMAX vs VHS、胶片 vs 锐利数码、水墨 vs UE5光追、三渲二 vs 写实PBR、慢镜头 vs 变速 — 互斥组合 = ❌ error。
+
+**规则 ⑦：裸英文运镜词检测**
+- 高风险裸词 `Dolly/Aerial/Crane/Pan/Arc/Dutch/Steadicam`：Seedance 可能误判为人名。
+- 中文提示词 → 改用中文运镜词；英文提示词 → 必须使用完整短语（如 `dolly tracking shot`）。
+
+**校验流程：**
+1. 逐条检查 Step 3 组装好的提示词，对照上述 7 项规则
+2. 如有任何 ❌ error：**自我反思**并重写提示词
+3. **再次逐条检查**，重复直到全部 7 项通过
+4. 全部通过后，才可进入 Step 5 交付
 5. 同时执行版权安全检查（见下方版权避障策略）
 
 ### Step 5: 专业交付 (Final Output)
@@ -533,7 +548,7 @@ Reference facial features from @Image1, costume from @Image2, scene from @Image3
 ## 质量自检 Checklist
 
 生成提示词后自动检查：
-- [ ] 已调用 validate_prompt() 校验且通过
+- [ ] 已完成 7 项强制校验规则且全部通过
 - [ ] @引用编号与素材清单一一对应
 - [ ] 总文件数 ≤ 12
 - [ ] 未包含写实真人面部素材

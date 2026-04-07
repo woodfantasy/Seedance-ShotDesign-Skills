@@ -2,7 +2,7 @@ English | [中文](README.zh-CN.md) | [日本語](README.ja.md) | [한국어](RE
 
 # 🎬 Seedance2.0 Shot Design — Cinematic Shot Language Designer
 
-[![Version](https://img.shields.io/badge/version-1.8.0-blue.svg)]()
+[![Version](https://img.shields.io/badge/version-1.8.1-blue.svg)]()
 [![License](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 
@@ -29,7 +29,7 @@ A Claude Skill built on the [Agent Skills](https://agentskills.io) specification
 | 📹 **Multimodal Reference Guide** | 6 core reference patterns (first frame / camera replication / action replication / camera+action separation / timbre reference / effect replication), multi-asset character control, consistency preservation |
 | 🌐 **Bilingual Prompt Output** | Chinese users → Chinese prompts, non-Chinese users → English prompts, auto-detected |
 | 🛡️ **Copyright-Safe IP Fallback** | Three-tier progressive IP fallback strategy to prevent platform content blocks |
-| 🔍 **Python Hard Validation** | Word count / camera moves / temporal logic / filler detection / optical physics conflicts / style conflict matrix — more reliable than "suggestions" |
+| 🔍 **Structured Hard Validation** | Word count / camera moves / temporal logic / filler detection / optical physics conflicts / style conflict matrix — 7-rule checklist applied before every delivery |
 
 ---
 
@@ -98,7 +98,7 @@ The Skill auto-activates and generates the prompt through a 5-step workflow:
 1. **Requirement Analysis** — Confirm duration / aspect ratio / assets / style
 2. **Visual Diagnosis** — Select camera language & director style
 3. **Six-Element Assembly** — Compose the prompt using the structured formula
-4. **Mandatory Validation** — Run the Python script for quality review
+4. **Mandatory Validation** — Apply 7-rule structured validation checklist
 5. **Professional Delivery** — Director's statement + complete prompt
 
 ### 3. Examples
@@ -172,9 +172,9 @@ seedance-shot-design/
 
 ---
 
-## 🔬 Validation Script
+## 🔬 Validation Script (Standalone Developer Tool)
 
-A standalone Python validation tool, usable from the command line:
+A standalone Python validation tool for developers and CI/CD pipelines. The AI agent applies these same rules natively via its built-in 7-rule validation checklist — no Python execution required during prompt generation.
 
 ```bash
 # Validate text directly
@@ -238,6 +238,10 @@ Following Agent Skills best practices:
 ---
 
 ## 📋 Changelog
+
+### v1.8.1 (2026-04-07)
+- 🛡️ **Security Compliance**: Resolved ClawHub OpenClaw "Suspicious patterns" flag by converting Python-based validation to LLM-native structured 7-rule validation checklist. Python scripts remain as standalone developer tools but are no longer executed by the agent
+- 🎯 **Trigger Phrase Optimization**: Reduced activation trigger phrases from 40+ to 15 high-signal professional terms, lowering unintended activation surface while preserving core discoverability
 
 ### v1.8.0 (2026-04-05)
 - 🎤 **Voice & Language Control System**: New timbre cloning via video reference (`语气和音色参考@视频1`), dialect/accent control (Sichuan/Cantonese/Northeast/Taiwanese etc.), multilingual dialogue mixing, special voice styles (documentary narration / stand-up comedy / opera / ASMR)
