@@ -252,3 +252,39 @@ Crash cam ground level, motorcycle tire spinning inches from lens, gravel sprayi
 黑白水墨风格，人物参考@视频1的特效和动作，上演一段水墨太极功夫
 ```
 
+## 九、运动强度修饰词速查（v1.8.2 新增）
+
+> 动作描写中使用明确的强度修饰词，可以显著改善 Seedance 的运动生成质量，避免"糊动"（motion mush）——即动作幅度不够或方向不明确。
+
+### 强度等级对照表
+
+| 等级 | 中文修饰词 | English Modifiers | 适用场景 |
+|------|-----------|------------------|---------|
+| ⚡ 极强 | 猛烈、暴烈、爆裂、猛冲 | violent, explosive, slamming, bursting | 爆炸/撞击/格斗 |
+| 🔥 强烈 | 剧烈、迅猛、急速、用力 | dramatic, vigorous, rapid, forceful | 追逐/运动/情绪高潮 |
+| ⚡ 突然 | 突然、骤然、猛然、戛然 | sudden, abrupt, snapping, jolting | 惊吓/转变/闪回 |
+| 🌊 中等 | 稳步、从容、自然、轻快 | steady, confident, natural, brisk | 叙事推进/日常动作 |
+| 🍃 轻柔 | 缓缓、温柔、轻柔、丝滑 | gentle, soft, smooth, delicate | 浪漫/舒缓/ASMR |
+| 🪨 渐进 | 渐渐、逐步、缓慢、不知不觉 | gradual, slowly, imperceptibly, easing | 日出/情绪渐变/暗场 |
+
+### 用法要点
+
+- **每个动作都应携带强度修饰词**——`人物猛然转身` 而非 `人物转身`；`Camera gently drifts upward` 而非 `Camera moves up`
+- **强度修饰词应与运镜节奏一致**——剧烈动作配快速运镜，轻柔动作配缓慢运镜
+- **避免矛盾组合**——`缓慢爆裂` / `gentle slamming` 这类自相矛盾的描述会让模型困惑
+
+### 对比示例
+
+```
+# ❌ 模糊（容易糊动）
+人物走过去。镜头跟随。
+
+# ✅ 明确（运动清晰）
+人物猛然起身大步流星冲向出口。手持跟拍急速追踪。
+
+# ❌ Vague (mushy motion)
+The person moves forward. Camera follows.
+
+# ✅ Clear (crisp motion)
+The person surges forward in explosive strides toward the exit. Handheld tracking shot rushes to keep pace.
+```

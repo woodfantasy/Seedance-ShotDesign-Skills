@@ -2,7 +2,7 @@
 
 # 🎬 Seedance2.0 Shot Design — 시네마틱 샷 언어 디자이너
 
-[![버전](https://img.shields.io/badge/version-1.8.1-blue.svg)]()
+[![버전](https://img.shields.io/badge/version-1.8.2-blue.svg)]()
 [![라이선스](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![플랫폼](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 

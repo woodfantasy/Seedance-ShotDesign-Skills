@@ -2,7 +2,7 @@ English | [中文](README.zh-CN.md) | [日本語](README.ja.md) | [한국어](RE
 
 # 🎬 Seedance2.0 Shot Design — Cinematic Shot Language Designer
 
-[![Version](https://img.shields.io/badge/version-1.8.1-blue.svg)]()
+[![Version](https://img.shields.io/badge/version-1.8.2-blue.svg)]()
 [![License](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 
@@ -238,6 +238,14 @@ Following Agent Skills best practices:
 ---
 
 ## 📋 Changelog
+
+### v1.8.2 (2026-04-07)
+- 🎥 **One-Shot-One-Move Rule**: New core rule (#10) enforcing a single camera movement per time segment — combining movements (e.g., push-in + pan) causes jitter. Subject motion and camera motion must be described separately
+- 🖼️ **I2V Golden Rule**: New core rule (#11) and dedicated I2V section — when generating video from an image, only describe motion/changes, never re-describe static content already in the first frame. Introduces `preserve composition and colors` anchor phrase
+- 📏 **Optimal Prompt Length**: Added 60–100 word sweet spot guidance — below is vague, above causes concept drift and conflicting instructions
+- 💪 **Motion Intensity Modifiers**: New bilingual quick-reference table in cinematography dictionary with 6 intensity tiers (violent → gentle → gradual) and do/don't examples to eliminate "mushy motion"
+- 🎤 **Rhythm Over Specs**: Assembly rules now explicitly prefer semantic rhythm words (gentle/gradual/smooth) over technical parameters (24fps/f2.8) that Seedance cannot parse
+- 🎬 **Reference Video Best Practices**: New practical constraints for reference clips — ideal 3–8s length, continuous shot (no cuts), single intent (subject OR camera, not both)
 
 ### v1.8.1 (2026-04-07)
 - 🛡️ **Security Compliance**: Resolved ClawHub OpenClaw "Suspicious patterns" flag by converting Python-based validation to LLM-native structured 7-rule validation checklist. Python scripts remain as standalone developer tools but are no longer executed by the agent

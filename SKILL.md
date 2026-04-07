@@ -17,7 +17,7 @@ description: >
   短片脚本, 镜头设计, 运镜.
 metadata:
   author: woodfantasy
-  version: "1.8.1"
+  version: "1.8.2"
 ---
 
 # Seedance 2.0 Shot Design
@@ -49,6 +49,10 @@ You are a virtual film director who combines Hollywood cinematography aesthetics
    - **中文提示词**：全部使用中文运镜词（航拍、推轨推进、摇臂升降、水平摇摄、弧形环绕等），不使用裸英文单词
    - **英文提示词**：必须使用完整短语（`dolly tracking shot` / `aerial drone shot` / `crane shot`），禁止仅写 `Dolly` / `Aerial` / `Crane` 等裸词
    - 高风险裸词清单：`Dolly`、`Aerial`、`Crane`、`Pan`、`Arc`、`Dutch`、`Steadicam`
+10. **一镜一动**——每个时间切片只指定**一个**运镜动作（如"缓慢推进"或"水平摇摄"）。禁止在同一时段叠加多个运镜（如"推进同时摇摄"），否则画面抖动失控。主体运动和镜头运动必须分离描述：
+    - ✅ `舞者缓慢旋转。镜头固定构图不动。` / `The dancer spins slowly. Camera holds fixed framing.`
+    - ❌ `镜头围绕旋转中的舞者旋转` / `Spinning camera around a dancing person`
+11. **I2V 只写变化**——图生视频（Image-to-Video）模式下，**不要重复描述首帧图片已有的内容**（角色外貌/场景布局/构图），只描述希望发生的**运动和变化**。用 `保留原始构图和色彩` / `preserve composition and colors` 锁定首帧视觉一致性。
 
 详细平台参数见 [seedance-specs.md](references/seedance-specs.md)。运镜安全写法速查见 [cinematography.md](references/cinematography.md)。
 
@@ -123,10 +127,13 @@ You are a virtual film director who combines Hollywood cinematography aesthetics
 ```
 
 **组装规则：**
+- **最优长度**：60-100词（中文约120-200字符）为品质最优区间——过短画面模糊缺细节，超过100词易导致概念漂移和指令冲突
 - 长视频(>5s)必须使用时间戳分镜：中文 `0-3秒：...` / 英文 `0-3s: ...`
 - **每个时间切片独占一行**，总纲、光影、音效、禁止项各占一行，方便用户阅读和修改
-- 每个时间切片内只描述**一个核心动作** + 对应运镜
+- 每个时间切片内只描述**一个核心动作** + **一个运镜动作**（一镜一动原则）
 - 动作描写注重物理逻辑（重心转移、流体风阻、材质交互）
+- **运动强度明确化**：使用具体的强度修饰词避免"糊动"——猛烈/explosive、突然/sudden、剧烈/dramatic、温柔/gentle、渐进/gradual、丝滑/smooth。详见 [cinematography.md](references/cinematography.md) 运动强度速查
+- **节奏词优于技术参数**：用"缓缓/gentle、渐进/gradual、丝滑/smooth"而非"24fps、f/2.8"——Seedance 理解语义节奏，不解析技术数值
 
 **🚨 v1.7 强制组装规则（违反即重写）：**
 
@@ -491,6 +498,32 @@ Seedance 单次生成上限 **4-15秒**。当用户目标时长超过 15秒时�
 ## 多模态参考指南（v1.8 升级）
 
 > 用户上传参考素材时，必须在提示词中用 @引用 明确声明每个素材的用途。以下为 6 种核心参考模式，可自由组合。
+
+### I2V 黄金法则（图生视频）
+
+当用户上传首帧图片进行图生视频时，遵循以下原则：
+
+1. **只写变化，不写已有**——首帧图片中已展现的内容（人物外貌、场景布局、色调构图）不要在提示词中重复描述，只描述希望发生的**运动和变化**
+2. **锁定视觉一致性**——在提示词开头加入 `保留原始构图和色彩` / `preserve composition and colors`，防止模型偏离首帧风格
+3. **运动描写要明确**——用具体动词+强度词描述变化（"头发被风猛烈吹起" vs "头发动了"）
+
+**I2V 提示词范式：**
+```
+# 中文
+保留原始构图和色彩。[运动描写] + [运镜] + [音效]
+
+# English
+Preserve composition and colors. [motion description] + [camera] + [SFX]
+```
+
+### 参考视频最佳实践
+
+选择参考视频时，遵循以下约束以获得最佳复刻效果：
+
+- **理想长度**：3-8秒——过短信息不足，过长模型抓取困难
+- **连续画面**：选择无跳切、无转场的连续片段——有剪辑点的视频会导致复刻混乱
+- **单一意图**：每段参考视频只包含一个"意图"——要么主体运动，要么镜头运动，不要两者混合
+- **提示词从简**：有参考视频时文字提示词保持精简，用 `参考@视频1的运镜节奏，重新诠释纹理和色彩` / `Respect motion from reference: reinterpret texture and color` 类指令
 
 ### 6 种核心参考模式
 
