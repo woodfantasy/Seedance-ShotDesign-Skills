@@ -237,6 +237,42 @@ Siguiendo las mejores prácticas de Agent Skills:
 
 ## 📋 Historial de Versiones
 
+### v1.8.2 (2026-04-07)
+- 🎥 **Regla Un-Plano-Un-Movimiento**: Nueva regla central (#10) — un solo movimiento de cámara por segmento temporal. Combinar movimientos (ej: push-in + pan) causa vibración. Movimiento del sujeto y de la cámara deben describirse por separado
+- 🖼️ **Regla de Oro I2V**: Nueva regla central (#11) y sección I2V dedicada — al generar vídeo desde imagen, solo describir movimiento/cambios, nunca re-describir el contenido estático del primer fotograma. Introduce frase ancla `preserve composition and colors`
+- 📏 **Longitud Óptima del Prompt**: Guía de punto óptimo 60-100 palabras — menos es vago, más de 100 causa deriva conceptual e instrucciones conflictivas
+- 💪 **Modificadores de Intensidad de Movimiento**: Nueva tabla de referencia bilingüe con 6 niveles de intensidad (violento → suave → gradual) y ejemplos Do/Don't para eliminar "movimiento pastoso"
+- 🎤 **Ritmo sobre Especificaciones**: Las reglas de ensamblaje prefieren explícitamente palabras de ritmo semántico (gentle/gradual/smooth) sobre parámetros técnicos (24fps/f2.8)
+- 🎬 **Mejores Prácticas para Vídeo de Referencia**: Restricciones prácticas — ideal 3-8s, plano continuo (sin cortes), intención única (sujeto O cámara, no ambos)
+
+### v1.8.1 (2026-04-07)
+- 🛡️ **Cumplimiento de Seguridad**: Resuelto el flag "patrones sospechosos" de ClawHub OpenClaw — validación Python convertida a checklist estructurada de 7 reglas LLM-nativas. Scripts Python mantenidos como herramientas de desarrollo independientes
+- 🎯 **Optimización de Frases Activadoras**: Triggers reducidos de 40+ a 15 términos profesionales de alta señal, reduciendo activaciones no deseadas
+
+### v1.8.0 (2026-04-05)
+- 🎤 **Sistema de Control de Voz e Idioma**: Clonación de timbre por referencia de vídeo, control de dialecto/acento, mezcla de diálogos multilingüe, estilos vocales especiales (documental/comedia/ópera/ASMR)
+- 📹 **Guía de Referencia Multimodal**: Actualización de 4 tips a 6 patrones de referencia core (primer fotograma/cámara/acción/cámara+acción/timbre/efectos)
+- 📏 **Escenario de Extensión de Vídeo**: Templates de extensión adelante/atrás, técnicas de continuación seamless, corrección cognitiva de duración
+- 📋 **Escenario de Completado de Historia**: Storyboard→vídeo, animación de viñetas, imagen→vídeo emocional
+- 🎬 **Referencia Rápida de Efectos Creativos**: Keywords VFX — zoom Hitchcock, ojo de pez, partículas, speed ramp, transición freeze, tinta china, morphing
+- 🎭 **Guía de Interpretación Emocional**: Tabla de especificidad emocional, triggers de transición emocional, uso de vídeo de referencia emocional
+
+### v1.7.2 (2026-04-02)
+- 🎯 **Expansión de Palabras Activadoras**: 20+ triggers chinos y 10+ ingleses para expresiones cotidianas ("haz un vídeo", "crear clip", "movimiento de cámara")
+
+### v1.7.1 (2026-03-29)
+- 🔒 **Optimización de Seguridad**: Resueltos flags de seguridad de ClawHub manteniendo funcionalidad completa
+
+### v1.7.0 (2026-03-28)
+- 🚨 **Step 3 Reglas de Ensamblaje Obligatorias**: Iluminación de tres capas en línea propia/línea SFX estandarizada/elementos prohibidos unificados/secciones no-template prohibidas
+- ⛔ **Step 4 Bloqueo de Validación**: Prompts que no pasan validación no se muestran al usuario
+- 📋 **Step 5 Formato Obligatorio**: Template de salida Tema+Nota del Director+bloque de código
+- 🎯 **Step 2 Extracción de Parámetros**: No solo "cargar" bases de conocimiento sino extraer e insertar parámetros específicos
+
+### v1.6.0 (2026-03-28)
+- 🧠 **Enrutamiento Semántico Inteligente**: Step 2 de "trigger explícito" a enrutamiento de tres capas — carga permanente/inferencia semántica/especificación explícita
+- 🎯 **Step 1 Inferencia Inteligente**: Inferencia activa de parámetros desde una sola frase, preguntas limitadas a 1-2
+
 ### v1.5.0 (2026-03-27)
 - 🎭 **Sistema de Bloqueo de Actores**: Posicionamiento de tres elementos (ubicación + dirección facial + foco de mirada) con vocabulario de modificadores emocionales para escenas multi-personaje
 - 🎙️ **Separación Voz en Off / Diálogos**: Plantillas distintas para diálogos en cámara vs. voz en off / monólogo interior, con directiva anti-lip-sync para escenas de VO

@@ -222,6 +222,42 @@ python -m unittest scripts.test_validate -v
 
 ## 📋 Histórico de Versões
 
+### v1.8.2 (2026-04-07)
+- 🎥 **Regra Um-Plano-Um-Movimento**: Nova regra central (#10) — um único movimento de câmera por segmento temporal. Combinar movimentos (ex: push-in + pan) causa tremura. Movimento do sujeito e da câmera devem ser descritos separadamente
+- 🖼️ **Regra de Ouro I2V**: Nova regra central (#11) e seção I2V dedicada — ao gerar vídeo a partir de imagem, descrever apenas movimento/mudanças, nunca re-descrever conteúdo estático do primeiro frame. Introduz frase âncora `preserve composition and colors`
+- 📏 **Comprimento Ótimo do Prompt**: Guia de ponto ideal 60-100 palavras — abaixo é vago, acima de 100 causa deriva conceitual e instruções conflitantes
+- 💪 **Modificadores de Intensidade de Movimento**: Nova tabela bilíngue com 6 níveis de intensidade (violento → suave → gradual) e exemplos Do/Don't para eliminar "movimento pastoso"
+- 🎤 **Ritmo sobre Especificações**: Regras de montagem preferem explicitamente palavras de ritmo semântico (gentle/gradual/smooth) sobre parâmetros técnicos (24fps/f2.8)
+- 🎬 **Melhores Práticas para Vídeo de Referência**: Restrições práticas — ideal 3-8s, plano contínuo (sem cortes), intenção única (sujeito OU câmera)
+
+### v1.8.1 (2026-04-07)
+- 🛡️ **Conformidade de Segurança**: Resolvido o flag "padrões suspeitos" do ClawHub OpenClaw — validação Python convertida para checklist estruturada de 7 regras LLM-nativas. Scripts Python mantidos como ferramentas de desenvolvimento independentes
+- 🎯 **Otimização de Frases Ativadoras**: Triggers reduzidos de 40+ para 15 termos profissionais de alto sinal
+
+### v1.8.0 (2026-04-05)
+- 🎤 **Sistema de Controle de Voz e Idioma**: Clonagem de timbre por referência de vídeo, controle de dialeto/sotaque, mistura de diálogos multilíngue, estilos vocais especiais (documentário/comédia/ópera/ASMR)
+- 📹 **Guia de Referência Multimodal**: Atualização de 4 dicas para 6 padrões de referência core (primeiro frame/câmera/ação/câmera+ação/timbre/efeitos)
+- 📏 **Cenário de Extensão de Vídeo**: Templates de extensão para frente/trás, técnicas de continuação seamless, correção cognitiva de duração
+- 📋 **Cenário de Completude de História**: Storyboard→vídeo, animação de painéis, imagem→vídeo emocional
+- 🎬 **Referência Rápida de Efeitos Criativos**: Keywords VFX — zoom Hitchcock, olho de peixe, partículas, speed ramp, transição freeze, tinta nanquim, morphing
+- 🎭 **Guia de Performance Emocional**: Tabela de especificidade emocional, triggers de transição emocional, uso de vídeo de referência emocional
+
+### v1.7.2 (2026-04-02)
+- 🎯 **Expansão de Palavras Ativadoras**: 20+ triggers chineses e 10+ ingleses para expressões cotidianas ("faça um vídeo", "criar clip", "movimento de câmera")
+
+### v1.7.1 (2026-03-29)
+- 🔒 **Otimização de Segurança**: Resolvidos flags de segurança do ClawHub mantendo funcionalidade completa
+
+### v1.7.0 (2026-03-28)
+- 🚨 **Step 3 Regras de Montagem Obrigatórias**: Iluminação de 3 camadas em linha própria/linha SFX padronizada/itens proibidos unificados/seções não-template proibidas
+- ⛔ **Step 4 Bloqueio de Validação**: Prompts reprovados na validação não são mostrados ao usuário
+- 📋 **Step 5 Formato Obrigatório**: Template de saída Tema+Nota do Diretor+bloco de código
+- 🎯 **Step 2 Extração de Parâmetros**: Não apenas "carregar" bases de conhecimento mas extrair e inserir parâmetros específicos
+
+### v1.6.0 (2026-03-28)
+- 🧠 **Roteamento Semântico Inteligente**: Step 2 de "trigger explícito"→roteamento de 3 camadas — carregamento permanente/inferência semântica/especificação explícita
+- 🎯 **Step 1 Inferência Inteligente**: Inferência ativa de parâmetros a partir de uma frase, perguntas limitadas a 1-2
+
 ### v1.5.0 (2026-03-27)
 - 🎭 **Sistema de Bloqueio de Atores**: Posicionamento de 3 elementos (posição + direção facial + foco do olhar) + vocabulário de modificadores emocionais
 - 🎙️ **Separação Narração/Diálogo**: Templates distintos para diálogos vs. narração/monólogo interior, com diretiva anti-lip-sync

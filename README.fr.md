@@ -222,6 +222,42 @@ python -m unittest scripts.test_validate -v
 
 ## 📋 Historique des Versions
 
+### v1.8.2 (2026-04-07)
+- 🎥 **Règle Un-Plan-Un-Mouvement** : Nouvelle règle centrale (#10) — un seul mouvement de caméra par segment temporel. Combiner les mouvements (ex : push-in + pan) provoque des tremblements. Mouvement du sujet et de la caméra doivent être décrits séparément
+- 🖼️ **Règle d'Or I2V** : Nouvelle règle centrale (#11) et section I2V dédiée — lors de la génération vidéo depuis image, décrire uniquement le mouvement/les changements, ne jamais re-décrire le contenu statique du premier frame. Introduit la phrase ancre `preserve composition and colors`
+- 📏 **Longueur Optimale du Prompt** : Guide du point optimal 60-100 mots — en dessous c'est vague, au-dessus de 100 mots provoque une dérive conceptuelle et des instructions conflictuelles
+- 💪 **Modificateurs d'Intensité de Mouvement** : Nouveau tableau bilingue avec 6 niveaux d'intensité (violent → doux → progressif) et exemples Do/Don't pour éliminer le « mouvement pâteux »
+- 🎤 **Rythme plutôt que Spécifications** : Les règles d'assemblage préfèrent explicitement les mots de rythme sémantique (gentle/gradual/smooth) aux paramètres techniques (24fps/f2.8)
+- 🎬 **Bonnes Pratiques Vidéo de Référence** : Contraintes pratiques — idéal 3-8s, plan continu (sans coupures), intention unique (sujet OU caméra)
+
+### v1.8.1 (2026-04-07)
+- 🛡️ **Conformité Sécurité** : Résolu le flag « modèles suspects » de ClawHub OpenClaw — validation Python convertie en checklist structurée de 7 règles LLM-natives. Scripts Python conservés comme outils de développement autonomes
+- 🎯 **Optimisation des Phrases d'Activation** : Triggers réduits de 40+ à 15 termes professionnels à haute densité de signal
+
+### v1.8.0 (2026-04-05)
+- 🎤 **Système de Contrôle Voix et Langue** : Clonage de timbre par référence vidéo, contrôle dialecte/accent, mixage de dialogues multilingues, styles vocaux spéciaux (documentaire/comédie/opéra/ASMR)
+- 📹 **Guide de Référence Multimodale** : Mise à jour de 4 conseils à 6 modèles de référence core (premier frame/caméra/action/caméra+action/timbre/effets)
+- 📏 **Scénario d'Extension Vidéo** : Templates d'extension avant/arrière, techniques de continuation seamless, correction cognitive de durée
+- 📋 **Scénario de Complément d'Histoire** : Storyboard→vidéo, animation de vignettes, image→vidéo émotionnelle
+- 🎬 **Référence Rapide d'Effets Créatifs** : Mots-clés VFX — zoom Hitchcock, fish-eye, particules, speed ramp, transition freeze, encre de Chine, morphing
+- 🎭 **Guide de Performance Émotionnelle** : Tableau de spécificité émotionnelle, triggers de transition émotionnelle, utilisation de vidéo de référence émotionnelle
+
+### v1.7.2 (2026-04-02)
+- 🎯 **Expansion des Mots d'Activation** : 20+ triggers chinois et 10+ anglais pour expressions quotidiennes (« fais une vidéo », « créer un clip », « mouvement de caméra »)
+
+### v1.7.1 (2026-03-29)
+- 🔒 **Optimisation de Sécurité** : Résolu les flags de sécurité ClawHub en maintenant la fonctionnalité complète
+
+### v1.7.0 (2026-03-28)
+- 🚨 **Step 3 Règles d'Assemblage Obligatoires** : Éclairage 3 couches en ligne propre/ligne SFX standardisée/éléments interdits unifiés/sections hors-template interdites
+- ⛔ **Step 4 Blocage de Validation** : Les prompts échouant à la validation ne sont plus montrés à l'utilisateur
+- 📋 **Step 5 Format Obligatoire** : Template de sortie Thème+Note du Réalisateur+bloc de code
+- 🎯 **Step 2 Extraction de Paramètres** : Non seulement « charger » les bases mais extraire et insérer des paramètres spécifiques
+
+### v1.6.0 (2026-03-28)
+- 🧠 **Routage Sémantique Intelligent** : Step 2 de « trigger explicite » → routage trois couches — chargement permanent/inférence sémantique/spécification explicite
+- 🎯 **Step 1 Inférence Intelligente** : Inférence active de paramètres depuis une seule phrase, questions limitées à 1-2
+
 ### v1.5.0 (2026-03-27)
 - 🎭 **Système de Placement d'Acteurs** : Positionnement à 3 éléments (placement + direction du visage + point de regard) + vocabulaire de modificateurs émotionnels
 - 🎙️ **Séparation Voix Off / Dialogues** : Modèles distincts pour dialogues vs. voix off / monologue intérieur, avec directive anti-lip-sync
