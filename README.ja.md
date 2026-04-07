@@ -2,7 +2,7 @@
 
 # 🎬 Seedance2.0 Shot Design — シネマティック・ショット言語デザイナー
 
-[![バージョン](https://img.shields.io/badge/version-1.8.2-blue.svg)]()
+[![バージョン](https://img.shields.io/badge/version-1.8.3-blue.svg)]()
 [![ライセンス](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![プラットフォーム](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 
@@ -236,6 +236,11 @@ Agent Skills のベストプラクティスに準拠：
 ---
 
 ## 📋 変更履歴
+
+### v1.8.3 (2026-04-08)
+- 🎭 **記述性優先ルール**：新規コアルール（#12）— カメラが「見えるもの」（視覚語）だけを書き、キャラが「感じるもの」（感情語）は書かない。すべての感情は可視化された身体表現に変換すること
+- ✍️ **英語現在進行形**：英語プロンプトの動作は -ing 形を義務化（`running` not `runs`）— 進行形は継続的な動きを暗示
+- 🎯 **モーショントーン前置**：スタイルプリアンブルで運動エネルギーを宣言（`dynamic motion` / `serene atmosphere`）、生成初期に運動基調をロック
 
 ### v1.8.2 (2026-04-07)
 - 🎥 **一鏡一動ルール**：新規コアルール（#10）— タイムセグメントごとのカメラ動作を1つに制限。複数運動の重畳（例：プッシュイン+パン）は画面の揺れを引き起こす。被写体の動きとカメラの動きは分離して記述すること

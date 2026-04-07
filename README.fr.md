@@ -2,7 +2,7 @@
 
 # 🎬 Seedance2.0 Shot Design — Concepteur de Langage Cinématographique
 
-[![Version](https://img.shields.io/badge/version-1.8.2-blue.svg)]()
+[![Version](https://img.shields.io/badge/version-1.8.3-blue.svg)]()
 [![Licence](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![Plateforme](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 
@@ -221,6 +221,11 @@ python -m unittest scripts.test_validate -v
 ---
 
 ## 📋 Historique des Versions
+
+### v1.8.3 (2026-04-08)
+- 🎭 **Règle Descriptif > Narratif** : Nouvelle règle centrale (#12) — écrire uniquement ce que la caméra VOIT (mots visuels), jamais ce que le personnage RESSENT (mots émotionnels). Toutes les émotions doivent être converties en expressions physiques visibles
+- ✍️ **Anglais Progressif** : Les règles d'assemblage exigent la forme -ing pour les actions en anglais (`running` pas `runs`) — le progressif implique un mouvement continu
+- 🎯 **Ton de Mouvement Anticipé** : Le préambule de style déclare l'énergie de mouvement globale (`dynamic motion` / `serene atmosphere`), verrouillant la base de mouvement dès le début
 
 ### v1.8.2 (2026-04-07)
 - 🎥 **Règle Un-Plan-Un-Mouvement** : Nouvelle règle centrale (#10) — un seul mouvement de caméra par segment temporel. Combiner les mouvements (ex : push-in + pan) provoque des tremblements. Mouvement du sujet et de la caméra doivent être décrits séparément

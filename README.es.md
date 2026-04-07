@@ -2,7 +2,7 @@
 
 # 🎬 Seedance2.0 Shot Design — Diseñador de Lenguaje Cinematográfico
 
-[![Versión](https://img.shields.io/badge/version-1.8.2-blue.svg)]()
+[![Versión](https://img.shields.io/badge/version-1.8.3-blue.svg)]()
 [![Licencia](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![Plataforma](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 
@@ -236,6 +236,11 @@ Siguiendo las mejores prácticas de Agent Skills:
 ---
 
 ## 📋 Historial de Versiones
+
+### v1.8.3 (2026-04-08)
+- 🎭 **Regla Descriptivo > Narrativo**: Nueva regla central (#12) — solo escribir lo que la cámara VE (palabras visuales), nunca lo que el personaje SIENTE (palabras emocionales). Todas las emociones deben convertirse en expresiones físicas visibles
+- ✍️ **Inglés Progresivo**: Reglas de ensamblaje requieren forma -ing para acciones en inglés (`running` no `runs`) — el progresivo implica movimiento continuo
+- 🎯 **Tono de Movimiento Anticipado**: El preámbulo de estilo declara la energía de movimiento general (`dynamic motion` / `serene atmosphere`), fijando la base de movimiento al inicio
 
 ### v1.8.2 (2026-04-07)
 - 🎥 **Regla Un-Plano-Un-Movimiento**: Nueva regla central (#10) — un solo movimiento de cámara por segmento temporal. Combinar movimientos (ej: push-in + pan) causa vibración. Movimiento del sujeto y de la cámara deben describirse por separado

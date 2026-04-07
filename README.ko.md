@@ -2,7 +2,7 @@
 
 # 🎬 Seedance2.0 Shot Design — 시네마틱 샷 언어 디자이너
 
-[![버전](https://img.shields.io/badge/version-1.8.2-blue.svg)]()
+[![버전](https://img.shields.io/badge/version-1.8.3-blue.svg)]()
 [![라이선스](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![플랫폼](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 
@@ -236,6 +236,11 @@ Agent Skills 모범 사례 준수:
 ---
 
 ## 📋 변경 이력
+
+### v1.8.3 (2026-04-08)
+- 🎭 **기술적 > 서술적 규칙**：새 핵심 규칙(#12) — 카메라가 "보이는 것"만 작성(시각어), 캐릭터가 "느끼는 것" 작성 금지(감정어). 모든 감정은 시각화된 신체 표현으로 변환
+- ✍️ **영어 현재진행형**：영어 프롬프트 동작에 -ing 형식 의무화(`running` not `runs`) — 진행형은 지속적 움직임을 암시
+- 🎯 **모션 톤 전치**：스타일 프리앨블에서 운동 에너지 선언(`dynamic motion` / `serene atmosphere`), 생성 초기에 운동 기조 락
 
 ### v1.8.2 (2026-04-07)
 - 🎥 **원샷원무브 규칙**: 새 핵심 규칙(#10) — 타임 세그먼트당 카메라 동작 1개 제한. 복합 운동(예: 푸시인+패닝) 조합시 화면 떨림 발생. 피사체 운동과 카메라 운동은 반드시 분리 기술

@@ -2,7 +2,7 @@ English | [中文](README.zh-CN.md) | [日本語](README.ja.md) | [한국어](RE
 
 # 🎬 Seedance2.0 Shot Design — Cinematic Shot Language Designer
 
-[![Version](https://img.shields.io/badge/version-1.8.2-blue.svg)]()
+[![Version](https://img.shields.io/badge/version-1.8.3-blue.svg)]()
 [![License](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 
@@ -238,6 +238,11 @@ Following Agent Skills best practices:
 ---
 
 ## 📋 Changelog
+
+### v1.8.3 (2026-04-08)
+- 🎭 **Descriptive Over Narrative Rule**: New core rule (#12) — only write what the camera SEES (visual words), never what characters FEEL (emotion words). All emotions must be converted to visible physical expressions (facial micro-expressions, body language, breathing rhythm, gaze direction)
+- ✍️ **English Present Progressive**: Assembly rules now mandate `-ing` form for English action descriptions (`running` not `runs`) — progressive tense implies continuous motion, matching video's dynamic nature
+- 🎯 **Motion Tone Front-Loading**: Style preamble now explicitly declares overall motion energy (e.g., `dynamic motion, high energy` or `serene, slow-paced atmosphere`) to lock motion baseline early in generation
 
 ### v1.8.2 (2026-04-07)
 - 🎥 **One-Shot-One-Move Rule**: New core rule (#10) enforcing a single camera movement per time segment — combining movements (e.g., push-in + pan) causes jitter. Subject motion and camera motion must be described separately

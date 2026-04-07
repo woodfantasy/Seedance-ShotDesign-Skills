@@ -2,7 +2,7 @@
 
 # 🎬 Seedance2.0 Shot Design — 镜头语言设计师
 
-[![版本](https://img.shields.io/badge/version-1.8.2-blue.svg)]()
+[![版本](https://img.shields.io/badge/version-1.8.3-blue.svg)]()
 [![协议](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![平台](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 
@@ -238,6 +238,11 @@ python -m unittest scripts.test_validate -v
 ---
 
 ## 📋 版本记录
+
+### v1.8.3 (2026-04-08)
+- 🎭 **描述性优于叙事性规则**：新增核心规则（#12）——只写镜头看到的（视觉词），不写角色感受的（情绪词）。所有情绪必须转化为可视化身体表现（微表情、肢体语言、呼吸节奏、眼神方向）
+- ✍️ **英文动作进行时态**：组装规则强制英文提示词动作使用 -ing 形式（`running` 而非 `runs`），进行时暗示持续运动，更契合视频动态本质
+- 🎯 **风格总纲前置运动基调**：提示词开头的风格总纲明确声明整体运动能量（如「动感十足的运动风格」或「静谧缓慢的氛围」），帮助模型生成初期锁定运动基调
 
 ### v1.8.2 (2026-04-07)
 - 🎥 **一镜一动规则**：新增核心规则（#10），强制每个时间切片只允许一个运镜动作，叠加多个运镜（如"推进+摇摄"）会导致画面抖动。主体运动和镜头运动必须分离描述

@@ -17,7 +17,7 @@ description: >
   短片脚本, 镜头设计, 运镜.
 metadata:
   author: woodfantasy
-  version: "1.8.2"
+  version: "1.8.3"
 ---
 
 # Seedance 2.0 Shot Design
@@ -53,6 +53,10 @@ You are a virtual film director who combines Hollywood cinematography aesthetics
     - ✅ `舞者缓慢旋转。镜头固定构图不动。` / `The dancer spins slowly. Camera holds fixed framing.`
     - ❌ `镜头围绕旋转中的舞者旋转` / `Spinning camera around a dancing person`
 11. **I2V 只写变化**——图生视频（Image-to-Video）模式下，**不要重复描述首帧图片已有的内容**（角色外貌/场景布局/构图），只描述希望发生的**运动和变化**。用 `保留原始构图和色彩` / `preserve composition and colors` 锁定首帧视觉一致性。
+12. **描述性优于叙事性**——只写**镜头看到**的（视觉词），不写**角色感受**的（情绪词）。Seedance 渲染画面，不理解心理活动：
+    - ✅ `泪水沿脸颊滑落，嘴唇微微颤抖` / `Tears streaming down her cheeks, lips trembling slightly`
+    - ❌ `她感到心碎` / `She feels heartbroken`
+    - 所有情绪必须**转化为可视化的身体表现**（表情、肢体、呼吸节奏、眼神方向）
 
 详细平台参数见 [seedance-specs.md](references/seedance-specs.md)。运镜安全写法速查见 [cinematography.md](references/cinematography.md)。
 
@@ -132,8 +136,10 @@ You are a virtual film director who combines Hollywood cinematography aesthetics
 - **每个时间切片独占一行**，总纲、光影、音效、禁止项各占一行，方便用户阅读和修改
 - 每个时间切片内只描述**一个核心动作** + **一个运镜动作**（一镜一动原则）
 - 动作描写注重物理逻辑（重心转移、流体风阻、材质交互）
+- **英文动作用进行时态**（-ing 形式）——`a woman running through rain` 而非 `a woman runs through rain`，进行时暗示持续运动，更契合视频的动态本质。中文无此语法要求
 - **运动强度明确化**：使用具体的强度修饰词避免"糊动"——猛烈/explosive、突然/sudden、剧烈/dramatic、温柔/gentle、渐进/gradual、丝滑/smooth。详见 [cinematography.md](references/cinematography.md) 运动强度速查
 - **节奏词优于技术参数**：用"缓缓/gentle、渐进/gradual、丝滑/smooth"而非"24fps、f/2.8"——Seedance 理解语义节奏，不解析技术数值
+- **风格总纲前置运动基调**：在提示词开头的风格总纲中声明整体运动能量（如 `动感十足的运动风格` / `dynamic motion, high energy` 或 `静谧缓慢的氛围` / `serene, slow-paced atmosphere`），帮助模型在生成初期锁定运动基调
 
 **🚨 v1.7 强制组装规则（违反即重写）：**
 
