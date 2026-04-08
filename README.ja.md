@@ -1,12 +1,24 @@
 [English](README.md) | [中文](README.zh-CN.md) | 日本語 | [한국어](README.ko.md) | [Español](README.es.md) | [Português](README.pt.md) | [Français](README.fr.md)
 
-# 🎬 Seedance2.0 Shot Design — シネマティック・ショット言語デザイナー
+<p align="center">
+  <img src="assets/logo.svg" width="128" height="128" alt="Seedance Shot Design Logo">
+</p>
 
-[![バージョン](https://img.shields.io/badge/version-1.8.4-blue.svg)]()
-[![ライセンス](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
-[![プラットフォーム](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
+<h1 align="center">Seedance2.0 Shot Design</h1>
 
-> あなたの漠然とした映像アイデアを、即夢 Seedance 2.0 で使える**映画レベルの動画プロンプト**にワンクリックで変換。
+<p align="center">
+  <strong>シネマティック・ショット言語デザイナー</strong>
+</p>
+
+<p align="center">
+  <a href=""><img src="https://img.shields.io/badge/version-1.8.4-blue.svg" alt="バージョン"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="ライセンス"></a>
+  <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="プラットフォーム"></a>
+</p>
+
+<p align="center">
+  あなたの漠然とした映像アイデアを、即夢 Seedance 2.0 で使える<strong>映画レベルの動画プロンプト</strong>にワンクリックで変換。
+</p>
 
 [Agent Skills](https://agentskills.io) 仕様に基づいて構築された Claude Skill です。ハリウッド最高峰の撮影美学と中国映像業界の実践知見を融合し、クリエイターが「綺麗だけどランダム」な AI 動画の壁を突破して、**精密で制御可能なビジュアルストーリーテリング**を実現することを目指しています。
 

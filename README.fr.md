@@ -1,12 +1,24 @@
 [English](README.md) | [中文](README.zh-CN.md) | [日本語](README.ja.md) | [한국어](README.ko.md) | [Español](README.es.md) | [Português](README.pt.md) | Français
 
-# 🎬 Seedance2.0 Shot Design — Concepteur de Langage Cinématographique
+<p align="center">
+  <img src="assets/logo.svg" width="128" height="128" alt="Seedance Shot Design Logo">
+</p>
 
-[![Version](https://img.shields.io/badge/version-1.8.4-blue.svg)]()
-[![Licence](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
-[![Plateforme](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
+<h1 align="center">Seedance2.0 Shot Design</h1>
 
-> Transformez vos idées vidéo vagues en **prompts cinématographiques professionnels** prêts pour Jimeng Seedance 2.0 — en un clic.
+<p align="center">
+  <strong>Concepteur de Langage Cinématographique</strong>
+</p>
+
+<p align="center">
+  <a href=""><img src="https://img.shields.io/badge/version-1.8.4-blue.svg" alt="Version"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="Licence"></a>
+  <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="Plateforme"></a>
+</p>
+
+<p align="center">
+  Transformez vos idées vidéo vagues en <strong>prompts cinématographiques professionnels</strong> prêts pour Jimeng Seedance 2.0 — en un clic.
+</p>
 
 Un Claude Skill construit sur la spécification [Agent Skills](https://agentskills.io), alliant l'esthétique cinématographique hollywoodienne aux pratiques de l'industrie audiovisuelle chinoise. Conçu pour aider les créateurs à dépasser le piège de la vidéo IA « jolie mais aléatoire » et atteindre une **narration visuelle précise et maîtrisée**.
 

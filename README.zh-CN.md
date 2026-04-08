@@ -1,12 +1,24 @@
 [English](README.md) | 中文 | [日本語](README.ja.md) | [한국어](README.ko.md) | [Español](README.es.md) | [Português](README.pt.md) | [Français](README.fr.md)
 
-# 🎬 Seedance2.0 Shot Design — 镜头语言设计师
+<p align="center">
+  <img src="assets/logo.svg" width="128" height="128" alt="Seedance Shot Design Logo">
+</p>
 
-[![版本](https://img.shields.io/badge/version-1.8.4-blue.svg)]()
-[![协议](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
-[![平台](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
+<h1 align="center">Seedance2.0 Shot Design</h1>
 
-> 将你模糊的视频创意，一键转化为即梦 Seedance 2.0 可用的**电影级视频提示词**。
+<p align="center">
+  <strong>镜头语言设计师</strong>
+</p>
+
+<p align="center">
+  <a href=""><img src="https://img.shields.io/badge/version-1.8.4-blue.svg" alt="版本"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="协议"></a>
+  <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="平台"></a>
+</p>
+
+<p align="center">
+  将你模糊的视频创意，一键转化为即梦 Seedance 2.0 可用的<strong>电影级视频提示词</strong>。
+</p>
 
 一个基于 [Agent Skills](https://agentskills.io) 规范构建的 Claude Skill，融合好莱坞顶级摄影美学与中国影视工业实践，旨在帮助创作者突破"好看但随机"的 AI 视频困境，实现**精准可控的视觉叙事**。
 
