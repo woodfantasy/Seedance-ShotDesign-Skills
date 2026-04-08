@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-1.8.4-blue.svg" alt="版本"></a>
+  <a href=""><img src="https://img.shields.io/badge/version-1.8.5-blue.svg" alt="版本"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="协议"></a>
   <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="平台"></a>
 </p>
@@ -252,6 +252,13 @@ python -m unittest scripts.test_validate -v
 ---
 
 ## 📋 版本记录
+
+### v1.8.5 (2026-04-08)
+- 🌐 **Runway 平台适配限制**：明确 Runway 用户专有的资产限制（图片≤5，视频≤3），并提供人脸审查规避方案（模糊化或三渲二重绘）。
+- 🎞️ **首尾帧锚定插值**：多模态指南新增第七种参考模式——`首尾关键帧 (Start / End frames)`，支持起点到终点的平滑过渡。
+- 🎬 **新增两大特效混剪场景**：
+  - `时间静止 / 子弹时间 (Freeze Time)`：摄影机在完全凝固的场景要素间穿梭
+  - `多镜头序列混剪 (Multishot Video)`：使用单次混剪覆盖快节奏短片蒙太奇需求
 
 ### v1.8.4 (2026-04-08)
 - 🔗 **CLI 联动指南**：`seedance-specs.md` 新增即梦 CLI 命令映射（`text2video` / `image2video` / `multiframe2video` / `multimodal2video`），含异步任务管理和 VIP 通道说明

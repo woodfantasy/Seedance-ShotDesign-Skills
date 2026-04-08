@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-1.8.4-blue.svg" alt="Versión"></a>
+  <a href=""><img src="https://img.shields.io/badge/version-1.8.5-blue.svg" alt="Versión"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="Licencia"></a>
   <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="Plataforma"></a>
 </p>
@@ -248,6 +248,13 @@ Siguiendo las mejores prácticas de Agent Skills:
 ---
 
 ## 📋 Historial de Versiones
+
+### v1.8.5 (2026-04-08)
+- 🌐 **Adaptación a Runway**: Límites de activos clarificados para usuarios de Runway (≤5 imágenes, ≤3 videos) y estrategias claras de bypass para la moderación de rostros humanos (difuminado o cambio de estilo NPR).
+- 🎞️ **Interpolación de Fotograma Inicial y Final**: Se agregó el 7º patrón de referencia multimodal (`@Image1 as start frame, @Image2 as end frame`) para transiciones precisas.
+- 🎬 **Dos Nuevos Escenarios de Efectos**:
+  - `Freeze Time (Tiempo Congelado)`: La cámara se mueve dramáticamente a través de elementos del escenario completamente congelados.
+  - `Multishot Video (Video Multitoma)`: Evitas la restricción de "toma única", permitiendo generar múltiples cortes de montaje rápidos en una sola generación.
 
 ### v1.8.4 (2026-04-08)
 - 🔗 **Guía de integración CLI**: Nueva sección en `seedance-specs.md` con mapeo de comandos CLI de Jimeng (`text2video` / `image2video` / `multiframe2video` / `multimodal2video`), gestión de tareas asíncronas y documentación de canales VIP

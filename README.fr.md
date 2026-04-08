@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-1.8.4-blue.svg" alt="Version"></a>
+  <a href=""><img src="https://img.shields.io/badge/version-1.8.5-blue.svg" alt="Version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="Licence"></a>
   <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="Plateforme"></a>
 </p>
@@ -233,6 +233,13 @@ python -m unittest scripts.test_validate -v
 ---
 
 ## 📋 Historique des Versions
+
+### v1.8.5 (2026-04-08)
+- 🌐 **Adaptation à Runway** : Clarification des limites d'actifs pour les utilisateurs de Runway (≤5 images, ≤3 vidéos) et ajout de stratégies de contournement de la modération pour les visages humains réalistes (floutage ou style NPR).
+- 🎞️ **Interpolation des Images Début/Fin** : Ajout d'un 7e motif de référence multimodale (`@Image1 as start frame, @Image2 as end frame`) pour des transitions précises de point à point.
+- 🎬 **Deux Nouveaux Scénarios d'Effets** :
+  - `Freeze Time (Temps Figé)` : La caméra se faufile spectaculairement à travers des éléments de scène totalement figés.
+  - `Multishot Video (Vidéo Multicaméra)` : Contourne la limite de "plan séquence" en déclenchant la génération automatique de montages à coupes franches.
 
 ### v1.8.4 (2026-04-08)
 - 🔗 **Guide d'intégration CLI** : Nouvelle section dans `seedance-specs.md` avec mappage des commandes CLI de Jimeng (`text2video` / `image2video` / `multiframe2video` / `multimodal2video`), gestion des tâches asynchrones et documentation des canaux VIP

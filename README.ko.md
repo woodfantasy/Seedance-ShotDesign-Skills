@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-1.8.4-blue.svg" alt="버전"></a>
+  <a href=""><img src="https://img.shields.io/badge/version-1.8.5-blue.svg" alt="버전"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="라이선스"></a>
   <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="플랫폼"></a>
 </p>
@@ -248,6 +248,13 @@ Agent Skills 모범 사례 준수:
 ---
 
 ## 📋 변경 이력
+
+### v1.8.5 (2026-04-08)
+- 🌐 **Runway 플랫폼 호환**: Runway 사용자를 위한 에셋 제한(이미지 최대 5장, 비디오 최대 3개)을 명시하고, 사실적인 사람 얼굴에 대한 중재를 우회하기 위한 명확한 전략(블러 처리 또는 NPR 스타일 적용)을 제공합니다.
+- 🎞️ **시작 및 끝 프레임 보간**: 정밀한 전환을 지원하기 위해 7번째 멀티모달 참조 패턴(`@Image1 as start frame, @Image2 as end frame`)을 추가했습니다.
+- 🎬 **두 가지 새로운 효과 시나리오**:
+  - `Freeze Time(타임 프리즈)`: 완전히 멈춘 장면 요소 사이를 카메라가 극적으로 통과합니다.
+  - `Multishot Video(멀티샷 비디오)`: "원테이크" 제한을 우회하여 한 번의 생성으로 날카로운 몽타주 컷을 자동 생성합니다.
 
 ### v1.8.4 (2026-04-08)
 - 🔗 **CLI 연동 가이드**: `seedance-specs.md`에 즉몽 CLI 명령 매핑 추가(`text2video` / `image2video` / `multiframe2video` / `multimodal2video`), 비동기 작업 관리 및 VIP 채널 설명 포함

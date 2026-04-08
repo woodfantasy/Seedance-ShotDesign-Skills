@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-1.8.4-blue.svg" alt="バージョン"></a>
+  <a href=""><img src="https://img.shields.io/badge/version-1.8.5-blue.svg" alt="バージョン"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="ライセンス"></a>
   <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="プラットフォーム"></a>
 </p>
@@ -248,6 +248,13 @@ Agent Skills のベストプラクティスに準拠：
 ---
 
 ## 📋 変更履歴
+
+### v1.8.5 (2026-04-08)
+- 🌐 **Runwayプラットフォーム対応**: Runwayユーザー向けの資産制限（画像5枚以下、動画3つ以下）を明記し、リアルな人間の顔に対するモデレーション回避策（ぼかしやNPRスタイルへの変換）を提供。
+- 🎞️ **開始＆終了フレーム補間**: マルチモーダルリファレンスパターンに第7のモード（`@Image1 as start frame, @Image2 as end frame`）を追加。正確なポイントツーポイントのトランジションをサポート。
+- 🎬 **2つの新しいエフェクトシナリオ**:
+  - `Freeze Time (バレットタイム)`: 完全に停止したシーンの要素間をカメラが劇的に通り抜ける。
+  - `Multishot Video (マルチショットビデオ)`: ワンテイクの制限を回避し、単一の生成でシャープなモンタージュカットを自動生成する。
 
 ### v1.8.4 (2026-04-08)
 - 🔗 **CLI連携ガイド**: `seedance-specs.md`に即梦CLIコマンドマッピングを追加（`text2video` / `image2video` / `multiframe2video` / `multimodal2video`）、非同期タスク管理とVIPチャンネル説明を含む

@@ -11,7 +11,7 @@ English | [中文](README.zh-CN.md) | [日本語](README.ja.md) | [한국어](RE
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-1.8.4-blue.svg" alt="Version"></a>
+  <a href=""><img src="https://img.shields.io/badge/version-1.8.5-blue.svg" alt="Version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="License"></a>
   <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="Platform"></a>
 </p>
@@ -261,6 +261,13 @@ Following Agent Skills best practices:
 ---
 
 ## 📋 Changelog
+
+### v1.8.5 (2026-04-08)
+- 🌐 **Runway Platform Adaptation**: Clarified native asset limits for Runway users (≤5 images, ≤3 videos) and provided explicit moderation bypass strategies for realistic human faces (blurring or NPR restyling).
+- 🎞️ **Start & End Frame Interpolation**: Added a 7th multimodal reference pattern (`@Image1 as start frame, @Image2 as end frame`) to support precise point-to-point transitions.
+- 🎬 **Two New Effects Scenarios**:
+  - `Freeze Time (Bullet Time)`: Camera dramatically weaves through completely frozen scene elements.
+  - `Multishot Video`: Bypasses the "one-take" limitation by triggering the model to auto-generate sharp montage cuts in a single generation.
 
 ### v1.8.4 (2026-04-08)
 - 🔗 **CLI Integration Guide**: New `seedance-specs.md` section mapping Shot Design modes to Jimeng CLI commands (`text2video` / `image2video` / `multiframe2video` / `multimodal2video`), with async task management and VIP channel documentation
