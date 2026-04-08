@@ -2,7 +2,7 @@
 
 # 🎬 Seedance2.0 Shot Design — 시네마틱 샷 언어 디자이너
 
-[![버전](https://img.shields.io/badge/version-1.8.3-blue.svg)]()
+[![버전](https://img.shields.io/badge/version-1.8.4-blue.svg)]()
 [![라이선스](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![플랫폼](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 
@@ -236,6 +236,11 @@ Agent Skills 모범 사례 준수:
 ---
 
 ## 📋 변경 이력
+
+### v1.8.4 (2026-04-08)
+- 🔗 **CLI 연동 가이드**: `seedance-specs.md`에 즉몽 CLI 명령 매핑 추가(`text2video` / `image2video` / `multiframe2video` / `multimodal2video`), 비동기 작업 관리 및 VIP 채널 설명 포함
+- 🎞️ **멀티프레임 스토리 템플릿**: 제20 시나리오 템플릿 「멀티프레임 스토리(multiframe2video)」추가 — 2-9장의 키프레임 이미지를 업로드하면 엔진이 자동으로 일관된 스토리 비디오 구성
+- 📚 **지식 베이스 라우팅 확장**: Step 2 의미 추론 테이블에 멀티프레임 및 CLI 라우팅 항목 추가
 
 ### v1.8.3 (2026-04-08)
 - 🎭 **기술적 > 서술적 규칙**：새 핵심 규칙(#12) — 카메라가 "보이는 것"만 작성(시각어), 캐릭터가 "느끼는 것" 작성 금지(감정어). 모든 감정은 시각화된 신체 표현으로 변환

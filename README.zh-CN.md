@@ -2,7 +2,7 @@
 
 # 🎬 Seedance2.0 Shot Design — 镜头语言设计师
 
-[![版本](https://img.shields.io/badge/version-1.8.3-blue.svg)]()
+[![版本](https://img.shields.io/badge/version-1.8.4-blue.svg)]()
 [![协议](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![平台](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 
@@ -238,6 +238,11 @@ python -m unittest scripts.test_validate -v
 ---
 
 ## 📋 版本记录
+
+### v1.8.4 (2026-04-08)
+- 🔗 **CLI 联动指南**：`seedance-specs.md` 新增即梦 CLI 命令映射（`text2video` / `image2video` / `multiframe2video` / `multimodal2video`），含异步任务管理和 VIP 通道说明
+- 🎞️ **多帧故事模板**：新增第20个场景模板「多帧故事（multiframe2video）」——上传2-9张关键帧图片，引擎自动编排为连贯故事视频。含多帧 vs 多段分镜决策矩阵
+- 📚 **知识库路由扩展**：Step 2 语义推断表新增多帧故事和 CLI 路由条目
 
 ### v1.8.3 (2026-04-08)
 - 🎭 **描述性优于叙事性规则**：新增核心规则（#12）——只写镜头看到的（视觉词），不写角色感受的（情绪词）。所有情绪必须转化为可视化身体表现（微表情、肢体语言、呼吸节奏、眼神方向）

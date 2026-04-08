@@ -2,7 +2,7 @@
 
 # 🎬 Seedance2.0 Shot Design — シネマティック・ショット言語デザイナー
 
-[![バージョン](https://img.shields.io/badge/version-1.8.3-blue.svg)]()
+[![バージョン](https://img.shields.io/badge/version-1.8.4-blue.svg)]()
 [![ライセンス](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![プラットフォーム](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 
@@ -236,6 +236,11 @@ Agent Skills のベストプラクティスに準拠：
 ---
 
 ## 📋 変更履歴
+
+### v1.8.4 (2026-04-08)
+- 🔗 **CLI連携ガイド**: `seedance-specs.md`に即梦CLIコマンドマッピングを追加（`text2video` / `image2video` / `multiframe2video` / `multimodal2video`）、非同期タスク管理とVIPチャンネル説明を含む
+- 🎞️ **マルチフレームストーリーテンプレート**: 第20シナリオテンプレート「マルチフレームストーリー（multiframe2video）」を追加——2-9枚のキーフレーム画像をアップロードし、エンジンが自動的に一貫したストーリービデオを構成
+- 📚 **ナレッジベースルーティング拡張**: Step 2の意味推論テーブルにマルチフレームおよびCLIルーティングエントリを追加
 
 ### v1.8.3 (2026-04-08)
 - 🎭 **記述性優先ルール**：新規コアルール（#12）— カメラが「見えるもの」（視覚語）だけを書き、キャラが「感じるもの」（感情語）は書かない。すべての感情は可視化された身体表現に変換すること

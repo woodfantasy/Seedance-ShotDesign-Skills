@@ -99,3 +99,53 @@ Seedance 2.0 训练数据分布对应的最佳结构：
 | 8 | 视频编辑 | `将@视频1中的A换成@图片1` |
 | 9 | 音乐卡点 | `参考@视频1的画面节奏/卡点` |
 | 10 | 情绪演绎 | 情绪变化描述 + 运镜配合 |
+
+## 即梦 CLI 联动指南（v1.8.4 新增）
+
+> 当 Shot Design 部署在支持 CLI 调用的 Agent 环境中（如 OpenClaw + Dreamina CLI），提示词可以直接通过 CLI 提交生成。本节提供命令映射速查。
+
+### CLI 安装
+
+```bash
+curl -fsSL https://jimeng.jianying.com/cli | bash
+dreamina login   # 首次登录
+```
+
+### 提示词 → CLI 命令映射
+
+| Shot Design 模式 | CLI 命令 | 关键参数 | 说明 |
+|-----------------|----------|----------|------|
+| 纯文本 → 视频 | `dreamina text2video` | `--prompt "提示词" --duration X --ratio 16:9` | 标准文生视频 |
+| 首帧图 → 视频 | `dreamina image2video` | `--image 路径 --prompt "运动描述"` | I2V 黄金法则 |
+| 多帧 → 故事视频 | `dreamina multiframe2video` | 多图输入 + prompt | 多图连贯叙事，引擎自动编排 |
+| 多模态 → 视频 | `dreamina multimodal2video` | 图+视频+音频 + prompt | 旗舰模式，支持 seedance2.0 家族 |
+| 纯文本 → 图片 | `dreamina text2image` | `--prompt "提示词"` | 生成首帧参考图 |
+| 图 → 图 | `dreamina image2image` | `--images 路径 --prompt "提示词"` | 迭代角色/场景设计 |
+
+> **使用建议：** 先用 Shot Design 生成提示词，再根据上表选择对应 CLI 命令提交。Agent 可通过 `dreamina <subcommand> -h` 查看最新参数。
+
+### 异步任务管理
+
+CLI 生成任务为**异步**模式，提交后需等待或轮询结果：
+
+```bash
+# 方式1：提交时自动轮询（推荐）
+dreamina text2video --prompt "提示词" --poll=30
+
+# 方式2：手动查询
+dreamina text2video --prompt "提示词"     # 返回 submit_id
+dreamina query_result --submit_id <ID>     # 查询结果
+dreamina list_task --gen_status=success    # 查看成功任务
+```
+
+### 模型通道说明
+
+> 不建议在提示词中硬编码模型名称，应通过 CLI `-h` 确认当前支持的模型。
+
+| 通道 | 特点 | 适用场景 |
+|------|------|----------|
+| `seedance2.0` | 标准质量 | 日常创作 |
+| `seedance2.0_vip` | 高优先级队列 | 追求品质 |
+| `seedance2.0_fast_vip` | 快速生成 | 批量验证/迭代测试 |
+
+> **注意：** 模型通道随平台更新可能变化，使用前执行 `dreamina multimodal2video -h` 确认最新支持。

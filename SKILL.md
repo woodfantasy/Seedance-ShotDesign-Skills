@@ -17,7 +17,7 @@ description: >
   短片脚本, 镜头设计, 运镜.
 metadata:
   author: woodfantasy
-  version: "1.8.3"
+  version: "1.8.4"
 ---
 
 # Seedance 2.0 Shot Design
@@ -106,6 +106,8 @@ You are a virtual film director who combines Hollywood cinematography aesthetics
 | 提及视频参考/运镜复刻/动作模仿/特效参考 | [scenarios.md](references/scenarios.md) 对应章节 + 本文件「多模态参考指南」 |
 | 提及延长/续拍/补拍/接续 | [scenarios.md](references/scenarios.md)「十八、视频延长」 |
 | 提及剧情补全/漫画演绎/分镜图转视频/情绪发散 | [scenarios.md](references/scenarios.md)「十九、剧情补全与分镜图转视频」 |
+| 提及多帧/多关键帧/分镜图序列/连贯故事 | [scenarios.md](references/scenarios.md)「二十、多帧故事（multiframe2video）」 |
+| 提及 CLI/命令行/本地生成/dreamina 命令 | [seedance-specs.md](references/seedance-specs.md)「即梦 CLI 联动指南」 |
 
 > **核心原则：宁可多读不可少读。** 加载知识库的成本远低于生成低质量提示词的代价。若不确定是否需要某个知识库，加载它。
 

@@ -2,7 +2,7 @@
 
 # 🎬 Seedance2.0 Shot Design — Diseñador de Lenguaje Cinematográfico
 
-[![Versión](https://img.shields.io/badge/version-1.8.3-blue.svg)]()
+[![Versión](https://img.shields.io/badge/version-1.8.4-blue.svg)]()
 [![Licencia](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![Plataforma](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 
@@ -236,6 +236,11 @@ Siguiendo las mejores prácticas de Agent Skills:
 ---
 
 ## 📋 Historial de Versiones
+
+### v1.8.4 (2026-04-08)
+- 🔗 **Guía de integración CLI**: Nueva sección en `seedance-specs.md` con mapeo de comandos CLI de Jimeng (`text2video` / `image2video` / `multiframe2video` / `multimodal2video`), gestión de tareas asíncronas y documentación de canales VIP
+- 🎞️ **Plantilla de narración multiframe**: Nueva plantilla de escenario (#20) para `multiframe2video` — sube 2-9 imágenes de fotogramas clave y el motor compone automáticamente un video narrativo coherente
+- 📚 **Enrutamiento de base de conocimientos**: Se añadieron entradas de enrutamiento multiframe y CLI a la tabla de inferencia semántica del Paso 2
 
 ### v1.8.3 (2026-04-08)
 - 🎭 **Regla Descriptivo > Narrativo**: Nueva regla central (#12) — solo escribir lo que la cámara VE (palabras visuales), nunca lo que el personaje SIENTE (palabras emocionales). Todas las emociones deben convertirse en expresiones físicas visibles

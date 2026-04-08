@@ -872,6 +872,92 @@ Background music reference @Video1.
 
 ---
 
+## 二十、多帧故事（multiframe2video）（v1.8.4 新增）
+
+> 即梦 CLI 支持 `multiframe2video` 命令——上传多张关键帧图片，引擎自动编排为连贯故事视频。
+> 与「多段分镜」的区别：多段分镜是每段独立生成后手动拼接；多帧故事是多图一次提交，引擎自动理解图片叙事逻辑并生成连贯过渡。
+
+### 何时用多帧故事 vs 多段分镜
+
+| 场景 | 推荐方式 | 理由 |
+|------|----------|------|
+| 有多张关键帧/角色设计图，需要连贯故事 | **多帧故事** | 引擎自动编排过渡，一次生成 |
+| 超长视频（>15秒）需要精确分镜控制 | **多段分镜** | 每段独立校验，手动控制交接 |
+| 漫画分格/分镜脚本图 | **多帧故事** | 引擎能读懂分格顺序 |
+| 需要精确时间轴控制（卡点/节奏） | **多段分镜** | 时间戳分镜更精准 |
+
+### 核心参数
+
+- **必须素材**：2-9 张关键帧图片
+- **画幅**：随图片比例 或 指定
+- **图片顺序**：按叙事顺序传入（第1张=开头，最后1张=结尾）
+- **提示词**：描述整体故事和风格，不需要逐帧描述
+
+### 模板
+
+**中文：**
+```
+参考以下图片序列创作一段连贯故事视频：
+@图片1为开场画面，@图片2为发展，@图片3为[高潮/转折]，@图片N为结局。
+整体风格：[风格总纲]。
+故事线：[一句话概括叙事弧线]。
+保持角色外貌在所有画面间完全一致。
+[运镜/节奏要求]。
+音效：[音效描述]。
+禁止：任何文字、字幕、LOGO或水印
+```
+
+**English:**
+```
+Create a coherent story video from the following image sequence:
+@Image1 as opening, @Image2 as development, @Image3 as [climax/turning point], @ImageN as ending.
+Overall style: [style overview].
+Story arc: [one-line narrative arc summary].
+Maintain character appearance perfectly consistent across all frames.
+[Camera/pacing requirements].
+SFX: [sound description].
+Negative: any text, subtitles, logos or watermarks
+```
+
+### 示例 — 仙侠角色觉醒三幕剧（3张关键帧）
+
+```
+参考以下图片序列创作一段连贯故事视频：
+@图片1为开场——角色在山间静坐冥想，
+@图片2为转折——角色睁眼，周围灵力汇聚，
+@图片3为高潮——角色腾空而起，衣袂飘飞。
+整体风格：写实东方电影质感，金青色调，空灵史诗氛围。
+故事线：从沉寂冥想到灵力觉醒再到破空飞升的渐进张力。
+保持角色外貌（白衣、长发、玉冠）在所有画面间完全一致。
+运镜从远景静态逐步推进到环绕动态，节奏由缓到急。
+音效：山风→灵力共振嗡鸣→破空冲击波。
+禁止：任何文字、字幕、LOGO或水印
+```
+
+**Example — Character Awakening Three-Act (3 keyframes, English):**
+
+```
+Create a coherent story video from the following image sequence:
+@Image1 as opening — character meditating in mountain stillness,
+@Image2 as turning point — character opens eyes, spiritual energy converging,
+@Image3 as climax — character ascending into sky, robes billowing.
+Overall style: realistic Eastern cinematic look, gold-teal palette, ethereal epic atmosphere.
+Story arc: gradual tension from silent meditation to spiritual awakening to skyward ascension.
+Maintain character appearance (white robes, long hair, jade crown) perfectly consistent across all frames.
+Camera progressing from distant static to orbital dynamic, pacing from slow to intense.
+SFX: mountain wind → spiritual resonance hum → skyward shockwave.
+Negative: any text, subtitles, logos or watermarks
+```
+
+### 多帧故事核心技巧
+
+1. **图片顺序即叙事顺序** — 引擎按传入顺序理解时间线
+2. **保持角色一致性** — 每张图中的角色外貌应尽量一致，或在提示词中强调 `保持一致`
+3. **提示词侧重整体** — 不需要逐帧描述画面内容（图片已经包含），侧重写故事弧线、风格、运镜节奏
+4. **图片数量建议** — 3-5 张最佳，过多图片可能降低过渡流畅度
+
+---
+
 ## 附录：动作物理阻尼词库 (Physics Simulation)
 
 > **跨场景通用工具箱。** 解决 AI 视频中人物动作像"滑步 (Moonwalking)"的核心问题——不写"他跑"，而是描述物理受力过程，让大模型的三维物理模拟器正确工作。

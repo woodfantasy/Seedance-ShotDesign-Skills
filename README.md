@@ -2,7 +2,7 @@ English | [中文](README.zh-CN.md) | [日本語](README.ja.md) | [한국어](RE
 
 # 🎬 Seedance2.0 Shot Design — Cinematic Shot Language Designer
 
-[![Version](https://img.shields.io/badge/version-1.8.3-blue.svg)]()
+[![Version](https://img.shields.io/badge/version-1.8.4-blue.svg)]()
 [![License](https://img.shields.io/badge/license-MIT--0-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Seedance_2.0-purple.svg)]()
 
@@ -23,7 +23,7 @@ A Claude Skill built on the [Agent Skills](https://agentskills.io) specification
 | 📐 **Timestamped Storyboarding** | `0-3s / 3-8s / …` precise timeline control to prevent visual bleeding between shots |
 | 🎯 **Six-Element Precision Assembly** | Subject / Action / Scene / Lighting / Camera / Sound — a structured, high-conversion formula |
 | 🎬 **Smart Multi-Segment Storyboard** | Videos >15s are automatically split into independent prompt segments with unified style, lighting, sound, and seamless transition frames |
-| 📦 **19 Scenario Templates** | E-commerce / Xianxia / Short Drama / Food / MV / One-Take / Automotive / Macro / Nature / Game PV / Horror / Travel / Pets / Transformation / Loop / Video Editing / Video Extension / Story Completion |
+| 📦 **20 Scenario Templates** | E-commerce / Xianxia / Short Drama / Food / MV / One-Take / Automotive / Macro / Nature / Game PV / Horror / Travel / Pets / Transformation / Loop / Video Editing / Video Extension / Story Completion / Multiframe Storytelling |
 | 🎵 **Sound & ASMR Vocabulary** | Physics-based onomatopoeia library covering ambient / action / vocal / music sounds |
 | 🎤 **Voice & Language Control** | Timbre cloning via video reference, dialect/accent control (Sichuan/Cantonese/Northeast/Taiwanese etc.), multilingual dialogue mixing, special voice styles (documentary/stand-up/opera/ASMR) |
 | 📹 **Multimodal Reference Guide** | 6 core reference patterns (first frame / camera replication / action replication / camera+action separation / timbre reference / effect replication), multi-asset character control, consistency preservation |
@@ -166,7 +166,7 @@ seedance-shot-design/
     ├── director-styles.md       # Director style parameterized mapping (28+ styles, incl. Cel-Shaded CG)
     ├── seedance-specs.md        # Seedance 2.0 official platform specs
     ├── quality-anchors.md       # Quality anchors & lighting library (incl. NPR materials / lighting / conflict matrix)
-    ├── scenarios.md             # Vertical scenario templates (17 scenarios + anime variants + video editing + physics damping toolkit)
+    ├── scenarios.md             # Vertical scenario templates (20 scenarios + anime variants + video editing + physics damping toolkit)
     └── audio-tags.md            # Audio & sound effect tag specs (incl. spatial acoustics & material-based onomatopoeia)
 ```
 
@@ -238,6 +238,11 @@ Following Agent Skills best practices:
 ---
 
 ## 📋 Changelog
+
+### v1.8.4 (2026-04-08)
+- 🔗 **CLI Integration Guide**: New `seedance-specs.md` section mapping Shot Design modes to Jimeng CLI commands (`text2video` / `image2video` / `multiframe2video` / `multimodal2video`), with async task management and VIP channel documentation
+- 🎞️ **Multiframe Storytelling Template**: New scenario template (#20) for `multiframe2video` — upload 2-9 keyframe images and let the engine auto-compose a coherent story video. Includes decision matrix for choosing between multiframe vs. multi-segment storyboard
+- 📚 **Knowledge Base Routing**: Added multiframe and CLI routing entries to Step 2 semantic inference table
 
 ### v1.8.3 (2026-04-08)
 - 🎭 **Descriptive Over Narrative Rule**: New core rule (#12) — only write what the camera SEES (visual words), never what characters FEEL (emotion words). All emotions must be converted to visible physical expressions (facial micro-expressions, body language, breathing rhythm, gaze direction)
