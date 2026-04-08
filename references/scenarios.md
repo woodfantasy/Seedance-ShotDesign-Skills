@@ -958,7 +958,7 @@ Negative: any text, subtitles, logos or watermarks
 
 ---
 
-## 十九、时间静止 / 子弹时间 (Freeze Time)（v1.9 新增）
+## 十九、时间静止 / 子弹时间 (Freeze Time)（v1.8.5 新增）
 
 > 通过极具视觉冲击力的特效运镜，在完全凝固的场景中进行摄影机穿梭。适用于商业大片、特效展示和戏剧化高潮。
 
@@ -987,7 +987,7 @@ finally locking focus on [core subject].
 
 ---
 
-## 二十、多镜头混剪序列 (Multishot Video)（v1.9 新增）
+## 二十、多镜头混剪序列 (Multishot Video)（v1.8.5 新增）
 
 > 官方推荐的高级玩法，用 `multishot video` 指令打破一镜到底的限制，让大模型在单次生成中自动完成多镜头蒙太奇剪辑。
 
