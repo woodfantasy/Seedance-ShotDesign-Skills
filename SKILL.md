@@ -558,6 +558,12 @@ Preserve composition and colors. [motion description] + [camera] + [SFX]
 Reference facial features from @Image1, costume from @Image2, scene from @Image3
 ```
 
+### 参考底图防污染法则 (Background Purification)
+
+在使用多模态参考（特别是第一人称 POV 或特定角色/物件动作迁移）时，如果提供的人物或器械设定图带有复杂的背景：
+- 中文建议：`请确保您上传的参考图片背景为“纯白/完全空白”，避免原图背景的杂质污染视频生成的环境。`
+- English: `Please ensure your reference image has a pure white/blank background to prevent background noise from contaminating the generated video environment.`
+
 ### 一致性保持
 
 多场景/多角度素材中保持角色外貌一致：

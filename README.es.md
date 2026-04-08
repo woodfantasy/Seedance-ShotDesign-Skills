@@ -256,6 +256,10 @@ Siguiendo las mejores prácticas de Agent Skills:
   - `Freeze Time (Tiempo Congelado)`: La cámara se mueve dramáticamente a través de elementos del escenario completamente congelados.
   - `Multishot Video (Video Multitoma)`: Evitas la restricción de "toma única", permitiendo generar múltiples cortes de montaje rápidos en una sola generación.
 
+- 🚀 **Escenarios POV Extremos**: Se agregó la nueva plantilla de escenario #21 que se centra en "lógica de seguimiento de la cabeza", "FPV de proyectiles a alta velocidad (espadas/flechas voladoras)" y "vuelo de criaturas".
+- 🎧 **Exclusión de Audio Inmersivo**: Directivas estrictas de exclusión de audio introducidas para plantillas POV (SOLO sonido ambiental, SIN BGM ni diálogos) para evitar que la IA arruine la inmersión.
+- 🧹 **Regla de Purificación de Fondo**: Se aclaró que las imágenes de personajes de referencia deben usar un "fondo blanco puro/en blanco" para evitar contaminar el entorno de video en la generación de Imagen a Video.
+
 ### v1.8.4 (2026-04-08)
 - 🔗 **Guía de integración CLI**: Nueva sección en `seedance-specs.md` con mapeo de comandos CLI de Jimeng (`text2video` / `image2video` / `multiframe2video` / `multimodal2video`), gestión de tareas asíncronas y documentación de canales VIP
 - 🎞️ **Plantilla de narración multiframe**: Nueva plantilla de escenario (#20) para `multiframe2video` — sube 2-9 imágenes de fotogramas clave y el motor compone automáticamente un video narrativo coherente

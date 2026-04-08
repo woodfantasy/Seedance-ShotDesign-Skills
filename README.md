@@ -269,6 +269,10 @@ Following Agent Skills best practices:
   - `Freeze Time (Bullet Time)`: Camera dramatically weaves through completely frozen scene elements.
   - `Multishot Video`: Bypasses the "one-take" limitation by triggering the model to auto-generate sharp montage cuts in a single generation.
 
+- 🚀 **Extreme POV Scenarios**: Added new 21st scenario template focusing on "human head-tracking logic", "high-speed projectile FPV (flying swords/arrows)", and "creature flight".
+- 🎧 **Immersive Audio Exclusion**: Introduced strict audio-exclusion directives for POV templates (ONLY ambient sound, NO BGM or dialogue) to prevent AI from breaking immersion.
+- 🧹 **Background Purification Rule**: Clarified that reference entity images must use a "pure white/blank background" to avoid contaminating the video environment in Image-to-Video generation.
+
 ### v1.8.4 (2026-04-08)
 - 🔗 **CLI Integration Guide**: New `seedance-specs.md` section mapping Shot Design modes to Jimeng CLI commands (`text2video` / `image2video` / `multiframe2video` / `multimodal2video`), with async task management and VIP channel documentation
 - 🎞️ **Multiframe Storytelling Template**: New scenario template (#20) for `multiframe2video` — upload 2-9 keyframe images and let the engine auto-compose a coherent story video. Includes decision matrix for choosing between multiframe vs. multi-segment storyboard

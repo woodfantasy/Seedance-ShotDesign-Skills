@@ -1016,6 +1016,81 @@ Fast-paced montage with sharp cuts.
 
 ---
 
+## 二十一、极限第一人称视角 (Extreme POV / FPV)（v1.8.6 新增）
+
+> 通过明确的观察逻辑、极限的风噪环境音和纯净图池法则，生成极具视觉冲击力的极限第一人称沉浸视角（如弓箭、飞鸟、御剑、跑酷等）。
+
+**核心参数与法则：**
+- **背景纯净法则**：如果是多模态参考（图生视频），提供的参考人物/物体素材图**必须是纯白/空白背景**，否则杂乱背景会污染第一人称视角的环境生成。
+- **音效排他原则**：必须强调 `仅生成环境音效，绝对不要配任何背景音乐(BGM)和对白`。
+- **动感修饰词**：极度的摇晃感 (extreme camera shake)、风噪氛围感 (wind noise)、强烈透视 (strong perspective)、高速飞行 (high-speed flight)。
+
+### 21.1 真实人类 POV (带视线转移)
+
+> 模拟人眼“先向下看，再抬头眺望”的沉浸式运镜操作。
+
+**模板：**
+```
+[时长]真实第一人称POV视角，
+0-X秒：镜头朝下，显示[人物自己的脚/手中的剑/手机]，镜头伴随自然呼吸微距晃动。
+X-N秒：[向上抬眼/视野上抬]，眺望远方的[宏大场景]，[镜头伴随摇晃向前移动]。
+注意保持第一人称肢体与周围环境的比例正常。
+音效：仅生成[真实脚步声/喘息声/风动声]，绝对不要配任何背景音乐和台词。
+```
+
+**English:**
+```
+[Xs] realistic first-person POV shot,
+0-Xs: Camera looks down, revealing [subject's feet/sword in hand/phone], subtle natural breathing camera shake.
+X-Ns: [Look up / tilt up], gazing at distant [epic scenery], [camera moves forward with hand-held shake].
+Maintain realistic scale proportions between first-person limbs and environment.
+SFX: Generate ONLY [realistic footsteps/breathing/wind noise], absolutely NO background music or dialogue.
+```
+
+### 21.2 飞行物体 FPV (无人机/飞箭/飞剑)
+
+> 附着在高速移动物体上的极限机位，强调穿梭感与破空感。
+
+**模板：**
+```
+[时长]物体第一人称FPV视角(Projectile POV)，主观视角附着在[飞行中的箭镞/御剑飞行的剑首]上。
+镜头跟随着[物体]在空中高速穿梭/俯冲，掠过[云层/人群/屋檐]。
+极度的摇晃感，强烈风噪氛围，强烈的透视感。
+最后定格于/击中[目标点]。
+音效：仅生成强烈的[破空声/疾风呼啸声]，绝对不要配任何背景音乐和台词。
+```
+
+**English:**
+```
+[Xs] object first-person FPV / projectile POV, subjective camera attached to [a flying arrowhead / front of a flying sword].
+Camera darts and dives through the air at high speed with the [object], skimming past [clouds/crowd/rooftops].
+Extreme camera shake, intense wind noise atmosphere, strong perspective.
+Finally locking onto / hitting [target].
+SFX: Generate ONLY intense [air-piercing slash/howling wind], absolutely NO background music or dialogue.
+```
+
+### 21.3 生物第一视角 (飞鸟/走兽 POV)
+
+> 模拟动物的移动习惯与视野高度（如从高空俯视，或从草丛低视角穿梭）。
+
+**模板：**
+```
+[时长]白鹤/老鹰的第一人称飞行POV视角，
+镜头模拟鸟类飞行的高低起伏，[从高空急速俯冲向下/贴着水面滑翔飞升]，穿梭于[场景元素]之间。
+强烈运动模糊与极速穿梭感。
+音效：仅生成强烈的风噪与翅膀扑腾声，绝对不要配任何背景音乐和台词。
+```
+
+**English:**
+```
+[Xs] first-person bird flight POV of a [crane / falcon],
+Camera mimics the undulating flight path of a bird, [rapidly dive-bombing from high altitude / soaring close to water surface], weaving through [scene elements].
+Strong motion blur and sense of extreme speed.
+SFX: Generate ONLY intense wind noise and wing flapping, absolutely NO background music or dialogue.
+```
+
+---
+
 ## 附录：动作物理阻尼词库 (Physics Simulation)
 
 > **跨场景通用工具箱。** 解决 AI 视频中人物动作像"滑步 (Moonwalking)"的核心问题——不写"他跑"，而是描述物理受力过程，让大模型的三维物理模拟器正确工作。

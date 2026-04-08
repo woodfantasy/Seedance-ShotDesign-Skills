@@ -241,6 +241,10 @@ python -m unittest scripts.test_validate -v
   - `Freeze Time (Temps Figé)` : La caméra se faufile spectaculairement à travers des éléments de scène totalement figés.
   - `Multishot Video (Vidéo Multicaméra)` : Contourne la limite de "plan séquence" en déclenchant la génération automatique de montages à coupes franches.
 
+- 🚀 **Scénarios POV Extrêmes** : Ajout d'un 21e modèle de scénario axé sur la "logique de suivi visuel humain", le "FPV de projectile à grande vitesse (épées/flèches volantes)" et le "vol de créature".
+- 🎧 **Exclusion Audio Immersive** : Directives strictes d'exclusion audio introduites pour les modèles de POV (UNIQUEMENT le son ambiant, AUCUN BGM ou dialogue) pour empêcher l'IA de rompre l'immersion.
+- 🧹 **Règle de Purification de l'Arrière-plan** : Il est précisé que les images d'entité de référence doivent utiliser un "fond blanc pur/vide" afin d'éviter de contaminer l'environnement vidéo dans la génération Image-to-Video.
+
 ### v1.8.4 (2026-04-08)
 - 🔗 **Guide d'intégration CLI** : Nouvelle section dans `seedance-specs.md` avec mappage des commandes CLI de Jimeng (`text2video` / `image2video` / `multiframe2video` / `multimodal2video`), gestion des tâches asynchrones et documentation des canaux VIP
 - 🎞️ **Template de narration multiframe** : Nouveau template de scénario (#20) pour `multiframe2video` — téléchargez 2-9 images de keyframes et le moteur compose automatiquement une vidéo narrative cohérente
