@@ -158,7 +158,7 @@ seedance-shot-design/
     ├── director-styles.md       # Cartographie des styles de réalisation (28+)
     ├── seedance-specs.md        # Spécifications officielles Seedance 2.0
     ├── quality-anchors.md       # Ancres qualité et éclairage
-    ├── scenarios.md             # 17 modèles de scénarios verticaux
+    ├── scenarios.md             # 20 modèles de scénarios verticaux
     └── audio-tags.md            # Tags audio et effets sonores
 ```
 
@@ -175,7 +175,7 @@ python scripts/validate_prompt.py --text "your prompt" --lang en
 python scripts/validate_prompt.py --text "votre prompt" --json
 ```
 
-**Vérifications (v1.5) :**
+**Vérifications :**
 - ❌ Dépassement du nombre de mots (Chinois >500 caractères / Anglais >1000 mots)
 - ❌ Terminologie professionnelle de caméra absente
 - ❌ Blocage dur des mots de remplissage (masterpiece / chef-d'œuvre / ultra-net → error)

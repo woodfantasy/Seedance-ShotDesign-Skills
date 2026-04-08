@@ -30,6 +30,8 @@ A Claude Skill built on the [Agent Skills](https://agentskills.io) specification
 | 🌐 **Bilingual Prompt Output** | Chinese users → Chinese prompts, non-Chinese users → English prompts, auto-detected |
 | 🛡️ **Copyright-Safe IP Fallback** | Three-tier progressive IP fallback strategy to prevent platform content blocks |
 | 🔍 **Structured Hard Validation** | Word count / camera moves / temporal logic / filler detection / optical physics conflicts / style conflict matrix — 7-rule checklist applied before every delivery |
+| 🔗 **CLI Integration** | Jimeng CLI command mapping (`text2video` / `image2video` / `multiframe2video` / `multimodal2video`), async task management, VIP channel routing |
+| 🎞️ **Multiframe Storytelling** | Upload 2-9 keyframe images → engine auto-composes coherent story video via `multiframe2video`, with decision matrix for choosing multiframe vs. multi-segment storyboard |
 
 ---
 
@@ -146,6 +148,15 @@ Write a 12-second plot-twist short drama scene with dialogue
 # One-Take
 Write a 15-second one-take museum walkthrough video prompt
 
+# Image-to-Video (I2V)
+I have a character design image — generate a 10-second animation from this first frame
+
+# Video Extension
+Extend this video by 10 seconds with a sunset ending
+
+# Multiframe Storytelling
+I have 5 storyboard keyframe images — create a coherent story video that flows through all frames
+
 # With Reference Assets
 I've uploaded 3 character design images and 1 reference video — generate a 15-second Xianxia fight scene
 ```
@@ -166,7 +177,7 @@ seedance-shot-design/
     ├── director-styles.md       # Director style parameterized mapping (28+ styles, incl. Cel-Shaded CG)
     ├── seedance-specs.md        # Seedance 2.0 official platform specs
     ├── quality-anchors.md       # Quality anchors & lighting library (incl. NPR materials / lighting / conflict matrix)
-    ├── scenarios.md             # Vertical scenario templates (20 scenarios + anime variants + video editing + physics damping toolkit)
+    ├── scenarios.md             # Vertical scenario templates (20 scenarios + anime variants + video editing + multiframe storytelling + physics damping toolkit)
     └── audio-tags.md            # Audio & sound effect tag specs (incl. spatial acoustics & material-based onomatopoeia)
 ```
 
@@ -190,7 +201,7 @@ python scripts/validate_prompt.py --text "your prompt" --lang en
 python scripts/validate_prompt.py --text "your prompt" --json
 ```
 
-**Validation Checks (v1.5):**
+**Validation Checks:**
 - ❌ Over word limit (Chinese >500 chars / English >1000 words)
 - ❌ Missing professional camera terminology
 - ❌ Filler word hard-block (masterpiece / ultra-clear, etc. → error)
@@ -229,7 +240,7 @@ Following Agent Skills best practices:
 |-----------|----------------|------------|
 | Compliance | Plain-text suggestions | **Python hard validation (incl. optical / style conflict matrix + review safety detection)** |
 | Director Styles | International directors only | **International + Chinese + Short Drama + AI Comic + Social Media + Anime + Cel-Shaded CG + Xiaohongshu** |
-| Scene Coverage | Biased toward epic films | **17 vertical scenarios + anime variants + video editing + physics damping toolkit** |
+| Scene Coverage | Biased toward epic films | **20 vertical scenarios + anime variants + video editing + physics damping toolkit** |
 | Sound Design | Brief mentions | **Spatial acoustics + material-based onomatopoeia library** |
 | Lighting | "Add a light" | **Source → Behavior → Tone three-layer + lighting recipes + material library** |
 | Multilingual | Chinese only | **Chinese / English bilingual output, auto language detection** |

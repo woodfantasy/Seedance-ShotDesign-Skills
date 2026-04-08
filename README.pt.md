@@ -23,7 +23,7 @@ Um Claude Skill construído sobre a especificação [Agent Skills](https://agent
 | 📐 **Storyboard com Marcação Temporal** | `0-3s / 3-8s / …` controle preciso da timeline para evitar sangramento visual entre planos |
 | 🎯 **Montagem de Seis Elementos** | Sujeito / Ação / Cena / Iluminação / Câmera / Som — fórmula estruturada de alta conversão |
 | 🎬 **Storyboard Multi-Segmento Inteligente** | Vídeos >15s divididos automaticamente em segmentos independentes com estilo, iluminação, som unificados e transições seamless |
-| 📦 **17 Templates de Cenários** | E-commerce / Xianxia / Curta / Gastronomia / MV / Plano-sequência / Automotivo / Macro / Natureza / Game PV / Terror / Viagem / Pets / Transformação / Loop / Edição de Vídeo |
+| 📦 **17 Templates de Cenários** | E-commerce / Xianxia / Curta / Gastronomia / MV / Plano-sequência / Automotivo / Macro / Natureza / Game PV / Terror / Viagem / Pets / Transformação / Loop / Edição de Vídeo / Extensão de Vídeo / Complemento de História / Narração Multiframe |
 | 🎵 **Vocabulário de Som e ASMR** | Biblioteca de onomatopeias baseada em física: ambiental / ação / vocal / música |
 | 🌐 **Saída Bilíngue de Prompts** | Usuários chineses → chinês / demais → inglês, detecção automática |
 | 🛡️ **Proteção de PI Segura** | Estratégia progressiva de recuo de PI em três níveis para evitar bloqueios |
@@ -158,7 +158,7 @@ seedance-shot-design/
     ├── director-styles.md       # Mapeamento de estilos de direção (28+)
     ├── seedance-specs.md        # Especificações oficiais Seedance 2.0
     ├── quality-anchors.md       # Âncoras de qualidade e iluminação
-    ├── scenarios.md             # 17 templates de cenários verticais
+    ├── scenarios.md             # 20 templates de cenários verticais
     └── audio-tags.md            # Tags de áudio e efeitos sonoros
 ```
 
@@ -175,7 +175,7 @@ python scripts/validate_prompt.py --text "your prompt" --lang en
 python scripts/validate_prompt.py --text "seu prompt" --json
 ```
 
-**Verificações (v1.5):**
+**Verificações:**
 - ❌ Excesso de palavras (Chinês >500 caracteres / Inglês >1000 palavras)
 - ❌ Terminologia profissional de câmera ausente
 - ❌ Bloqueio duro de enchimento (masterpiece / obra-prima / ultra-nítido → error)

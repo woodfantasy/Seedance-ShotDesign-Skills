@@ -23,7 +23,7 @@ Un Claude Skill construido sobre la especificación [Agent Skills](https://agent
 | 📐 **Storyboard con Marcas de Tiempo** | `0-3s / 3-8s / …` control preciso del timeline para evitar el sangrado visual entre planos |
 | 🎯 **Ensamblaje de Seis Elementos** | Sujeto / Acción / Escena / Iluminación / Cámara / Sonido — fórmula estructurada de alta conversión |
 | 🎬 **Storyboard Multi-Segmento Inteligente** | Vídeos de >15s se dividen automáticamente en segmentos independientes con estilo, iluminación, sonido unificados y transiciones fluidas |
-| 📦 **17 Plantillas de Escenarios** | E-commerce / Xianxia / Cortometraje / Gastronomía / MV / Plano Secuencia / Automoción / Macro / Naturaleza / Game PV / Terror / Viajes / Mascotas / Transformación / Loop / Edición de Vídeo |
+| 📦 **20 Plantillas de Escenarios** | E-commerce / Xianxia / Cortometraje / Gastronomía / MV / Plano Secuencia / Automoción / Macro / Naturaleza / Game PV / Terror / Viajes / Mascotas / Transformación / Loop / Edición de Vídeo / Extensión de Vídeo / Completado de Historia / Narración Multiframe |
 | 🎵 **Vocabulario de Sonido y ASMR** | Biblioteca de onomatopeyas basada en física: ambiente / acción / vocal / música |
 | 🌐 **Salida Bilingüe de Prompts** | Usuarios chinos → prompts en chino / resto → en inglés, detección automática |
 | 🛡️ **Protección de PI segura** | Estrategia de repliegue de PI progresiva en tres niveles para evitar bloqueos de contenido |
@@ -164,7 +164,7 @@ seedance-shot-design/
     ├── director-styles.md       # Mapeo parametrizado de estilos de dirección (28+ estilos, incl. Cel-Shaded CG)
     ├── seedance-specs.md        # Especificaciones oficiales de la plataforma Seedance 2.0
     ├── quality-anchors.md       # Anclas de calidad y biblioteca de iluminación (incl. materiales NPR / iluminación / matriz de conflictos)
-    ├── scenarios.md             # Plantillas de escenarios verticales (17 escenarios + variantes anime + edición de vídeo + kit de amortiguación física)
+    ├── scenarios.md             # Plantillas de escenarios verticales (20 escenarios + variantes anime + edición de vídeo + kit de amortiguación física)
     └── audio-tags.md            # Especificaciones de etiquetas de audio y efectos sonoros (incl. acústica espacial y onomatopeyas por material)
 ```
 
@@ -188,7 +188,7 @@ python scripts/validate_prompt.py --text "your prompt" --lang en
 python scripts/validate_prompt.py --text "tu prompt" --json
 ```
 
-**Comprobaciones de Validación (v1.5):**
+**Comprobaciones de Validación:**
 - ❌ Exceso de palabras (Chino >500 caracteres / Inglés >1000 palabras)
 - ❌ Terminología profesional de cámara ausente
 - ❌ Bloqueo duro de palabras de relleno (masterpiece / obra maestra / ultra-nítido, etc. → error)
@@ -227,7 +227,7 @@ Siguiendo las mejores prácticas de Agent Skills:
 |-----------|---------------|------------|
 | Validación de conformidad | Sugerencias en texto plano | **Validación rigurosa con Python (incl. matriz de conflictos ópticos / de estilo + detección de seguridad de revisión)** |
 | Estilos de dirección | Solo directores internacionales | **Internacional + Chino + Cortometraje + Cómic IA + Redes Sociales + Anime + Cel-Shaded CG + Xiaohongshu** |
-| Cobertura de escenas | Sesgado hacia cine épico | **17 escenarios verticales + variantes anime + edición de vídeo + kit de amortiguación física** |
+| Cobertura de escenas | Sesgado hacia cine épico | **20 escenarios verticales + variantes anime + edición de vídeo + kit de amortiguación física** |
 | Diseño de sonido | Menciones breves | **Acústica espacial + biblioteca de onomatopeyas por material** |
 | Iluminación | "Pon una luz" | **Fuente → Comportamiento → Tono en tres capas + recetas de iluminación + biblioteca de materiales** |
 | Multilingüe | Solo chino | **Salida bilingüe chino / inglés, detección automática de idioma** |
