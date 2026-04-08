@@ -958,6 +958,64 @@ Negative: any text, subtitles, logos or watermarks
 
 ---
 
+## 十九、时间静止 / 子弹时间 (Freeze Time)（v1.9 新增）
+
+> 通过极具视觉冲击力的特效运镜，在完全凝固的场景中进行摄影机穿梭。适用于商业大片、特效展示和戏剧化高潮。
+
+**核心参数：**
+- 必须包含提示词：`场景完全静止` / `completely frozen scene`
+- 运镜：快速推轨 (Dolly Track) 或 三维穿梭 (Weave through)
+- 如果提供首帧图（@图片1为起幅），效果会大幅提升
+
+**模板：**
+```
+[时长]子弹时间特效，[渲染/精度要求]，
+@图片1为起幅，场景完全静止(completely frozen scene)，
+[静止场景中的元素：漂浮的碎片/水滴/火星/人群]，
+[运镜手法]：镜头极速穿梭/环绕经过这些静止元素，
+最终定格于[画面核心焦点]。
+```
+
+**English:**
+```
+[Xs] bullet time effect, [render/quality anchor],
+use @Image1 as starting frame, completely frozen scene,
+[elements frozen in mid-air: floating debris/water droplets/embers/crowd],
+camera dramatically weaves through the frozen scene,
+finally locking focus on [core subject].
+```
+
+---
+
+## 二十、多镜头混剪序列 (Multishot Video)（v1.9 新增）
+
+> 官方推荐的高级玩法，用 `multishot video` 指令打破一镜到底的限制，让大模型在单次生成中自动完成多镜头蒙太奇剪辑。
+
+**核心参数：**
+- 必须包含提示词：`多镜头视频` / `multishot video`
+- 适用于：快速蒙太奇、MV拼接、预告片快速闪现
+- 注意：牺牲了空间连续性，但获得了更密集的叙事节奏。
+
+**模板：**
+```
+[时长]多镜头视频混剪，[风格总纲]，
+第一镜：[画面描述+运镜A]；
+第二镜：[画面描述+运镜B]；
+第三镜：[画面描述+运镜C]。
+节奏极快，镜头切换凌厉。
+```
+
+**English:**
+```
+[Xs] multishot video, [style overview],
+Shot 1: [visuals + camera A];
+Shot 2: [visuals + camera B];
+Shot 3: [visuals + camera C].
+Fast-paced montage with sharp cuts.
+```
+
+---
+
 ## 附录：动作物理阻尼词库 (Physics Simulation)
 
 > **跨场景通用工具箱。** 解决 AI 视频中人物动作像"滑步 (Moonwalking)"的核心问题——不写"他跑"，而是描述物理受力过程，让大模型的三维物理模拟器正确工作。
