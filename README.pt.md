@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-1.8.5-blue.svg" alt="Versão"></a>
+  <a href=""><img src="https://img.shields.io/badge/version-1.9.0-blue.svg" alt="Versão"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="Licença"></a>
   <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="Plataforma"></a>
 </p>
@@ -233,6 +233,14 @@ python -m unittest scripts.test_validate -v
 ---
 
 ## 📋 Histórico de Versões
+
+### v1.9.0 (2026-04-18)
+- 🎬 **Referência Rápida de Planos Narrativos Guia (novo capítulo)**: Nova Seção IX em `cinematography.md` — 8 tipos de planos de guia/seguimento/revelação (Leading Shot, Following Shot, Side Tracking, Low Angle Follow, Long Lens Follow, Epic Drone Reveal, Reveal Through, Orbit Follow), com frases-gatilho bilíngues e prompts de exemplo
+- 🚁 **Epic Drone Reveal**: Adicionado como movimento de câmera Level 1 independente — ascensão lenta de trás/ângulo baixo revelando a paisagem épica; estrutura narrativa distinta dos planos aéreos genéricos
+- 🌿 **Reveal from Behind / Through Shot**: Nova entrada Level 1 para planos de penetração de obstáculos (câmera empurrando por bambu/multidão/cortina para revelar), com guia de frases seguras
+- 🚶 **Leading Shot**: Nova entrada Level 1 para movimento de câmera que recua à frente do sujeito, transmitindo jornada e agência do protagonista
+- ⚡ **Snap Zoom / Crash Zoom**: Adicionado a combos Level 3 — salto explosivo de distância focal para impacto cômico, ênfase de susto e sincronização de beat MV
+- 🌀 **Orbit Follow**: Adicionado a combos Level 3 — combinação orbit + tracking onde o ponto pivô se move com o sujeito, distinto das órbitas de sujeito estático
 
 ### v1.8.5 (2026-04-08)
 - 🌐 **Adaptação à Plataforma Runway**: Limites de recursos especificados para usuários do Runway (≤5 imagens, ≤3 vídeos) e estratégias explícitas para contornar a moderação de rostos humanos realistas (desfoque ou estilos NPR).

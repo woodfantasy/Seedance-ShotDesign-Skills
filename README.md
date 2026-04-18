@@ -11,7 +11,7 @@ English | [中文](README.zh-CN.md) | [日本語](README.ja.md) | [한국어](RE
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-1.8.5-blue.svg" alt="Version"></a>
+  <a href=""><img src="https://img.shields.io/badge/version-1.9.0-blue.svg" alt="Version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="License"></a>
   <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="Platform"></a>
 </p>
@@ -261,6 +261,14 @@ Following Agent Skills best practices:
 ---
 
 ## 📋 Changelog
+
+### v1.9.0 (2026-04-18)
+- 🎬 **Narrative Guidance Shot Patterns**: New Section IX in `cinematography.md` — 8 leading/following/reveal shot types (Leading Shot, Following Shot, Side Tracking, Low Angle Follow, Long Lens Follow, Epic Drone Reveal, Reveal Through, Orbit Follow) with bilingual trigger phrases and example prompts
+- 🚁 **Epic Drone Reveal**: Added as a standalone Level 1 camera move — slow rise from behind subject unveiling grand landscape; distinct narrative structure from generic aerial shots
+- 🌿 **Reveal from Behind / Through Shot**: New Level 1 entry for obstacle-penetration shots (camera pushing through bamboo/crowd/curtain to reveal), with safety phrasing guide
+- 🚶 **Leading Shot**: New Level 1 entry for retreating-ahead camera movement conveying journey and protagonist agency
+- ⚡ **Snap Zoom / Crash Zoom**: Added to Level 3 combos — explosive focal-length jump for comedy impact, scare emphasis, and MV beat-sync
+- 🌀 **Orbit Follow**: Added to Level 3 combos — simultaneous orbit + tracking where the pivot point moves with the subject, distinct from static-subject orbits
 
 ### v1.8.5 (2026-04-08)
 - 🌐 **Runway Platform Adaptation**: Clarified native asset limits for Runway users (≤5 images, ≤3 videos) and provided explicit moderation bypass strategies for realistic human faces (blurring or NPR restyling).

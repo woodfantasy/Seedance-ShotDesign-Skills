@@ -17,7 +17,7 @@ description: >
   短片脚本, 镜头设计, 运镜.
 metadata:
   author: woodfantasy
-  version: "1.8.5"
+  version: "1.9.0"
 ---
 
 # Seedance 2.0 Shot Design

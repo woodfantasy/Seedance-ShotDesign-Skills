@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-1.8.5-blue.svg" alt="版本"></a>
+  <a href=""><img src="https://img.shields.io/badge/version-1.9.0-blue.svg" alt="版本"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="协议"></a>
   <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="平台"></a>
 </p>
@@ -252,6 +252,14 @@ python -m unittest scripts.test_validate -v
 ---
 
 ## 📋 版本记录
+
+### v1.9.0 (2026-04-18)
+- 🎬 **叙事引导运镜速查（新章节）**：`cinematography.md` 新增第九节——8种引导/跟随/揭示类运镜（引导后退镜头、背影跟随、侧向平行跟随、低角度贴地跟随、长焦压迫跟随、史诗无人机揭示、遮挡揭示/穿梭镜头、移动环绕），配双语触发词与实例提示词
+- 🚁 **史诗级无人机揭示（Epic Drone Reveal）**：升级为独立 Level 1 运镜条目——无人机从主体背后/低位缓慢升起揭示宏大场景；与普通航拍在叙事结构上具有根本性差别
+- 🌿 **遮挡揭示/穿梭镜头（Reveal from Behind / Through Shot）**：新增 Level 1 条目，穿越遮挡物（树丛/门框/人群/窗帘）后揭示场景，制造悬念与层次纵深
+- 🚶 **引导镜头（Leading Shot）**：新增 Level 1 条目，镜头在主体前方后退引导，强化旅程感与角色主动性
+- ⚡ **急推变焦/骤变焦（Snap Zoom / Crash Zoom）**：新增 Level 3 组合——焦距骤变产生爆裂冲击感，适用于喜剧冲击、惊吓强调和 MV 节拍卡点
+- 🌀 **移动环绕（Orbit Follow）**：新增 Level 3 组合——主体运动中同步环绕（orbit + tracking），区别于静止主体环绕
 
 ### v1.8.5 (2026-04-08)
 - 🌐 **Runway 平台适配限制**：明确 Runway 用户专有的资产限制（图片≤5，视频≤3），并提供人脸审查规避方案（模糊化或三渲二重绘）。

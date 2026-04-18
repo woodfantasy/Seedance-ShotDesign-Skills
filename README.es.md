@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-1.8.5-blue.svg" alt="Versión"></a>
+  <a href=""><img src="https://img.shields.io/badge/version-1.9.0-blue.svg" alt="Versión"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="Licencia"></a>
   <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="Plataforma"></a>
 </p>
@@ -248,6 +248,14 @@ Siguiendo las mejores prácticas de Agent Skills:
 ---
 
 ## 📋 Historial de Versiones
+
+### v1.9.0 (2026-04-18)
+- 🎬 **Referencia Rápida de Planos Guía-Narrativos (nuevo capítulo)**: Nueva Sección IX en `cinematography.md` — 8 tipos de planos de guía/seguimiento/revelación (Leading Shot, Following Shot, Side Tracking, Low Angle Follow, Long Lens Follow, Epic Drone Reveal, Reveal Through, Orbit Follow), con frases gatillo bilingües y prompts de ejemplo
+- 🚁 **Epic Drone Reveal**: Añadido como movimiento de cámara Level 1 independiente — ascenso lento desde detrás/ángulo bajo revelando el paisaje épico; estructura narrativa distinta a los planos aéreos genéricos
+- 🌿 **Reveal from Behind / Through Shot**: Nueva entrada Level 1 para planos de penetración de obstáculos (cámara empujando a través de bambú/multitud/cortina para revelar), con guía de frases seguras
+- 🚶 **Leading Shot**: Nueva entrada Level 1 para movimiento de cámara que retrocede delante del sujeto, transmitiendo viaje y agencia del protagonista
+- ⚡ **Snap Zoom / Crash Zoom**: Añadido a combos Level 3 — salto explosivo de distancia focal para impacto cómico, énfasis de susto y sincronización de beat MV
+- 🌀 **Orbit Follow**: Añadido a combos Level 3 — órbita + tracking simultáneos donde el punto pivote se mueve con el sujeto, distinto de las órbitas de sujeto estático
 
 ### v1.8.5 (2026-04-08)
 - 🌐 **Adaptación a Runway**: Límites de activos clarificados para usuarios de Runway (≤5 imágenes, ≤3 videos) y estrategias claras de bypass para la moderación de rostros humanos (difuminado o cambio de estilo NPR).

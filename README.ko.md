@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-1.8.5-blue.svg" alt="버전"></a>
+  <a href=""><img src="https://img.shields.io/badge/version-1.9.0-blue.svg" alt="버전"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="라이선스"></a>
   <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="플랫폼"></a>
 </p>
@@ -248,6 +248,14 @@ Agent Skills 모범 사례 준수:
 ---
 
 ## 📋 변경 이력
+
+### v1.9.0 (2026-04-18)
+- 🎬 **내러티브 가이드 카메라워크 속차 (신규 챕터)**: `cinematography.md` 제IX절 신설 — 8종 리딩/팔로잉/리빌 샷(리딩샷·팔로잉샷·사이드트래킹·로앵글팔로우·장초점압박팔로우·에픽드론리빌·장애물리빌·이동오빗), 이중언어 트리거워드 및 예시 포함
+- 🚁 **에픽 드론 리빌 (Epic Drone Reveal)**: 독립 Level 1 카메라 무브로 격상 — 피사체 뒤/저위에서 천천히 상승하며 장대한 경관 공개; 일반 항공촬영과 근본적으로 다른 서사 구조
+- 🌿 **장애물 리빌/스루샷 (Reveal / Through Shot)**: 신규 Level 1 — 장애물(대나무숲/문/군중/커튼)을 통과해 장면 공개, 서스펜스와 레이어 깊이감 연출
+- 🚶 **리딩샷 (Leading Shot)**: 신규 Level 1 — 카메라가 피사체 앞에서 후퇴하며 가이드, 여정감과 주인공 능동성 강화
+- ⚡ **스냅줌/크래시줌 (Snap Zoom / Crash Zoom)**: Level 3 콤보 추가 — 초점거리 급변으로 폭발적 충격감, 코미디·놀람 강조·MV 비트싱크에 활용
+- 🌀 **이동 오빗 (Orbit Follow)**: Level 3 콤보 추가 — 피사체 이동에 맞춰 오빗 중심점이 함께 이동하는 orbit+tracking 복합기
 
 ### v1.8.5 (2026-04-08)
 - 🌐 **Runway 플랫폼 호환**: Runway 사용자를 위한 에셋 제한(이미지 최대 5장, 비디오 최대 3개)을 명시하고, 사실적인 사람 얼굴에 대한 중재를 우회하기 위한 명확한 전략(블러 처리 또는 NPR 스타일 적용)을 제공합니다.

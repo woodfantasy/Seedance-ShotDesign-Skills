@@ -39,6 +39,9 @@
 | Push In | 缓慢推进 | 缓慢靠近主体 | 累积紧张感、聚焦细节 | ✅ 安全 |
 | Pull Out | 缓慢拉出 | 缓慢远离主体 | 揭示更大环境 | ✅ 安全 |
 | Pedestal Up/Down | 升降平移 | 机身垂直升降不改俯仰角 | 跟随角色起立/坐下 | ✅ 安全 |
+| Epic Drone Reveal | 史诗级无人机揭示 | 无人机从背后/低位缓慢升起，揭示宏观场景 | 从人物亲密视角到史诗全貌的戏剧性反转，制造震撼揭示感 | ✅ CN: `无人机缓慢上升揭示` / EN: `epic drone reveal shot` |
+| Reveal from Behind / Through Shot | 遮挡揭示/穿梭镜头 | 镜头穿越遮挡物（树丛/门框/人群/窗帘）后揭示场景 | 制造悬念感与层次纵深，营造"发现"的仪式感 | ✅ CN: `穿越[遮挡物]揭示` / EN: `reveal through obstacle shot` |
+| Leading Shot | 引导镜头 | 镜头在主体前方后退，主体主动"追"镜头方向前进 | 叙述旅程感与主动性，观众视角=前方未知 | ✅ CN: `引导后退跟拍` / EN: `leading shot pulling back` |
 
 ### Level 2：修饰词（赋予运镜灵魂）
 
@@ -89,6 +92,8 @@
 | Dolly Back + Crane Up | 逐渐揭示宏大场景 | 震撼场景揭示 |
 | Arc 180° + Subtle Zoom In | 情绪聚焦 | 情绪转折点 |
 | Whip Pan | 极速横摇转场 | 空间转场、紧张节奏 |
+| Snap Zoom / Crash Zoom | 急推变焦——焦距骤变至极端特写或极端远景，产生爆裂冲击感 | 喜剧冲击、惊吓强调、MV节拍卡点 |
+| Orbit Follow（移动环绕） | 主体运动中同步环绕（orbit + tracking），环绕中心点随主体移动 | 跟随奔跑/格斗同时环绕，制造动感包围感；区别于静止主体环绕 |
 
 ## 三、焦段与物理镜头参数
 
@@ -252,7 +257,38 @@ Crash cam ground level, motorcycle tire spinning inches from lens, gravel sprayi
 黑白水墨风格，人物参考@视频1的特效和动作，上演一段水墨太极功夫
 ```
 
-## 九、运动强度修饰词速查（v1.8.2 新增）
+## 九、叙事引导运镜速查（v1.9 新增）
+
+> 「引导与跟随」是最常被 AI 视频创作者忽视的运镜维度——它决定了观众的情绪视角是「被带领」还是「旁观」，是区分"有叙事灵魂的镜头"与"监控探头"的关键。
+
+| 运镜类型 | 中文触发词 | English Trigger | 叙事效果 |
+|----------|-----------|----------------|----------|
+| 引导后退镜头 (Leading Shot) | `镜头在主体前方缓慢后退引导` | `leading shot, camera retreating ahead of subject` | 观众站在"未知前方"视角，强化旅程感与主动性 |
+| 背影跟随镜头 (Following Shot) | `背影稳定跟随，呈现旅程感` | `following shot from behind, steady pursuit` | 传达前进与探索感，营造神秘与宿命感 |
+| 侧向平行跟随 (Side Tracking) | `侧面平行跟拍，同步展示动作` | `side tracking shot, parallel to subject movement` | 展示肢体语言与动作全貌，适合跑步/舞蹈/格斗 |
+| 低角度贴地跟随 (Low Angle Follow) | `低机位贴地跟随` | `low angle follow shot, camera near ground level` | 夸大运动动感，制造奔跑/车辆的速度压迫感 |
+| 长焦压迫跟随 (Long Lens Follow) | `200mm长焦跟拍，背景与主体压缩叠加` | `long lens follow, 200mm telephoto compression` | 背景快速填满画面，强化幽闭与追击紧迫感 |
+| 史诗无人机揭示 (Epic Drone Reveal) | `无人机从低位缓慢升起，从背后揭示宏大场景` | `epic drone reveal, slow rise from low angle behind subject` | 从人物视角→史诗全貌的戏剧性反转，常用于高潮揭示 |
+| 遮挡揭示 (Reveal Through) | `镜头穿越[遮挡物]后揭示场景` | `reveal through [obstacle], camera pushing through [obstruction]` | 制造"发现"的仪式感与层次纵深，增加叙事悬念 |
+| 移动环绕 (Orbit Follow) | `移动中环绕拍摄，中心点随主体运动` | `orbit follow shot, circling subject while both move` | 跟随运动主体同步环绕，制造动感包围感 |
+
+**提示词范例：**
+
+```
+# 引导后退镜头（旅程感）
+徒步者背负行囊缓步攀爬山路。镜头在其正前方缓慢后退引导，始终保持中景。
+Hiker trudging up mountain trail, camera retreating ahead of subject in steady leading shot, keeping medium framing throughout.
+
+# 史诗无人机揭示（震撼高潮）
+无人机从武者背后低位缓慢上升揭示，起始特写武者颈后，随上升逐渐揭示身后万顷沙漠与落日余晖。
+epic drone reveal shot rising slowly from behind warrior, starting tight on neck, ascending to unveil vast desert and blazing sunset panorama.
+
+# 遮挡揭示（叙事悬念）
+镜头缓慢穿越密集竹林缝隙，穿出竹林后瞬间揭示远处隐约可见的孤独山城。
+camera slowly pushing through dense bamboo forest gaps, emerging to reveal a solitary mountain fortress in the mist beyond.
+```
+
+## 十、运动强度修饰词速查（v1.8.2 新增）
 
 > 动作描写中使用明确的强度修饰词，可以显著改善 Seedance 的运动生成质量，避免"糊动"（motion mush）——即动作幅度不够或方向不明确。
 

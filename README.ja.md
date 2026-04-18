@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-1.8.5-blue.svg" alt="バージョン"></a>
+  <a href=""><img src="https://img.shields.io/badge/version-1.9.0-blue.svg" alt="バージョン"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="ライセンス"></a>
   <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="プラットフォーム"></a>
 </p>
@@ -248,6 +248,14 @@ Agent Skills のベストプラクティスに準拠：
 ---
 
 ## 📋 変更履歴
+
+### v1.9.0 (2026-04-18)
+- 🎬 **ナラティブガイドカメラワーク速査（新章）**: `cinematography.md` 第IX節を新設 — 8種のリード/フォロー/リビールショット（リードショット・フォローショット・サイドトラッキング・ローアングルフォロー・長焦圧縮フォロー・史詩的ドローンリビール・遮障物越しリビール・移動オービット）、双言語トリガーワード＆例付き
+- 🚁 **史詩的ドローンリビール（Epic Drone Reveal）**: 独立したLevel 1カメラムーブとして追加 — 被写体背後/低位から徐々に上昇して壮大な景観を明かす；通常の空撮とは根本的に異なる叙事構造
+- 🌿 **遮障物越しリビール/スルーショット（Reveal / Through Shot）**: 新規Level 1 — 障害物（竹林/鳥居/人混み/カーテン）を抜けてシーンを明かす、サスペンスと奥行き感を演出
+- 🚶 **リードショット（Leading Shot）**: 新規Level 1 — カメラが被写体の前を後退しながらガイド、旅の感覚と主人公の能動性を強化
+- ⚡ **スナップズーム/クラッシュズーム（Snap Zoom / Crash Zoom）**: Level 3コンボに追加 — 焦点距離の急変による爆発的インパクト、コメディ・驚き・MVビートシンクに
+- 🌀 **移動オービット（Orbit Follow）**: Level 3コンボに追加 — 被写体の動きに合わせてオービット中心点が移動するorbit+tracking複合技
 
 ### v1.8.5 (2026-04-08)
 - 🌐 **Runwayプラットフォーム対応**: Runwayユーザー向けの資産制限（画像5枚以下、動画3つ以下）を明記し、リアルな人間の顔に対するモデレーション回避策（ぼかしやNPRスタイルへの変換）を提供。

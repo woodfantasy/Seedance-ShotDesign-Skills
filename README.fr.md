@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-1.8.5-blue.svg" alt="Version"></a>
+  <a href=""><img src="https://img.shields.io/badge/version-1.9.0-blue.svg" alt="Version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="Licence"></a>
   <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="Plateforme"></a>
 </p>
@@ -233,6 +233,14 @@ python -m unittest scripts.test_validate -v
 ---
 
 ## 📋 Historique des Versions
+
+### v1.9.0 (2026-04-18)
+- 🎬 **Référence Rapide des Plans Narratifs Guidés (nouveau chapitre)** : Nouvelle Section IX dans `cinematography.md` — 8 types de plans de guidage/suivi/révélation (Leading Shot, Following Shot, Side Tracking, Low Angle Follow, Long Lens Follow, Epic Drone Reveal, Reveal Through, Orbit Follow), avec phrases-déclencheurs bilingues et exemples de prompts
+- 🚁 **Epic Drone Reveal** : Ajout comme mouvement de caméra Level 1 indépendant — lente montée depuis l'arrière/angle bas révélant le paysage épique ; structure narrative distincte des plans aériens génériques
+- 🌿 **Reveal from Behind / Through Shot** : Nouvelle entrée Level 1 pour les plans de pénétration d'obstacle (caméra poussant à travers bambou/foule/rideau pour révéler), avec guide des formulations sûres
+- 🚶 **Leading Shot** : Nouvelle entrée Level 1 pour le mouvement de caméra reculant devant le sujet, transmettant le voyage et l'agentivité du protagoniste
+- ⚡ **Snap Zoom / Crash Zoom** : Ajout aux combos Level 3 — saut explosif de distance focale pour impact comique, emphase de sursaut et synchronisation de beat MV
+- 🌀 **Orbit Follow** : Ajout aux combos Level 3 — orbit + tracking simultanés où le point pivot se déplace avec le sujet, distinct des orbites à sujet statique
 
 ### v1.8.5 (2026-04-08)
 - 🌐 **Adaptation à Runway** : Clarification des limites d'actifs pour les utilisateurs de Runway (≤5 images, ≤3 vidéos) et ajout de stratégies de contournement de la modération pour les visages humains réalistes (floutage ou style NPR).
