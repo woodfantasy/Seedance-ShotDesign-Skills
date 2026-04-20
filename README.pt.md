@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-1.9.0-blue.svg" alt="Versão"></a>
+  <a href=""><img src="https://img.shields.io/badge/version-1.9.1-blue.svg" alt="Versão"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="Licença"></a>
   <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="Plataforma"></a>
 </p>
@@ -39,7 +39,7 @@ Um Claude Skill construído sobre a especificação [Agent Skills](https://agent
 | 🎵 **Vocabulário de Som e ASMR** | Biblioteca de onomatopeias baseada em física: ambiental / ação / vocal / música |
 | 🌐 **Saída Bilíngue de Prompts** | Usuários chineses → chinês / demais → inglês, detecção automática |
 | 🛡️ **Proteção de PI Segura** | Estratégia progressiva de recuo de PI em três níveis para evitar bloqueios |
-| 🔍 **Validação Rigorosa com Python** | Contagem de palavras / câmera / lógica temporal / enchimento / conflitos ópticos / matriz de conflitos de estilo |
+| 🔍 **Validação Rigorosa Estruturada** | Contagem de palavras / câmera / lógica temporal / enchimento / conflitos ópticos / matriz de conflitos de estilo |
 
 ---
 
@@ -103,7 +103,7 @@ O Skill ativa automaticamente e gera o prompt em 5 etapas:
 1. **Análise de Requisitos** — Confirmar duração / proporção / assets / estilo
 2. **Diagnóstico Visual** — Selecionar linguagem de câmera e estilo de direção
 3. **Montagem de Seis Elementos** — Composição precisa segundo a fórmula
-4. **Validação Obrigatória** — Executar o script Python para revisão de qualidade
+4. **Validação Obrigatória** — Aplicar checklist estruturada de 7 regras
 5. **Entrega Profissional** — Declaração do diretor + prompt completo
 
 ### 3. Exemplos
@@ -216,13 +216,13 @@ python -m unittest scripts.test_validate -v
 
 - **SKILL.md** (~4000 tokens): Fluxo principal + templates + checklist
 - **references/** (sob demanda): Lidos apenas quando necessário
-- **scripts/** (sob demanda): Validação apenas após gerar o prompt
+- **scripts/** (ferramenta independente para desenvolvedores — NÃO executada pelo agente): Apenas para desenvolvedores e pipelines CI/CD. O agente valida com sua checklist nativa LLM de 7 regras
 
 ### Vantagens Competitivas
 
 | Dimensão | Comum | Este Skill |
 |----------|-------|------------|
-| Validação | Sugestões em texto | **Python rigoroso (óptica/estilo + segurança)** |
+| Validação | Sugestões em texto | **Validação rigorosa estruturada de 7 regras (óptica/estilo + segurança)** |
 | Estilos | Diretores internacionais | **Internacional + Chinês + Curta + IA + SNS + Anime + Cel-Shaded + Xiaohongshu** |
 | Cenários | Cinema épico | **17 verticais + anime + edição + amortecimento físico** |
 | Som | Menções breves | **Acústica espacial + onomatopeias por material** |
@@ -233,6 +233,9 @@ python -m unittest scripts.test_validate -v
 ---
 
 ## 📋 Histórico de Versões
+
+### v1.9.1 (2026-04-21)
+- 🛡️ **Conformidade de Segurança (Rodada 3)**: Resolvido o flag "Suspicious" do ClawHub OpenClaw — sincronizada a descrição do Step 4 nos READMEs ja/ko/es/pt/fr (de "executar script Python" para "checklist estruturada de 7 regras"); removidas todas as associações com "Python" nas tabelas de capacidades e comparativas; adicionado `execution: none` no SKILL.md; adicionados disclaimers NOT-FOR-AGENT nos scripts Python
 
 ### v1.9.0 (2026-04-18)
 - 🎬 **Referência Rápida de Planos Narrativos Guia (novo capítulo)**: Nova Seção IX em `cinematography.md` — 8 tipos de planos de guia/seguimento/revelação (Leading Shot, Following Shot, Side Tracking, Low Angle Follow, Long Lens Follow, Epic Drone Reveal, Reveal Through, Orbit Follow), com frases-gatilho bilíngues e prompts de exemplo

@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+# ============================================================================
+# ⚠️  STANDALONE DEVELOPER TOOL — NOT EXECUTED BY THE AI AGENT
+# ============================================================================
+# Test cases for validate_prompt.py. This file is for developers and CI/CD
+# pipelines only. The AI agent does NOT execute any Python scripts.
+# ============================================================================
 """
 validate_prompt.py 的测试用例
 运行: python -m pytest scripts/test_validate.py -v

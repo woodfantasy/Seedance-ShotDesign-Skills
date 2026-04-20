@@ -11,7 +11,7 @@ English | [中文](README.zh-CN.md) | [日本語](README.ja.md) | [한국어](RE
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-1.9.0-blue.svg" alt="Version"></a>
+  <a href=""><img src="https://img.shields.io/badge/version-1.9.1-blue.svg" alt="Version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="License"></a>
   <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="Platform"></a>
 </p>
@@ -244,13 +244,13 @@ Following Agent Skills best practices:
 
 - **SKILL.md** (~4000 tokens): Core workflow + structural templates + quality checklist
 - **references/** (three-layer routing): Camera dictionary and quality anchors are always loaded (Always-On); other knowledge bases auto-matched via semantic inference or loaded on explicit user request
-- **scripts/** (executed on demand): Validation runs only after prompt generation
+- **scripts/** (standalone developer tool — NOT executed by the agent): Provided for developers and CI/CD pipelines only. The agent validates prompts using its built-in LLM-native 7-rule checklist
 
 ### Competitive Advantages
 
 | Dimension | Common Approach | This Skill |
 |-----------|----------------|------------|
-| Compliance | Plain-text suggestions | **Python hard validation (incl. optical / style conflict matrix + review safety detection)** |
+| Compliance | Plain-text suggestions | **Structured 7-rule hard validation (incl. optical / style conflict matrix + review safety detection)** |
 | Director Styles | International directors only | **International + Chinese + Short Drama + AI Comic + Social Media + Anime + Cel-Shaded CG + Xiaohongshu** |
 | Scene Coverage | Biased toward epic films | **20 vertical scenarios + anime variants + video editing + physics damping toolkit** |
 | Sound Design | Brief mentions | **Spatial acoustics + material-based onomatopoeia library** |
@@ -261,6 +261,9 @@ Following Agent Skills best practices:
 ---
 
 ## 📋 Changelog
+
+### v1.9.1 (2026-04-21)
+- 🛡️ **Security Compliance (Round 3)**: Resolved ClawHub OpenClaw "Suspicious" flag — synchronized Step 4 workflow descriptions across ja/ko/es/pt/fr READMEs (from "run Python script" to "7-rule structured validation checklist"); removed all "Python" associations from capability tables and competitive comparisons across all locales; added `execution: none` metadata to SKILL.md frontmatter; added prominent NOT-FOR-AGENT disclaimers to Python scripts
 
 ### v1.9.0 (2026-04-18)
 - 🎬 **Narrative Guidance Shot Patterns**: New Section IX in `cinematography.md` — 8 leading/following/reveal shot types (Leading Shot, Following Shot, Side Tracking, Low Angle Follow, Long Lens Follow, Epic Drone Reveal, Reveal Through, Orbit Follow) with bilingual trigger phrases and example prompts

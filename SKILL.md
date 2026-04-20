@@ -17,7 +17,8 @@ description: >
   短片脚本, 镜头设计, 运镜.
 metadata:
   author: woodfantasy
-  version: "1.9.0"
+  version: "1.9.1"
+  execution: none  # This skill is instruction-only. The agent does NOT execute any scripts.
 ---
 
 # Seedance 2.0 Shot Design

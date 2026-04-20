@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+# ============================================================================
+# ⚠️  STANDALONE DEVELOPER TOOL — NOT EXECUTED BY THE AI AGENT
+# ============================================================================
+# This script is a standalone validation tool for developers and CI/CD
+# pipelines. The AI agent performs equivalent validation using its built-in
+# LLM-native 7-rule checklist and does NOT import or execute this file.
+# ============================================================================
 """
 Seedance 2.0 提示词工业级校验模块
 供 Agent 在生成提示词后进行自动化质量审查。

@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-1.9.0-blue.svg" alt="版本"></a>
+  <a href=""><img src="https://img.shields.io/badge/version-1.9.1-blue.svg" alt="版本"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="协议"></a>
   <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="平台"></a>
 </p>
@@ -252,6 +252,9 @@ python -m unittest scripts.test_validate -v
 ---
 
 ## 📋 版本记录
+
+### v1.9.1 (2026-04-21)
+- 🛡️ **安全合规（第三轮）**：彻底解决 ClawHub OpenClaw “Suspicious” 标记——同步修正日/韩/西/葡/法 5 个语言 README 中 Step 4 工作流描述（从“执行 Python 脚本”改为“7 项结构化校验规则”）；统一移除所有 README 核心能力表和竞品对比中的 “Python” 关联表述；SKILL.md frontmatter 新增 `execution: none` 元数据声明；Python 脚本添加醒目的 NOT-FOR-AGENT 免责声明
 
 ### v1.9.0 (2026-04-18)
 - 🎬 **叙事引导运镜速查（新章节）**：`cinematography.md` 新增第九节——8种引导/跟随/揭示类运镜（引导后退镜头、背影跟随、侧向平行跟随、低角度贴地跟随、长焦压迫跟随、史诗无人机揭示、遮挡揭示/穿梭镜头、移动环绕），配双语触发词与实例提示词

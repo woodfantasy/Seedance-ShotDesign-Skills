@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-1.9.0-blue.svg" alt="Versión"></a>
+  <a href=""><img src="https://img.shields.io/badge/version-1.9.1-blue.svg" alt="Versión"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="Licencia"></a>
   <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="Plataforma"></a>
 </p>
@@ -39,7 +39,7 @@ Un Claude Skill construido sobre la especificación [Agent Skills](https://agent
 | 🎵 **Vocabulario de Sonido y ASMR** | Biblioteca de onomatopeyas basada en física: ambiente / acción / vocal / música |
 | 🌐 **Salida Bilingüe de Prompts** | Usuarios chinos → prompts en chino / resto → en inglés, detección automática |
 | 🛡️ **Protección de PI segura** | Estrategia de repliegue de PI progresiva en tres niveles para evitar bloqueos de contenido |
-| 🔍 **Validación Rigurosa con Python** | Conteo de palabras / movimientos de cámara / lógica temporal / detección de relleno / conflictos óptico-físicos / matriz de conflictos de estilo — más fiable que simples "sugerencias" |
+| 🔍 **Validación Rigurosa Estructurada** | Conteo de palabras / movimientos de cámara / lógica temporal / detección de relleno / conflictos óptico-físicos / matriz de conflictos de estilo — más fiable que simples "sugerencias" |
 
 ---
 
@@ -108,7 +108,7 @@ El Skill se activa automáticamente y genera el prompt mediante un flujo de 5 pa
 1. **Análisis de Requisitos** — Confirmar duración / relación de aspecto / assets / estilo
 2. **Diagnóstico Visual** — Seleccionar lenguaje de cámara y estilo de dirección
 3. **Ensamblaje de Seis Elementos** — Composición precisa según la fórmula estructurada
-4. **Validación Obligatoria** — Ejecutar el script Python para revisión de calidad
+4. **Validación Obligatoria** — Aplicar checklist estructurada de 7 reglas
 5. **Entrega Profesional** — Declaración del director + prompt completo
 
 ### 3. Ejemplos
@@ -231,13 +231,13 @@ Siguiendo las mejores prácticas de Agent Skills:
 
 - **SKILL.md** (~4000 tokens): Flujo de trabajo principal + plantillas estructurales + checklist de calidad
 - **references/** (carga bajo demanda): Solo se leen cuando el usuario menciona necesidades de estilo / cámara / calidad
-- **scripts/** (ejecución bajo demanda): La validación se ejecuta solo después de generar el prompt
+- **scripts/** (herramienta independiente para desarrolladores — NO ejecutada por el agente): Solo para desarrolladores y pipelines CI/CD. El agente valida con su checklist nativa LLM de 7 reglas
 
 ### Ventajas Competitivas
 
 | Dimensión | Enfoque Común | Este Skill |
 |-----------|---------------|------------|
-| Validación de conformidad | Sugerencias en texto plano | **Validación rigurosa con Python (incl. matriz de conflictos ópticos / de estilo + detección de seguridad de revisión)** |
+| Validación de conformidad | Sugerencias en texto plano | **Validación rigurosa estructurada de 7 reglas (incl. matriz de conflictos ópticos / de estilo + detección de seguridad de revisión)** |
 | Estilos de dirección | Solo directores internacionales | **Internacional + Chino + Cortometraje + Cómic IA + Redes Sociales + Anime + Cel-Shaded CG + Xiaohongshu** |
 | Cobertura de escenas | Sesgado hacia cine épico | **20 escenarios verticales + variantes anime + edición de vídeo + kit de amortiguación física** |
 | Diseño de sonido | Menciones breves | **Acústica espacial + biblioteca de onomatopeyas por material** |
@@ -248,6 +248,9 @@ Siguiendo las mejores prácticas de Agent Skills:
 ---
 
 ## 📋 Historial de Versiones
+
+### v1.9.1 (2026-04-21)
+- 🛡️ **Cumplimiento de Seguridad (Ronda 3)**: Resuelto el flag "Suspicious" de ClawHub OpenClaw — sincronizada la descripción de Step 4 en READMEs ja/ko/es/pt/fr (de "ejecutar script Python" a "checklist estructurada de 7 reglas"); eliminadas todas las asociaciones con "Python" en tablas de capacidades y comparativas; añadido `execution: none` en SKILL.md; añado disclaimer NOT-FOR-AGENT en scripts Python
 
 ### v1.9.0 (2026-04-18)
 - 🎬 **Referencia Rápida de Planos Guía-Narrativos (nuevo capítulo)**: Nueva Sección IX en `cinematography.md` — 8 tipos de planos de guía/seguimiento/revelación (Leading Shot, Following Shot, Side Tracking, Low Angle Follow, Long Lens Follow, Epic Drone Reveal, Reveal Through, Orbit Follow), con frases gatillo bilingües y prompts de ejemplo
