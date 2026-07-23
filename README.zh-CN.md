@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-1.9.1-blue.svg" alt="版本"></a>
+  <a href=""><img src="https://img.shields.io/badge/version-2.0.0-blue.svg" alt="版本"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="协议"></a>
   <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="平台"></a>
 </p>
@@ -28,6 +28,7 @@
 
 | 能力 | 描述 |
 |------|------|
+| 🎭 **表演级微表情系统** | 面部7区域分区词库（眼/眉/唇/鼻/颌喉/额/面颊）+ L1-L4四级表情强度体系 + 2秒精度情绪弧线编排（4种模式）+ 12种情绪演员级分解 + 反AI假脸宣言 + 微表情镜头联动速查 |
 | 🎭 **AI漫剧 & 短剧全链路制作** | 全面支持AI漫剧与AI短剧生产——角色对白/画外音/演员调度/夸张表情特写/叙事化运镜/短剧风格快速选择器/4套提示词模板（中英文×对白/画外音），配套专属场景模板与完整示例 |
 | 🎨 **28+导演与风格** | 诺兰/维伦纽瓦/芬奇/迪金斯/黑泽明/新海诚/王家卫/张艺谋/仙侠/三渲二/二次元/小红书... |
 | 🎬 **专业运镜词典** | 3级运镜体系 + 14种焦段 + 6种焦点控制 + 7种物理机位，中英文对照 |
@@ -252,6 +253,14 @@ python -m unittest scripts.test_validate -v
 ---
 
 ## 📋 版本记录
+
+### v2.0.0 (2026-07-23)
+- 🎭 **表演级微表情系统（新架构）**：重磅推出 `references/micro-expressions.md` 知识库（~400行），大幅提升剧集与高要求镜头的人脸表情质量，杜绝 AI 假脸、尬脸与过度夸张表情
+- 🧩 **面部 7 区域分区词库**：系统化拆解眼/眉/唇/鼻/颌喉/额/面颊 7 大部位微动作，提供中英文对照及情绪/强度标记
+- 📊 **表情强度四级体系**：建立 L1 克制 → L2 内敛（默认推荐） → L3 外显 → L4 爆发强度分级与渐进过渡规则
+- ⏱️ **2 秒精度情绪弧线编排**：专为表情密集镜头设计 2s 高精度时间轴及 4 种弧线模式（渐进递增/反高潮收束/表面平静内心翻涌/过山车）
+- 🎬 **微表情 × 镜头/光影联动**：新增景别/焦段/运镜/光影与表情的协同规范；`cinematography.md` 新增微表情镜头最佳实践
+- 🚨 **反 AI 假脸宣言与禁忌词**：`quality-anchors.md` 追加反 AI 假脸强制规范，封禁完美对称、瞬间变脸与夸张卡通化描述
 
 ### v1.9.1 (2026-04-21)
 - 🛡️ **安全合规（第三轮）**：彻底解决 ClawHub OpenClaw “Suspicious” 标记——同步修正日/韩/西/葡/法 5 个语言 README 中 Step 4 工作流描述（从“执行 Python 脚本”改为“7 项结构化校验规则”）；统一移除所有 README 核心能力表和竞品对比中的 “Python” 关联表述；SKILL.md frontmatter 新增 `execution: none` 元数据声明；Python 脚本添加醒目的 NOT-FOR-AGENT 免责声明

@@ -11,24 +11,25 @@
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-1.9.1-blue.svg" alt="Version"></a>
+  <a href=""><img src="https://img.shields.io/badge/version-2.0.0-blue.svg" alt="Version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="Licence"></a>
   <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="Plateforme"></a>
 </p>
 
 <p align="center">
-  Transformez vos idées vidéo vagues en <strong>prompts cinématographiques professionnels</strong> prêts pour Jimeng Seedance 2.0 — en un clic.
+  Transformez vos idées vidéo vagues en <strong>prompts vidéo de qualité cinématographique</strong> prêts pour Jimeng Seedance 2.0 en un seul clic.
 </p>
 
-Un Claude Skill construit sur la spécification [Agent Skills](https://agentskills.io), alliant l'esthétique cinématographique hollywoodienne aux pratiques de l'industrie audiovisuelle chinoise. Conçu pour aider les créateurs à dépasser le piège de la vidéo IA « jolie mais aléatoire » et atteindre une **narration visuelle précise et maîtrisée**.
+Un Claude Skill construit selon la spécification [Agent Skills](https://agentskills.io), combinant l'esthétique cinématographique d'Hollywood avec la pratique de l'industrie cinématographique chinoise pour aider les créateurs à réaliser une <strong>narration visuelle précise et contrôlable</strong>.
 
 ---
 
-## ✨ Capacités Principales
+## ✨ Fonctionnalités Principales
 
-| Capacité | Description |
+| Fonctionnalité | Description |
 |----------|-------------|
-| 🎭 **Production de Drame Comic IA & Court-métrage IA** | Support complet pour les drames comics IA (漫剧) et les courts-métrages IA — dialogues / voix off / placement d'acteurs / gros plans d'expressions exagérées / mouvements de caméra narratifs / sélecteur rapide de style / 4 variantes de templates (CN/EN × dialogue/voix off), avec modèles de scénarios et exemples complets |
+| 🎭 **Système de Micro-expressions Niveau Acteur** | Atlas facial de 7 zones (yeux/sourcils/lèvres/nez/mâchoire-gorge/front/joues) + intensité à 4 niveaux L1-L4 + chorégraphie d'arcs émotionnels avec précision 2s + décomposition de 12 émotions + manifeste anti-visage-IA + liaison caméra-expression |
+| 🎭 **Production de BD IA & Court Métrage IA** | Support complet de la chaîne de production de BD animées IA (漫剧) et courts métrages IA — dialogues / voix off / placement des acteurs / gros plans d'expressions / mouvements de caméra narratifs / sélecteur rapide de style / 4 variantes de templates (CN/EN × dialogue/voix off), avec templates de scénarios et exemples complets |
 | 🎨 **28+ Presets de Réalisateurs et Styles** | Nolan / Villeneuve / Fincher / Deakins / Kurosawa / Makoto Shinkai / Wong Kar-wai / Zhang Yimou / Xianxia / Cel-Shaded CG / Anime / Xiaohongshu… |
 | 🎬 **Dictionnaire Pro des Mouvements de Caméra** | Système de caméra à 3 niveaux + 14 focales + 6 contrôles de mise au point + 7 montures physiques, réf. bilingues CN/EN |
 | 💡 **Structure d'Éclairage en Trois Couches** | Source → Comportement → Tonalité — fini le vague « mets une lumière » |
@@ -233,6 +234,14 @@ python -m unittest scripts.test_validate -v
 ---
 
 ## 📋 Historique des Versions
+
+### v2.0.0 (2026-07-23)
+- 🎭 **Système de Micro-expressions Niveau Acteur (Nouvelle Architecture)** : Lancement de la base de connaissances `references/micro-expressions.md` (~400 lignes) pour améliorer considérablement la qualité du jeu facial dans les plans narratifs exigeants, éliminant les visages IA faux, gênants ou exagérés.
+- 🧩 **Atlas Facial 7 Zones** : Cartographie systématique des micro-mouvements sur 7 zones avec prompts bilingues et tags d'émotion/intensité.
+- 📊 **Système d'Intensité 4 Niveaux** : Règles de transition progressive de L1 Subtil → L2 Contenu (recommandé) → L3 Explicite → L4 Explosif.
+- ⏱️ **Chorégraphie d'Arcs Émotionnels Précision 2s** : Lignes temporelles 2s haute densité pour plans à jeu d'acteur intense avec 4 modèles d'arcs.
+- 🎬 **Liaison Caméra et Éclairage pour Micro-expressions** : Règles d'intégration taille de plan / focale / mouvements / éclairage ; ajout des Meilleures Pratiques à `cinematography.md`.
+- 🚨 **Manifeste Anti-Visage-IA et Mots Interdits** : Ajout de règles obligatoires Anti-Visage-IA dans `quality-anchors.md`, interdisant les expressions parfaitement symétriques, les changements instantanés et les descriptions de type dessin animé.
 
 ### v1.9.1 (2026-04-21)
 - 🛡️ **Conformité Sécurité (Round 3)** : Résolu le flag « Suspicious » de ClawHub OpenClaw — synchronisé la description du Step 4 dans les READMEs ja/ko/es/pt/fr (de « exécuter le script Python » à « checklist structurée de 7 règles ») ; supprimé toutes les associations « Python » dans les tableaux de capacités et comparatifs ; ajouté `execution: none` dans SKILL.md ; ajouté des disclaimers NOT-FOR-AGENT dans les scripts Python

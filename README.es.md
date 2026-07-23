@@ -11,16 +11,16 @@
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-1.9.1-blue.svg" alt="Versión"></a>
+  <a href=""><img src="https://img.shields.io/badge/version-2.0.0-blue.svg" alt="Versión"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="Licencia"></a>
   <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="Plataforma"></a>
 </p>
 
 <p align="center">
-  Convierte tus ideas vagas de vídeo en <strong>prompts cinematográficos profesionales</strong> listos para Jimeng Seedance 2.0, con un solo clic.
+  Convierte tus ideas de video vagas en <strong>prompts de video de nivel cinematográfico</strong> listos para Jimeng Seedance 2.0 en un solo paso.
 </p>
 
-Un Claude Skill construido sobre la especificación [Agent Skills](https://agentskills.io), que fusiona la estética cinematográfica de Hollywood con las prácticas de la industria audiovisual china. Diseñado para ayudar a los creadores a superar la trampa del vídeo IA que "queda bonito pero es aleatorio" y lograr una **narrativa visual precisa y controlable**.
+Un Claude Skill construido bajo la especificación [Agent Skills](https://agentskills.io), fusionando la estética cinematográfica de Hollywood con la práctica de la industria cinematográfica china para ayudar a los creadores a lograr una <strong>narrativa visual precisa y controlable</strong>.
 
 ---
 
@@ -28,6 +28,7 @@ Un Claude Skill construido sobre la especificación [Agent Skills](https://agent
 
 | Capacidad | Descripción |
 |-----------|-------------|
+| 🎭 **Sistema de Microexpresiones a Nivel de Actuación** | Atlas de 7 zonas faciales (ojos/cejas/labios/nariz/mandíbula-garganta/frente/mejillas) + intensidad en 4 niveles L1-L4 + coreografía de arcos emocionales con precisión de 2s + desglose de 12 emociones + manifiesto anti-rostro-IA + vinculación cámara-expresión |
 | 🎭 **Producción de Drama Cómic IA y Cortometraje IA** | Soporte completo para dramas cómicos IA (漫剧) y cortometrajes IA — diálogos / voz en off / bloqueo de actores / primeros planos con expresiones exageradas / movimiento de cámara con motivación narrativa / selector rápido de estilo / 4 variantes de plantilla (CN/EN × diálogo/voz en off), con plantillas de escenario y ejemplos completos |
 | 🎨 **28+ Presets de Directores y Estilos** | Nolan / Villeneuve / Fincher / Deakins / Kurosawa / Makoto Shinkai / Wong Kar-wai / Zhang Yimou / Xianxia / Cel-Shaded CG / Anime / Xiaohongshu… |
 | 🎬 **Diccionario Profesional de Movimientos de Cámara** | Sistema de cámara de 3 niveles + 14 distancias focales + 6 controles de enfoque + 7 montajes físicos, con referencias bilingües CN/EN |
@@ -248,6 +249,14 @@ Siguiendo las mejores prácticas de Agent Skills:
 ---
 
 ## 📋 Historial de Versiones
+
+### v2.0.0 (2026-07-23)
+- 🎭 **Sistema de Microexpresiones a Nivel de Actuación (Nueva Arquitectura)**: Lanzamiento de la base de conocimiento `references/micro-expressions.md` (~400 líneas) para mejorar drásticamente la calidad de las actuaciones faciales en tomas narrativas exigentes, eliminando rostros de IA falsos, incómodos o exagerados.
+- 🧩 **Atlas Facial de 7 Zonas**: Mapeo sistemático de micromovimientos en 7 zonas con prompts bilingües y etiquetas de emoción/intensidad.
+- 📊 **Sistema de Intensidad de 4 Niveles**: Establecimiento de reglas de transición gradual desde L1 Sutil → L2 Moderado (recomendado) → L3 Explícito → L4 Explosivo.
+- ⏱️ **Coreografía de Arcos Emocionales con Precisión de 2s**: Diseñó líneas de tiempo de alta densidad de 2s para tomas con actuación intensa junto con 4 patrones de arco emocional.
+- 🎬 **Vinculación Cámara y Iluminación para Microexpresiones**: Integración de reglas para encuadre / distancia focal / movimientos / iluminación; añadida sección de Mejores Prácticas a `cinematography.md`.
+- 🚨 **Manifiesto Anti-Rostro-IA y Palabras Prohibidas**: Añadidas reglas obligatorias Anti-Rostro-IA en `quality-anchors.md`, prohibiendo expresiones perfectamente simétricas, cambios instantáneos y descripciones caricaturescas.
 
 ### v1.9.1 (2026-04-21)
 - 🛡️ **Cumplimiento de Seguridad (Ronda 3)**: Resuelto el flag "Suspicious" de ClawHub OpenClaw — sincronizada la descripción de Step 4 en READMEs ja/ko/es/pt/fr (de "ejecutar script Python" a "checklist estructurada de 7 reglas"); eliminadas todas las asociaciones con "Python" en tablas de capacidades y comparativas; añadido `execution: none` en SKILL.md; añado disclaimer NOT-FOR-AGENT en scripts Python

@@ -11,16 +11,16 @@
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-1.9.1-blue.svg" alt="버전"></a>
+  <a href=""><img src="https://img.shields.io/badge/version-2.0.0-blue.svg" alt="버전"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="라이선스"></a>
   <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="플랫폼"></a>
 </p>
 
 <p align="center">
-  막연한 영상 아이디어를 즉멍 Seedance 2.0에서 바로 사용할 수 있는 <strong>영화급 비디오 프롬프트</strong>로 원클릭 변환.
+  모호한 비디오 아이디어를 클릭 한 번으로 지몽 Seedance 2.0에서 바로 사용할 수 있는 <strong>영화급 비디오 프롬프트</strong>로 변환합니다.
 </p>
 
-[Agent Skills](https://agentskills.io) 규격에 기반하여 구축된 Claude Skill입니다. 할리우드 최고 수준의 촬영 미학과 중국 영상 산업의 실무 노하우를 융합하여, 크리에이터가 "예쁜데 랜덤"한 AI 영상의 한계를 극복하고 **정밀하고 제어 가능한 비주얼 스토리텔링**을 구현할 수 있도록 설계되었습니다.
+[Agent Skills](https://agentskills.io) 사양을 기반으로 구축된 Claude Skill로, 할리우드 최고 수준의 촬영 미학과 중국 영상 산업의 실무 경험을 결합하여 크리에이터가 "보기엔 좋지만 랜덤한" AI 비디오의 한계를 극복하고 <strong>정밀하고 제어 가능한 비주얼 스토리텔링</strong>을 실현하도록 돕습니다.
 
 ---
 
@@ -248,6 +248,14 @@ Agent Skills 모범 사례 준수:
 ---
 
 ## 📋 변경 이력
+
+### v2.0.0 (2026-07-23)
+- 🎭 **연기급 미세 표정 시스템 (새 아키텍처)**: `references/micro-expressions.md` 지식 베이스(~400행) 신규 도입. 드라마 및 고요구 숏에서 인물 표정 퀄리티를 대폭 향상, AI 특유의 어색함 및 과도한 억지 표정 근절
+- 🧩 **얼굴 7개 영역 부위별 어휘집**: 눈·눈썹·입술·코·턱/목·이마·볼 7대 부위 미세 동작 체계화, 중/영 대조 및 감정/강도 태그 제공
+- 📊 **4단계 표정 강도 체계**: L1 절제 → L2 내면화(기본 권장) → L3 외현 → L4 폭발 강도 분급 및 점진적 전이 규칙 확립
+- ⏱️ **2초 정밀도 감정 아크 연출**: 표정 밀집 숏 전용 2초 고정밀 타임라인 및 4가지 아크 패턴(점진적 고조 / 반(Anti)클라이맥스 해소 / 수면은 평온·내면은 격랑 / 롤러코스터) 설계
+- 🎬 **미세 표정 × 카메라/조명 연동**: 앵글·초점거리·카메라 워크·조명과 표정의 협동 규범 추가; `cinematography.md`에 미세 표정 카메라 베스트 프랙티스 추가
+- 🚨 **반(Anti) AI 가짜 얼굴 선언 및 금지어**: `quality-anchors.md`에 반 AI 가짜 얼굴 강제 규범 추가, 완전 대칭·순간 변심·과장된 카툰 표현 금지
 
 ### v1.9.1 (2026-04-21)
 - 🛡️ **보안 준수 (제3회)**: ClawHub OpenClaw "의심 패턴" 플래그 해결 — ja/ko/es/pt/fr README의 Step 4 설명을 동기 수정 ("Python 스크립트 실행"→"7항 구조화 체크리스트"); 모든 로케일의 기능표·경쟁 비교에서 "Python" 관련 표현 제거; SKILL.md에 `execution: none` 메타데이터 추가; Python 스크립트에 NOT-FOR-AGENT 면책사항 추가

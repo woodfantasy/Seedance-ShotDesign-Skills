@@ -11,7 +11,7 @@ English | [中文](README.zh-CN.md) | [日本語](README.ja.md) | [한국어](RE
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-1.9.1-blue.svg" alt="Version"></a>
+  <a href=""><img src="https://img.shields.io/badge/version-2.0.0-blue.svg" alt="Version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="License"></a>
   <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="Platform"></a>
 </p>
@@ -28,6 +28,7 @@ A Claude Skill built on the [Agent Skills](https://agentskills.io) specification
 
 | Capability | Description |
 |------------|-------------|
+| 🎭 **Acting-Level Micro-Expression System** | 7-zone facial muscle atlas (eyes/brows/lips/nose/jaw-throat/forehead/cheeks) + L1-L4 4-tier expression intensity + 2s-precision emotion arc choreography (4 patterns) + 12-emotion actor breakdown + anti-AI-face manifesto + camera-expression linkage |
 | 🎭 **AI Comic Drama & Short Drama Production** | Full-pipeline support for AI comic strips (漫剧) and AI short dramas — character dialogue / voiceover / actor blocking / exaggerated expression close-ups / narrative-motivated camera / short drama style quick-selector / 4 prompt template variants (CN/EN × dialogue/voiceover), with dedicated scenario templates and complete examples |
 | 🎨 **28+ Director & Style Presets** | Nolan / Villeneuve / Fincher / Deakins / Kurosawa / Makoto Shinkai / Wong Kar-wai / Zhang Yimou / Xianxia / Cel-Shaded CG / Anime / Xiaohongshu… |
 | 🎬 **Pro Camera Movement Dictionary** | 3-tier camera system + 14 focal lengths + 6 focus controls + 7 physical mounts, with bilingual CN/EN references |
@@ -261,6 +262,14 @@ Following Agent Skills best practices:
 ---
 
 ## 📋 Changelog
+
+### v2.0.0 (2026-07-23)
+- 🎭 **Acting-Level Micro-Expression System (New Architecture)**: Launched `references/micro-expressions.md` knowledge base (~400 lines) to dramatically upgrade facial performance quality for high-demand narrative shots, eliminating fake, awkward, or cartoonishly exaggerated AI faces.
+- 🧩 **7-Zone Facial Muscle Atlas**: Systematically mapped micro-movements across 7 zones (eyes, brows, lips, nose, jaw/throat, forehead, cheeks) with bilingual prompts and emotional/intensity tags.
+- 📊 **4-Tier Expression Intensity System**: Established L1 Subtle → L2 Restrained (recommended default) → L3 Overt → L4 Explosive intensity grading and gradual transition rules.
+- ⏱️ **2s-Precision Emotion Arc Choreography**: Designed high-density 2s timelines for performance-heavy shots along with 4 narrative arc patterns (Gradual Escalation / Anti-Climax Release / Calm Surface Deep Turbulence / Rollercoaster).
+- 🎬 **Camera & Lighting Linkage for Micro-Expressions**: Integrated shot size / focal length / camera moves / lighting linkage rules; added Micro-Expression Best Practices to `cinematography.md`.
+- 🚨 **Anti-AI-Face Manifesto & Banned Words**: Added mandatory Anti-AI-Face rules in `quality-anchors.md`, banning perfectly symmetrical expressions, instant emotion swaps, and exaggerated cartoonish descriptions.
 
 ### v1.9.1 (2026-04-21)
 - 🛡️ **Security Compliance (Round 3)**: Resolved ClawHub OpenClaw "Suspicious" flag — synchronized Step 4 workflow descriptions across ja/ko/es/pt/fr READMEs (from "run Python script" to "7-rule structured validation checklist"); removed all "Python" associations from capability tables and competitive comparisons across all locales; added `execution: none` metadata to SKILL.md frontmatter; added prominent NOT-FOR-AGENT disclaimers to Python scripts

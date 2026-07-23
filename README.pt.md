@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-1.9.1-blue.svg" alt="Versão"></a>
+  <a href=""><img src="https://img.shields.io/badge/version-2.0.0-blue.svg" alt="Versão"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="Licença"></a>
   <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="Plataforma"></a>
 </p>
@@ -28,6 +28,7 @@ Um Claude Skill construído sobre a especificação [Agent Skills](https://agent
 
 | Capacidade | Descrição |
 |------------|-----------|
+| 🎭 **Sistema de Microexpressões Nível Atuação** | Atlas de 7 zonas faciais (olhos/sobrancelhas/lábios/nariz/mandíbula-garganta/testa/bochechas) + intensidade em 4 níveis L1-L4 + coreografia de arcos emocionais com precisão de 2s + desdobramento de 12 emoções + manifesto anti-rosto-IA + vinculação câmera-expressão |
 | 🎭 **Produção de Drama Cômico IA & Curta-metragem IA** | Suporte completo para dramas cômicos IA (漫剧) e curtas-metragens IA — diálogos / narração / bloqueio de atores / close-ups de expressões exageradas / movimentos de câmera narrativos / seletor rápido de estilo / 4 variantes de templates (CN/EN × diálogo/narração), com templates de cenários e exemplos completos |
 | 🎨 **28+ Presets de Diretores e Estilos** | Nolan / Villeneuve / Fincher / Deakins / Kurosawa / Makoto Shinkai / Wong Kar-wai / Zhang Yimou / Xianxia / Cel-Shaded CG / Anime / Xiaohongshu… |
 | 🎬 **Dicionário Profissional de Movimentos de Câmera** | Sistema de câmera em 3 níveis + 14 distâncias focais + 6 controles de foco + 7 montagens físicas, com referências bilíngues CN/EN |
@@ -233,6 +234,14 @@ python -m unittest scripts.test_validate -v
 ---
 
 ## 📋 Histórico de Versões
+
+### v2.0.0 (2026-07-23)
+- 🎭 **Sistema de Microexpressões Nível Atuação (Nova Arquitetura)**: Lançamento da base de conhecimento `references/micro-expressions.md` (~400 linhas) para elevar dramaticamente a qualidade de atuações faciais em tomadas narrativas exigentes, eliminando rostos de IA falsos, estranhos ou exagerados.
+- 🧩 **Atlas Facial de 7 Zonas**: Mapeamento sistemático de micromovimentos em 7 zonas com prompts bilíngues e tags de emoção/intensidade.
+- 📊 **Sistema de Intensidade de 4 Níveis**: Regras de transição gradual de L1 Sutil → L2 Contido (recomendado) → L3 Explícito → L4 Explosivo.
+- ⏱️ **Coreografia de Arcos Emocionais com Precisão de 2s**: Linhas do tempo de 2s para tomadas com atuação intensa com 4 padrões de arco emocional.
+- 🎬 **Vinculação Câmera e Iluminação para Microexpressões**: Integração de regras de enquadramento / distância focal / movimentos / iluminação; adicionada seção de Melhores Práticas em `cinematography.md`.
+- 🚨 **Manifesto Anti-Rosto-IA e Palavras Proibidas**: Adicionadas regras obrigatórias Anti-Rosto-IA em `quality-anchors.md`, proibindo expressões perfeitamente simétricas, mudanças instantâneas e descrições caricatas.
 
 ### v1.9.1 (2026-04-21)
 - 🛡️ **Conformidade de Segurança (Rodada 3)**: Resolvido o flag "Suspicious" do ClawHub OpenClaw — sincronizada a descrição do Step 4 nos READMEs ja/ko/es/pt/fr (de "executar script Python" para "checklist estruturada de 7 regras"); removidas todas as associações com "Python" nas tabelas de capacidades e comparativas; adicionado `execution: none` no SKILL.md; adicionados disclaimers NOT-FOR-AGENT nos scripts Python
