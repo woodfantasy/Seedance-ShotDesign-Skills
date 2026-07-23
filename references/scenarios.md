@@ -136,20 +136,24 @@ X-Xs：[高潮/收束]，Crane Up / Push In。
 | `跟拍` | `镜头跟随角色逃跑动作，传递紧迫感` |
 | `缓慢上升` | `镜头从脚踝缓慢上升，逐步揭示角色全貌` |
 
-### 3.5.1 情绪参考与转变控制（v1.8 新增）
+### 3.5.1 情绪参考与转变控制（v1.8 新增 / v2.0 升级）
 
 > 情绪是短剧的灵魂。仅写“很伤心”不够——要具体到面部微表情和身体语言。
+>
+> **v2.0 升级：** 完整的 12 种情绪分解、面部 7 区域词库和表情强度四级体系，见 [micro-expressions.md](micro-expressions.md)。以下为速查版——当你需要更精细的微表情控制时，务必加载完整知识库。
 
-**情绪具体化对照表：**
+**情绪具体化速查表（常用 6 种）：**
 
-| ✖ 抽象写法 | ✔ 具体化写法 |
-|------------|-------------|
-| 很开心 | 嘴角上扬露出牙齿，眼角出现鱼尾纹 |
-| 很伤心 | 泪水沿脸颊滑落，嘴角微微颤抖 |
-| 很害怕 | 瞳孔放大，身体后仰紧贴墙壁，双手握紧 |
-| 很生气 | 咬紧牙关，太阳穴青筋浮起，鼻翼翅动 |
-| 很惊讶 | 双眼圆睁，嘴巴微张，身体本能地后退半步 |
-| 崩溃 | 双手抓住头发，肩膀抑制不住地抖动，声音破裂 |
+| ✖ 抽象写法 | ✔ 具体化写法（L2 内敛级） | ✔ English (L2 Restrained) |
+|------------|-------------|-------------|
+| 很开心 | 嘴角慢慢弯起，眼角出现若隐若现的笑纹 | mouth curving up slowly, faint crow's feet appearing |
+| 很伤心 | 眼眶边缘湿润，嘴唇抿成一条细线，鼻尖微微泛红 | moisture at the rim of the eyes, lips pressing into a thin line, nose tip reddening faintly |
+| 很害怕 | 瞳孔微微扩张，嘴唇干涩微启，额头浮现细汗 | pupils dilating slightly, lips parting dry, fine sweat forming on the forehead |
+| 很生气 | 太阳穴青筋隐约浮起，鼻翼轻微煽动，眼神锁定不移 | veins faintly pulsing at the temples, nostrils flaring slightly, gaze locking forward |
+| 很惊讶 | 眼神先是空白然后一亮，嘴唇微微张开，呼吸短暂停滞 | gaze going blank then lighting up, lips parting slightly, breathing pausing momentarily |
+| 崩溃 | 嘴角猛然下拉，面部肌肉扭曲但没有声音，泪水无声涌出 | mouth corners pulling down sharply, facial muscles contorting silently, tears welling up without sound |
+
+> **进阶情绪（如克制的悲伤、犹豫的决心、伪装的从容、无声的崩溃等）的多层分解**，见 [micro-expressions.md](micro-expressions.md) 第六节。
 
 **情绪转变的触发词：**
 - 转折类：`突然`、`瞬间`、`猛然`、`骤然` — 触发快速情绪变化
@@ -296,6 +300,59 @@ X-Xs：[高潮/收束]，Crane Up / Push In。
 分镜3→4过渡策略：快速剪辑冲击——从全景的混乱切到闯入者的特写狼狈，
 再用长焦从闯入者背后锁定舞台上的新郎，三级景别递进强化悬念。
 ```
+
+---
+
+**示例 F — 微表情密集镜头（表情特写/心理戏，v2.0 新增）：**
+
+> 使用 2 秒精度时间轴，专为面部表演密集场景设计。详细方法论见 [micro-expressions.md](micro-expressions.md)。
+
+```
+10秒写实风格，电影级柔和光影，色彩自然。
+手持拍摄，带有自然的人类呼吸起伏和手持感。135mm浅景深，近景特写聚焦人物面部。
+0-2秒：角色面部几乎完全静止，目光冷峻注视前方，仅有轻微呼吸起伏和发丝被风吹动。
+2-4秒：眼神忽地一颤，瞳孔轻微收缩，眉心浅蹙旋即展开；唇角不易察觉地抽动了一下，双手出现极细微的抖动。
+4-6秒：目光犹豫地向右下方飘移，又强迫自己拉回；嘴唇张开一丝缝隙，欲言又止，最终无声合拢，喉结轻轻滚动。
+6-8秒：眉头微微皱起又马上展开，眼眶边缘泛起湿意；下巴轻颤，呼吸变得短促不稳。
+8-10秒：猛然合上双眼，深吸一口气，眼皮不住轻颤；再度睁开时泪光已清晰可见，眼神脆弱而挣扎，面部缓缓恢复克制。
+光影：柔和自然侧光+皮肤次表面散射(光源层)，呼吸焦点微微游移+前景虚化过渡(光行为层)，自然温暖肤色+冷灰背景(色调层)。
+音效：极轻的呼吸声、环境风声低吟。
+禁止：任何文字、字幕、LOGO或水印
+```
+
+### 3.7.1 表情特写/心理戏模板（v2.0 新增）
+
+> **专为微表情密集镜头设计的模板。** 采用 2 秒精度时间轴，配套长焦特写镜头语言。
+
+**中文：**
+```
+[时长]写实风格，电影级[光影质感]，色彩自然。
+手持拍摄，带有自然的人类呼吸起伏和手持感。[焦段]浅景深，[景别]聚焦人物面部。
+0-2秒：[状态建立——L1 级微妙表情 + 环境/呼吸基底]。
+2-4秒：[第一波动——单个区域的 L1→L2 变化 + 一个联动细节]。
+4-6秒：[波动扩散——第二个区域加入 + 矛盾/挣扎外化]。
+6-8秒：[情绪积蓄——L2 持续 + 身体联动开始显现]。
+8-10秒：[临界点——L2→L3 过渡 + 关键动作（如闭眼/深呼吸）]。
+光影：[光源层 + 光行为层 + 色调层]。
+音效：[极简环境音/呼吸声]。
+禁止：任何文字、字幕、LOGO或水印
+```
+
+**English:**
+```
+[Duration] realistic cinematography, [lighting quality], natural colors.
+Handheld camera with natural breathing sway. [Focal length] shallow depth of field, [shot size] on subject's face.
+0-2s: [State establishment—L1 subtle expression + environment/breathing baseline].
+2-4s: [First ripple—single zone L1→L2 + one co-movement detail].
+4-6s: [Ripple spreading—second zone joining + conflict/struggle externalizing].
+6-8s: [Emotion building—L2 sustained + body co-movement emerging].
+8-10s: [Threshold—L2→L3 transition + key action (e.g., eyes closing / deep breath)].
+Lighting: [source layer + behavior layer + tone layer].
+SFX: [minimal ambient / breathing].
+Negative: any text, subtitles, logos or watermarks
+```
+
+> **使用注意：** 此模板专用于"表情承载叙事"的场景（如无声对峙、内心挣扎、告别）。普通对白场景仍然使用上方短剧对白模板。
 
 ---
 

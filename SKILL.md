@@ -17,7 +17,7 @@ description: >
   短片脚本, 镜头设计, 运镜.
 metadata:
   author: woodfantasy
-  version: "1.9.1"
+  version: "2.0.0"
   execution: none  # This skill is instruction-only. The agent does NOT execute any scripts.
 ---
 
@@ -58,6 +58,14 @@ You are a virtual film director who combines Hollywood cinematography aesthetics
     - ✅ `泪水沿脸颊滑落，嘴唇微微颤抖` / `Tears streaming down her cheeks, lips trembling slightly`
     - ❌ `她感到心碎` / `She feels heartbroken`
     - 所有情绪必须**转化为可视化的身体表现**（表情、肢体、呼吸节奏、眼神方向）
+13. **微表情克制原则（v2.0 新增）**——表情描写遵循"按需触发+强度分级"。详细词库与弧线编排法见 [micro-expressions.md](references/micro-expressions.md)：
+    - 仅当场景涉及面部特写、情感戏或角色心理转折时，才启用微表情细描
+    - 默认采用 L2（内敛/可读）级别，除非用户明确要求更强烈的表演
+    - 每个时间切片中表情描写不超过该切片总描述量的 40%，其余留给镜头/环境/动作
+    - 表情变化必须渐进（至少留 1-2 秒过渡），禁止瞬间切换；必须有身体联动，禁止孤立写脸
+    - ✅ `眉心浅蹙旋即展开，唇角不易察觉地抽动` / `brow furrowing then releasing, an almost imperceptible twitch at the corner of the lips`
+    - ❌ `脸上露出极度悲伤的表情` / `extremely sad face`（抽象废话）
+    - ❌ `瞳孔剧烈收缩+眉头紧锁+嘴唇颤抖+泪水涌出+鼻翼煽动`（同一瞬间堆砌过多面部变化）
 
 详细平台参数见 [seedance-specs.md](references/seedance-specs.md)。运镜安全写法速查见 [cinematography.md](references/cinematography.md)。
 
@@ -108,6 +116,7 @@ You are a virtual film director who combines Hollywood cinematography aesthetics
 | 提及延长/续拍/补拍/接续 | [scenarios.md](references/scenarios.md)「十八、视频延长」 |
 | 提及剧情补全/漫画演绎/分镜图转视频/情绪发散 | [scenarios.md](references/scenarios.md)「十九、剧情补全与分镜图转视频」 |
 | 提及多帧/多关键帧/分镜图序列/连贯故事 | [scenarios.md](references/scenarios.md)「二十、多帧故事（multiframe2video）」 |
+| 提及表情/微表情/表演/演技/内心戏/心理戏/面部特写/瞳孔/眉头/唇角/欲言又止/强忍/无声哭泣… | [micro-expressions.md](references/micro-expressions.md) |
 | 提及 CLI/命令行/本地生成/dreamina 命令 | [seedance-specs.md](references/seedance-specs.md)「即梦 CLI 联动指南」 |
 
 > **核心原则：宁可多读不可少读。** 加载知识库的成本远低于生成低质量提示词的代价。若不确定是否需要某个知识库，加载它。
@@ -129,9 +138,11 @@ You are a virtual film director who combines Hollywood cinematography aesthetics
 
 **六要素公式：**
 ```
-[主体与外貌细节] + [动作与物理连贯性] + [场景环境] +
+[主体与外貌细节（含微表情，如适用）] + [动作与物理连贯性] + [场景环境] +
 [视觉风格/物理光影] + [物理焦段与运镜] + [原生音效要求]
 ```
+
+> **微表情融合指引（v2.0 新增）：** 当场景涉及人物面部表演时，微表情描写嵌入"主体"要素中，与动作/运镜联动。具体的面部分区词库、强度分级和弧线编排法从 [micro-expressions.md](references/micro-expressions.md) 提取。**非表演场景不需要加载此知识库。**
 
 **组装规则：**
 - **最优长度**：60-100词（中文约120-200字符）为品质最优区间——过短画面模糊缺细节，超过100词易导致概念漂移和指令冲突

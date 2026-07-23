@@ -135,6 +135,34 @@
 50mm standard lens, eye-level medium shot, natural perspective, couple walking through autumn park
 ```
 
+### 微表情镜头最佳实践（v2.0 新增）
+
+> 微表情镜头的核心：让摄像机成为观众的眼睛，近到能看清瞳孔的收缩。完整的微表情描写方法论见 [micro-expressions.md](../references/micro-expressions.md)。
+
+**景别 × 焦段 × 运镜联动速查：**
+
+| 表情场景 | 推荐焦段 | 推荐景别 | 运镜 | 辅助手法 |
+|----------|----------|----------|------|----------|
+| 内心挣扎（渐进弧线） | 135mm | ECU 极致特写 | 极缓推进 | 呼吸焦点 + 手持微晃 |
+| 情绪压制（角色在忍） | 85mm | CU 特写 | 固定机位 | 浅景深 + 前景虚化 |
+| 情绪渐变（从 A 到 B） | 85-135mm | CU→ECU | 缓慢推进 | Rack Focus 焦点转移 |
+| 情绪爆发前夕 | 135mm | ECU 极致特写 | 静止 | 呼吸焦点 + 拉长时间 |
+| 无声对峙 | 85mm | CU 特写（双人交替） | 固定 或 极慢环绕 | 浅景深正反打 |
+| 告别/释然 | 85mm | CU→MS（缓慢拉远） | 缓慢后拉 | 景深渐深，空间感展开 |
+
+**提示词范例：**
+
+```
+# 内心挣扎 × 极缓推进
+135mm telephoto lens, handheld with natural breathing sway, extreme close-up slowly pushing toward the face, breathing focus gently drifting, shallow depth of field isolating the subject
+
+# 情绪压制 × 固定机位
+85mm portrait lens, locked-off tripod shot, close-up on face, shallow depth of field with blurred foreground element, camera holds perfectly still letting micro-expressions carry the narrative
+
+# 告别 × 缓慢后拉
+85mm portrait lens, slow dolly pull-back from close-up to medium shot, depth of field gradually deepening to reveal the surrounding space
+```
+
 ## 四、焦点控制与景深
 
 | 术语 | 英文 | 效果 |
