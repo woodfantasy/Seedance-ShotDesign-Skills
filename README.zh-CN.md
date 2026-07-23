@@ -179,6 +179,7 @@ seedance-shot-design/
 └── references/
     ├── cinematography.md        # 运镜与焦段专业词典（含物理机位与焦段心理学）
     ├── director-styles.md       # 导演风格参数化映射库（28+风格，含三渲二/Cel-Shaded CG）
+    ├── micro-expressions.md     # 表演级微表情系统知识库（7大分区/4级强度/2s情绪弧线）
     ├── seedance-specs.md        # Seedance 2.0官方平台规范
     ├── quality-anchors.md       # 品质锚定与光影库（含NPR材质/灯光/冲突矩阵）
     ├── scenarios.md             # 垂直场景模板库（20大场景 + 二次元变体 + 视频编辑 + 物理阻尼工具箱）

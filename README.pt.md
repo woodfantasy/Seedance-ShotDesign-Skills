@@ -36,7 +36,7 @@ Um Claude Skill construído sobre a especificação [Agent Skills](https://agent
 | 📐 **Storyboard com Marcação Temporal** | `0-3s / 3-8s / …` controle preciso da timeline para evitar sangramento visual entre planos |
 | 🎯 **Montagem de Seis Elementos** | Sujeito / Ação / Cena / Iluminação / Câmera / Som — fórmula estruturada de alta conversão |
 | 🎬 **Storyboard Multi-Segmento Inteligente** | Vídeos >15s divididos automaticamente em segmentos independentes com estilo, iluminação, som unificados e transições seamless |
-| 📦 **17 Templates de Cenários** | E-commerce / Xianxia / Curta / Gastronomia / MV / Plano-sequência / Automotivo / Macro / Natureza / Game PV / Terror / Viagem / Pets / Transformação / Loop / Edição de Vídeo / Extensão de Vídeo / Complemento de História / Narração Multiframe |
+| 📦 **20 Templates de Cenários** | E-commerce / Xianxia / Curta / Gastronomia / MV / Plano-sequência / Automotivo / Macro / Natureza / Game PV / Terror / Viagem / Pets / Transformação / Loop / Edição de Vídeo / Extensão de Vídeo / Complemento de História / Narração Multiframe |
 | 🎵 **Vocabulário de Som e ASMR** | Biblioteca de onomatopeias baseada em física: ambiental / ação / vocal / música |
 | 🌐 **Saída Bilíngue de Prompts** | Usuários chineses → chinês / demais → inglês, detecção automática |
 | 🛡️ **Proteção de PI Segura** | Estratégia progressiva de recuo de PI em três níveis para evitar bloqueios |
@@ -169,6 +169,7 @@ seedance-shot-design/
 └── references/
     ├── cinematography.md        # Dicionário de câmera e distâncias focais
     ├── director-styles.md       # Mapeamento de estilos de direção (28+)
+    ├── micro-expressions.md     # Base de conhecimento do sistema de microexpressões nível atuação (atlas 7 zonas / intensidade 4 níveis / arco 2s)
     ├── seedance-specs.md        # Especificações oficiais Seedance 2.0
     ├── quality-anchors.md       # Âncoras de qualidade e iluminação
     ├── scenarios.md             # 20 templates de cenários verticais

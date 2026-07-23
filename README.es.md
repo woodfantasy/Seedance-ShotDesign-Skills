@@ -175,6 +175,7 @@ seedance-shot-design/
 └── references/
     ├── cinematography.md        # Diccionario de cámara y distancias focales (incl. montajes físicos y psicología focal)
     ├── director-styles.md       # Mapeo parametrizado de estilos de dirección (28+ estilos, incl. Cel-Shaded CG)
+    ├── micro-expressions.md     # Base de conocimientos del sistema de microexpresiones a nivel de actuación (atlas 7 zonas / intensidad 4 niveles / arco 2s)
     ├── seedance-specs.md        # Especificaciones oficiales de la plataforma Seedance 2.0
     ├── quality-anchors.md       # Anclas de calidad y biblioteca de iluminación (incl. materiales NPR / iluminación / matriz de conflictos)
     ├── scenarios.md             # Plantillas de escenarios verticales (20 escenarios + variantes anime + edición de vídeo + kit de amortiguación física)

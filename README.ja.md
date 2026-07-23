@@ -175,9 +175,10 @@ seedance-shot-design/
 └── references/
     ├── cinematography.md        # カメラ＆焦点距離辞典（物理マウント＆焦点距離心理学含む）
     ├── director-styles.md       # 監督スタイルパラメータ化マッピング（28+スタイル、セルシェーディングCG含む）
+    ├── micro-expressions.md     # 演技レベルの微表情システム知識ベース（7領域パーツ/4段階強度/2秒感情アーク）
     ├── seedance-specs.md        # Seedance 2.0 公式プラットフォーム仕様
     ├── quality-anchors.md       # 品質アンカー＆ライティングライブラリ（NPR素材/ライティング/競合マトリクス含む）
-    ├── scenarios.md             # 垂直シナリオテンプレート（17シナリオ+アニメ変体+映像編集+物理ダンピングツールキット）
+    ├── scenarios.md             # 垂直シナリオテンプレート（20シナリオ+アニメ変体+映像編集+物理ダンピングツールキット）
     └── audio-tags.md            # オーディオ＆効果音タグ仕様（空間音響＆素材ベースオノマトペ含む）
 ```
 

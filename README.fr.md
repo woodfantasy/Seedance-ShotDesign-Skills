@@ -169,6 +169,7 @@ seedance-shot-design/
 └── references/
     ├── cinematography.md        # Dictionnaire caméra et focales
     ├── director-styles.md       # Cartographie des styles de réalisation (28+)
+    ├── micro-expressions.md     # Base de connaissances du système de micro-expressions niveau acteur (atlas 7 zones / intensité 4 niveaux / arc 2s)
     ├── seedance-specs.md        # Spécifications officielles Seedance 2.0
     ├── quality-anchors.md       # Ancres qualité et éclairage
     ├── scenarios.md             # 20 modèles de scénarios verticaux
