@@ -1,151 +1,159 @@
-# Seedance 2.0 官方平台规范
+# Seedance 2.5 官方平台规范
 
-> 本文档为 Seedance 2.0（即梦）平台的技术参数与规范速查。所有提示词必须在此边界内设计。
+> Source of truth: `【即梦】Seedance 2.5 使用手册.md`, reviewed 2026-08-02. Use this file for platform limits. Distinguish hard limits from quality guidance and unresolved UI details.
 
-## 提示词容量限制
+## Contents
 
-| 语言 | 上限 | 说明 |
-|------|------|------|
-| 中文 | **500 字符** | 超出则模型仅抓取宏观重点，忽略微观细节 |
-| 英文 | **1000 词** | 同上 |
+- Hard platform limits
+- Input file requirements
+- Stability guidance
+- Supported modes and language behavior
+- Prompt and timestamp behavior
+- Unverified or ambiguous items
 
-> 提示词不是越长越好。过长导致信息分散，模型可能忽略布光、材质等关键指令。
+## Hard platform limits
 
-## 生成时长
+### Output duration
 
-- **单次生成**：4-15 秒
-- **超长视频**：需分段生成 + 视频延长拼接（每段 ≤15s）
+| Mode | Duration | Notes |
+|---|---:|---|
+| Standard generation | 4–30s | `duration=-1` may represent platform auto duration; do not assume it when the user requests an exact length |
+| Ultra-long video | 30–180s | Dedicated 超长视频 mode; one generation rather than mandatory 15s splitting |
+| Video extension source | ≤30s | Only a source/current result no longer than 30s can be extended |
+| Added extension | 4–30s | UI duration means the added interval, not the final total |
+| Extension result | ≤60s | Maximum example: 30s source + 30s extension |
 
-## 分辨率与画幅
+Standard generation uses 97–721 frames for 4–30 seconds. The official examples use 24fps frame anchors, e.g. 720 frames for 30 seconds.
 
-| 分辨率 | 画幅比 |
-|--------|--------|
-| 480p / 720p / **1080p** | 16:9（横屏）、9:16（竖屏）、21:9（超宽）、1:1（方形）、2.35:1（宽银幕） |
+### Output resolution
 
-## 多模态文件限制
+- Supported API/manual values: **480p** and **720p**.
+- Do not claim official 1080p support from this manual.
+- The UI walkthrough mentions a `720P+` label. Treat it as a UI label, not a documented 1080p parameter.
 
-| 类型 | 最大数量 | 格式 | 大小限制 |
-|------|----------|------|----------|
-| 图片 | **9 张** | jpeg/png/webp/bmp/tiff/gif | 每张 < 30MB |
-| 视频 | **3 段** | mp4/mov | 每段 2-15s，总计 < 50MB |
-| 音频 | **3 段** | mp3/wav | 总计 ≤ 15s，总计 < 15MB |
-| **合计** | **≤ 12 个** | — | — |
+### Images
 
-## 多模态引用语法
+- Maximum per request: **30 images**.
+- Supported formats listed in the manual's unchanged input specification: jpeg, png, webp, bmp, tiff, gif, heic, heif.
+- Single image: under 30MB.
+- Width/height ratio: 0.4–2.5.
+- Width and height: 300–6000px.
+- Prefer images within 4K for the 30-image workflow.
 
-在提示词中使用以下格式引用上传的素材：
+### Videos
 
-```
-@图片1 ~ @图片9    图片引用
-@视频1 ~ @视频3    视频引用
-@音频1 ~ @音频3    音频引用
-```
+- Maximum per request: **10 videos**.
+- Single reference duration: nominally 2–30s; accepted tolerance shown as 1.8–30.2s.
+- Total duration of all reference videos: nominally ≤30s; accepted tolerance shown as ≤30.2s.
+- Formats: mp4, mov.
+- Resolution: 480p–4K.
+- Aspect ratio: 0.4–2.5.
+- Width and height: 300–6000px.
+- Total pixel range: 409,600–8,295,044.
+- Single video size: ≤200MB.
+- Frame rate: 24–60fps.
 
-### 引用功能说明
+### Audio
 
-| 引用方式 | 用途 | 典型写法 |
-|----------|------|----------|
-| **身份锚定** | 锁定角色外貌 | `保留@图片1中人物的面部特征和服装` |
-| **风格参考** | 借鉴视觉风格 | `参考@图片2的色调和构图风格` |
-| **运镜复刻** | 复制镜头轨迹 | `参考@视频1的运镜和动作节奏` |
-| **动作编排** | 复制舞蹈/动作 | `复刻@视频1中的舞步编排` |
-| **音色参考** | 匹配声音特征 | `音色参考@视频1` |
-| **视频延长** | 续拍接力 | `将@视频1延长5秒` |
-| **角色替换** | 更换视频中角色 | `将@视频1中的A换成@图片1` |
-| **首帧锚定** | 指定起始画面 | `@图片1为首帧` |
-| **尾帧锚定** | 指定结束画面 | `@图片2为尾帧` |
+- Maximum per request: **10 audio clips**.
+- Single reference duration: ≤30s.
+- Total duration of all reference audio: ≤30s.
+- Formats: wav, mp3.
+- Single audio size: ≤15MB.
+- Audio-only multimodal generation is supported; an image or video is no longer mandatory.
 
-## 官方提示词核心公式
+### Mixed inputs
 
-Seedance 2.0 训练数据分布对应的最佳结构：
+The Seedance 2.5 manual does **not** state a combined 12-file cap. Validate the documented per-type limits rather than reusing the Seedance 2.0 mixed-total rule.
 
-```
-主体/角色 + 所在场景 + 核心动作/时序 + 镜头语言 + 画面风格/光影材质 + 音频要求
-```
+## Stability guidance
 
-### 时间戳分镜语法
+These are quality recommendations, not upload rejection limits.
 
-对于长视频（>5秒），强烈建议使用时间戳分段：
+| Scenario | Stable range | Higher-risk range |
+|---|---|---|
+| Distinct subjects from video/audio | 1–5 | 6–10 may require more attempts |
+| Subject video/audio duration | 5–10s | Longer references may reduce stability |
+| Distinct subjects from images | 1–8 | 9–12 may require more attempts |
+| Video used for editing | ≤20s | Longer clips may reduce edit preservation |
+| Reference images for video editing | 1–5 | 6–8 may reduce stability |
 
-```
-0-3秒：画面A + 镜头A + 音效A。
-4-8秒：画面B + 镜头B + 音效B。
-9-12秒：画面C + 镜头C + 音效C。
-```
+For more than five subjects, separate multi-angle views into multiple images. Multiple images containing one view each are more stable than one collage containing many views.
 
-**规则：**
-- 每个时间段只描述一个核心动作
-- 段与段之间保持逻辑连贯
-- 时间段不可重叠
-- 完整覆盖总时长
+## Supported modes
 
-## 内容合规红线
+- 全能参考
+- 智能编辑
+- 超长视频
+- 首尾帧
+- 视频延长
+- 高级编辑 for locally uploaded video
+- 视频编辑 for an already generated result
+- Spatial viewpoint modification
+- BGM separation/removal
+- Creative transfer
+- Multi-character reference
+- Voice-timbre reference
+- Green-screen editing
+- Rough/fine white-model control
+- Seamless transition between two source clips
+- Multi-panel storyboard input
 
-1. **写实真人面部素材**：平台自动拦截用真人照片作为强绑定的请求
-2. **知名 IP/品牌**：即使不使用原名，标志性视觉特征也可能触发拦截
-3. **暴力/色情/政治敏感**：严格按平台审核标准执行
+## Prompt structure
 
-## 十大核心能力速查
+Official common formula:
 
-| # | 能力 | 模式 |
-|---|------|------|
-| 1 | 一致性控制（人脸/服装/字体） | `@图片N` 锚定 |
-| 2 | 运镜/动作复刻 | `参考@视频1的运镜` |
-| 3 | 创意/特效复刻 | `参考@视频1的特效` |
-| 4 | 剧情补全 | 分镜脚本 + 演绎方式 |
-| 5 | 视频延长 | `将@视频1延长Xs` |
-| 6 | 声音控制 | `音色参考 + "台词"` |
-| 7 | 一镜到底 | `一镜到底 + 全程不切镜头` |
-| 8 | 视频编辑 | `将@视频1中的A换成@图片1` |
-| 9 | 音乐卡点 | `参考@视频1的画面节奏/卡点` |
-| 10 | 情绪演绎 | 情绪变化描述 + 运镜配合 |
-
-## 即梦 CLI 联动指南（v1.8.4 新增）
-
-> 当 Shot Design 部署在支持 CLI 调用的 Agent 环境中（如 OpenClaw + Dreamina CLI），提示词可以直接通过 CLI 提交生成。本节提供命令映射速查。
-
-### CLI 安装
-
-```bash
-curl -fsSL https://jimeng.jianying.com/cli | bash
-dreamina login   # 首次登录
-```
-
-### 提示词 → CLI 命令映射
-
-| Shot Design 模式 | CLI 命令 | 关键参数 | 说明 |
-|-----------------|----------|----------|------|
-| 纯文本 → 视频 | `dreamina text2video` | `--prompt "提示词" --duration X --ratio 16:9` | 标准文生视频 |
-| 首帧图 → 视频 | `dreamina image2video` | `--image 路径 --prompt "运动描述"` | I2V 黄金法则 |
-| 多帧 → 故事视频 | `dreamina multiframe2video` | 多图输入 + prompt | 多图连贯叙事，引擎自动编排 |
-| 多模态 → 视频 | `dreamina multimodal2video` | 图+视频+音频 + prompt | 旗舰模式，支持 seedance2.0 家族 |
-| 纯文本 → 图片 | `dreamina text2image` | `--prompt "提示词"` | 生成首帧参考图 |
-| 图 → 图 | `dreamina image2image` | `--images 路径 --prompt "提示词"` | 迭代角色/场景设计 |
-
-> **使用建议：** 先用 Shot Design 生成提示词，再根据上表选择对应 CLI 命令提交。Agent 可通过 `dreamina <subcommand> -h` 查看最新参数。
-
-### 异步任务管理
-
-CLI 生成任务为**异步**模式，提交后需等待或轮询结果：
-
-```bash
-# 方式1：提交时自动轮询（推荐）
-dreamina text2video --prompt "提示词" --poll=30
-
-# 方式2：手动查询
-dreamina text2video --prompt "提示词"     # 返回 submit_id
-dreamina query_result --submit_id <ID>     # 查询结果
-dreamina list_task --gen_status=success    # 查看成功任务
+```text
+Material description
++ one-sentence overview
++ detailed story/timestamp description
++ global supplement at the end
 ```
 
-### 模型通道说明
+Within a segment, include positive instructions for image, camera, action, dialogue, and sound, plus contextual negative instructions for unwanted content. Repeat only global constraints that genuinely need persistence.
 
-> 不建议在提示词中硬编码模型名称，应通过 CLI `-h` 确认当前支持的模型。
+For a complex 30s video, use:
 
-| 通道 | 特点 | 适用场景 |
-|------|------|----------|
-| `seedance2.0` | 标准质量 | 日常创作 |
-| `seedance2.0_vip` | 高优先级队列 | 追求品质 |
-| `seedance2.0_fast_vip` | 快速生成 | 批量验证/迭代测试 |
+```text
+Multimodal reference layer
++ global world/visual/camera/character/performance setup
++ timestamped script with physical action and optional directing subtext
++ global continuity and negative constraints
+```
 
-> **注意：** 模型通道随平台更新可能变化，使用前执行 `dreamina multimodal2video -h` 确认最新支持。
+For an ultra-long video, the manual explicitly permits restating duration and aspect ratio at the beginning.
+
+## Timestamp behavior
+
+- Native second-level interval control is supported.
+- Use ordered ranges such as `[00.0-05.0s]`, `0-5秒`, or `0:30-0:45`.
+- Frame anchors are supported in official examples. Assume 24fps only when the prompt or production brief establishes it.
+- Attach actions, dialogue, sound effects, transitions, or edit windows to explicit time ranges when timing matters.
+
+## Language behavior
+
+- Priority optimization: Chinese, English, Spanish, Indonesian, Malay.
+- Supported coverage: Thai, Arabic, Portuguese, Vietnamese, Japanese, Korean.
+- Native-language directing prompts are supported.
+- Exact target-language dialogue and subtitles should be written explicitly, with speaker binding and pronunciation/delivery intent.
+
+## Asset tokens
+
+Use the exact token inserted by the platform UI. Typical Chinese-interface tokens are:
+
+```text
+@图片1   @视频1   @音频1
+```
+
+Do not infer that token numbering must stop at the old 9/3/3 limits.
+
+## Content and identity safety
+
+The provided capability manual demonstrates photorealistic human generation but does not define every identity-binding or moderation rule. Distinguish generated fictional humans from real-person likeness use. Require authorization for recognizable real people and follow current platform policy for public figures, copyrighted characters, brands, violence, sexual content, and other sensitive material.
+
+## Unverified or ambiguous items
+
+- No official prompt character/word ceiling is stated in this manual. Do not enforce the legacy 500-character/1000-word limit.
+- `720P+` appears in a UI example, while the parameter table states 480p/720p. Use the parameter table until separately verified.
+- The manual links a Maya/Blender white-model plugin guide but does not document CLI commands or model channel names. Do not publish old CLI commands as 2.5 facts without current official verification.
+- Per-file image/audio requirements appear in the unchanged specification column. Treat them as current operational limits while marking future changes through a source update rather than silently guessing.

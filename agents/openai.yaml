@@ -1,0 +1,8 @@
+interface:
+  display_name: "Seedance 2.5 Shot Design"
+  short_description: "为 Seedance 2.5 生成、延长与编辑专业视频提示词"
+  icon_large: "./assets/logo.svg"
+  default_prompt: "Use $seedance-shot-design to turn my video idea or source clip into a production-ready Seedance 2.5 plan and prompt."
+
+policy:
+  allow_implicit_invocation: true

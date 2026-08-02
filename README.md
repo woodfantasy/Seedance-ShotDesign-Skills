@@ -4,398 +4,179 @@ English | [中文](README.zh-CN.md) | [日本語](README.ja.md) | [한국어](RE
   <img src="assets/logo.svg" width="128" height="128" alt="Seedance Shot Design Logo">
 </p>
 
-<h1 align="center">Seedance2.0 Shot Design</h1>
+<h1 align="center">Seedance 2.5 Shot Design</h1>
+
+<p align="center"><strong>Mode-aware directing, prompt design, extension, and editing for Jimeng Seedance 2.5</strong></p>
 
 <p align="center">
-  <strong>Cinematic Shot Language Designer</strong>
+  <img src="https://img.shields.io/badge/version-3.0.0-blue.svg" alt="Version 3.0.0">
+  <img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="MIT-0 License">
+  <img src="https://img.shields.io/badge/platform-Seedance_2.5-purple.svg" alt="Seedance 2.5">
 </p>
 
-<p align="center">
-  <a href=""><img src="https://img.shields.io/badge/version-2.0.0-blue.svg" alt="Version"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT--0-green.svg" alt="License"></a>
-  <a href=""><img src="https://img.shields.io/badge/platform-Seedance_2.0-purple.svg" alt="Platform"></a>
-</p>
+Seedance Shot Design turns a rough video idea or an approved source clip into a production-ready Seedance 2.5 plan and copyable prompt. Version 3.0 is a capability-level rewrite for 30-second standard generation, 30–180 second ultra-long work, multimodal references, extension, precision editing, and industrial workflows.
 
-<p align="center">
-  Turn your vague video ideas into <strong>cinema-grade video prompts</strong> ready for Jimeng Seedance 2.0 — in one shot.
-</p>
+## What changed in 3.0
 
-A Claude Skill built on the [Agent Skills](https://agentskills.io) specification, blending Hollywood-level cinematography aesthetics with Chinese film industry practices. It's designed to help creators break free from the "looks nice but random" AI video trap and achieve **precise, controllable visual storytelling**.
+| Area | Seedance 2.5 behavior |
+|---|---|
+| Standard generation | One continuous 4–30s generation; exactly 30s stays in standard mode by default |
+| Ultra-long | Continuous 30–180s stories with a continuity bible, acts, sequences, and a resolved ending |
+| Extension | Source ≤30s, add 4–30s, final ≤60s; the prompt controls only the added portion |
+| Multimodal input | Up to 30 images, 10 videos, and 10 audios under the documented per-type duration/file constraints |
+| Editing | Smart edit, annotation-based advanced edit, local replacement/removal, and viewpoint reconstruction |
+| Audio | Audio-only references, voice/timbre binding, multilingual dialogue, BGM removal with speech/ambience preservation |
+| Production modes | Creative transfer, green screen, rough/fine white model, seamless transition, multi-panel storyboard |
+| Validation | Mode-aware duration, asset, timeline, contract, preservation, and contradiction checks |
+| Localization | Native directing language; dialogue is explicitly bound to speaker and target language |
 
----
+The skill deliberately removes obsolete assumptions: no forced split above 15 seconds, no 9/3/3/12 mixed-file rule, no universal 500-character ceiling, no forced English for non-Chinese users, and no undocumented 1080p or CLI claims.
 
-## ✨ Core Capabilities
+## Core workflow
 
-| Capability | Description |
-|------------|-------------|
-| 🎭 **Acting-Level Micro-Expression System** | 7-zone facial muscle atlas (eyes/brows/lips/nose/jaw-throat/forehead/cheeks) + L1-L4 4-tier expression intensity + 2s-precision emotion arc choreography (4 patterns) + 12-emotion actor breakdown + anti-AI-face manifesto + camera-expression linkage |
-| 🎭 **AI Comic Drama & Short Drama Production** | Full-pipeline support for AI comic strips (漫剧) and AI short dramas — character dialogue / voiceover / actor blocking / exaggerated expression close-ups / narrative-motivated camera / short drama style quick-selector / 4 prompt template variants (CN/EN × dialogue/voiceover), with dedicated scenario templates and complete examples |
-| 🎨 **28+ Director & Style Presets** | Nolan / Villeneuve / Fincher / Deakins / Kurosawa / Makoto Shinkai / Wong Kar-wai / Zhang Yimou / Xianxia / Cel-Shaded CG / Anime / Xiaohongshu… |
-| 🎬 **Pro Camera Movement Dictionary** | 3-tier camera system + 14 focal lengths + 6 focus controls + 7 physical mounts, with bilingual CN/EN references |
-| 💡 **Three-Layer Lighting Structure** | Light Source → Light Behavior → Color Tone — no more vague "add a light" |
-| 📐 **Timestamped Storyboarding** | `0-3s / 3-8s / …` precise timeline control to prevent visual bleeding between shots |
-| 🎯 **Six-Element Precision Assembly** | Subject / Action / Scene / Lighting / Camera / Sound — a structured, high-conversion formula |
-| 🎬 **Smart Multi-Segment Storyboard** | Videos >15s are automatically split into independent prompt segments with unified style, lighting, sound, and seamless transition frames |
-| 📦 **20 Scenario Templates** | E-commerce / Xianxia / Short Drama / Food / MV / One-Take / Automotive / Macro / Nature / Game PV / Horror / Travel / Pets / Transformation / Loop / Video Editing / Video Extension / Story Completion / Multiframe Storytelling |
-| 🎵 **Sound & ASMR Vocabulary** | Physics-based onomatopoeia library covering ambient / action / vocal / music sounds |
-| 🎤 **Voice & Language Control** | Timbre cloning via video reference, dialect/accent control (Sichuan/Cantonese/Northeast/Taiwanese etc.), multilingual dialogue mixing, special voice styles (documentary/stand-up/opera/ASMR) |
-| 📹 **Multimodal Reference Guide** | 6 core reference patterns (first frame / camera replication / action replication / camera+action separation / timbre reference / effect replication), multi-asset character control, consistency preservation |
-| 🌐 **Bilingual Prompt Output** | Chinese users → Chinese prompts, non-Chinese users → English prompts, auto-detected |
-| 🛡️ **Copyright-Safe IP Fallback** | Three-tier progressive IP fallback strategy to prevent platform content blocks |
-| 🔍 **Structured Hard Validation** | Word count / camera moves / temporal logic / filler detection / optical physics conflicts / style conflict matrix — 7-rule checklist applied before every delivery |
-| 🔗 **CLI Integration** | Jimeng CLI command mapping (`text2video` / `image2video` / `multiframe2video` / `multimodal2video`), async task management, VIP channel routing |
-| 🎞️ **Multiframe Storytelling** | Upload 2-9 keyframe images → engine auto-composes coherent story video via `multiframe2video`, with decision matrix for choosing multiframe vs. multi-segment storyboard |
+```mermaid
+flowchart LR
+    A[Production brief] --> B{Route by intent}
+    B --> C[Generation or ultra-long]
+    B --> D[Extension]
+    B --> E[Editing or audio]
+    B --> F[Industrial workflow]
+    C --> G[Asset binding and continuity]
+    D --> G
+    E --> G
+    F --> G
+    G --> H[Mode-specific prompt contract]
+    H --> I[Mode-aware validation]
+    I --> J[Copyable Seedance 2.5 delivery]
+```
 
----
+The skill:
 
-## 🚀 Quick Start
+1. infers the production brief;
+2. selects one primary Seedance mode;
+3. loads only the relevant reference guides;
+4. binds every asset to a role, scope, and exclusion;
+5. designs time, action causality, and continuity state;
+6. validates and delivers one self-contained prompt.
 
-### 1. Install the Skill
+## Supported routes
 
-<details>
-<summary><b>Claude Code</b></summary>
+- `standard`: 全能参考 / 首尾帧, 4–30s
+- `ultra_long`: 超长视频, 30–180s
+- `extension`: 视频延长
+- `smart_edit` / `advanced_edit`: 智能编辑 / 高级编辑 / 视频编辑
+- `viewpoint`: 空间视角修改
+- `bgm`: 音轨编辑 / BGM separation
+- `creative_transfer`: 迁移创意
+- `green_screen`: 绿幕编辑
+- `rough_white_model` / `fine_white_model`: 粗颗粒 / 细颗粒白模
+- `seamless_transition`: 视频无缝转场
+- `storyboard`: 多宫格分镜
 
-Place the `seedance-shot-design/` folder under `.claude/skills/` in your project root:
+## Installation
+
+Place this folder in the skills directory used by your agent host. Common examples:
+
+```text
+.claude/skills/seedance-shot-design/
+~/.codex/skills/seedance-shot-design/
+.cursor/skills/seedance-shot-design/
+```
+
+The repository currently remains available at its existing URL:
 
 ```bash
-# Clone into your project's Skill directory
-git clone https://github.com/woodfantasy/Seedance2.0-ShotDesign-Skills.git .claude/skills/seedance-shot-design
+git clone https://github.com/woodfantasy/Seedance2.0-ShotDesign-Skills.git seedance-shot-design
 ```
 
-Claude Code will automatically detect and load the Skill.
-</details>
+Invoke it explicitly when desired:
 
-<details>
-<summary><b>OpenClaw</b></summary>
-
-In your connected IM app (WeChat, Feishu, etc.), send a message to the OpenClaw Agent:
-
-```
-Please learn this skill: https://github.com/woodfantasy/Seedance2.0-ShotDesign-Skills
+```text
+Use $seedance-shot-design to design a continuous 30-second vertical suspense film.
 ```
 
-The Agent will fetch and learn the Seedance Shot Design skill automatically. You can start making requests right away.
-</details>
+It can also activate implicitly for Seedance prompts, storyboards, extension, editing, white-model rendering, green-screen compositing, and related shot-design requests.
 
-<details>
-<summary><b>Codex</b></summary>
+## Example requests
 
-Place the Skill folder under Codex's agents instruction directory:
+```text
+Create a 30-second 9:16 product story with three image references and one voice reference.
+```
+
+```text
+Continue @Video1 forward by 20 seconds from its last-frame motion, without changing the original clip.
+```
+
+```text
+Remove the poster inside the red box from 4–11s, reconstruct the brick wall, then remove BGM while keeping dialogue and footsteps.
+```
+
+```text
+Render this 24-second fine white-model animation as a realistic sci-fi hangar while preserving geometry, camera, and collision timing.
+```
+
+## Validator
+
+The standard library–only validator can be used locally or in CI:
 
 ```bash
-git clone https://github.com/woodfantasy/Seedance2.0-ShotDesign-Skills.git agents/skills/seedance-shot-design
+python3 scripts/validate_prompt.py \
+  --mode standard \
+  --duration 30 \
+  --resolution 720p \
+  --prompt-file prompt.txt
 ```
 
-Then invoke it within a Codex conversation.
-</details>
-
-<details>
-<summary><b>Cursor</b></summary>
-
-Place the Skill folder under `.cursor/skills/` in your project root:
+For extension, `--duration` means the **added** duration:
 
 ```bash
-git clone https://github.com/woodfantasy/Seedance2.0-ShotDesign-Skills.git .cursor/skills/seedance-shot-design
+python3 scripts/validate_prompt.py \
+  --mode extension \
+  --duration 20 \
+  --source-duration 25 \
+  --prompt-file extension.txt
 ```
 
-Cursor Agent mode will automatically read the Skill instructions.
-</details>
+Run the regression suite:
 
-### 2. Usage
-
-Just tell Claude:
-
-```
-Write a 15-second cyberpunk rain chase video prompt
+```bash
+python3 -m unittest scripts/test_validate.py
 ```
 
-The Skill auto-activates and generates the prompt through a 5-step workflow:
-1. **Requirement Analysis** — Confirm duration / aspect ratio / assets / style
-2. **Visual Diagnosis** — Select camera language & director style
-3. **Six-Element Assembly** — Compose the prompt using the structured formula
-4. **Mandatory Validation** — Apply 7-rule structured validation checklist
-5. **Professional Delivery** — Director's statement + complete prompt
+## Structure
 
-### 3. Examples
-
-#### Full Interaction Demo
-
-**User Input:**
-```
-Write a 10-second Eastern Xianxia short film video prompt
-```
-
-**Skill Output:**
-
-> **Seedance Video Prompt**
->
-> **Theme**: A young man in white catches a red leaf in a misty ancient temple at dawn, reaching enlightenment
->
-> **Director's Statement** (for creative intent only — do not copy):
-> Uses an aerial → dolly → slow push three-phase camera progression, transitioning from grand vista to intimate emotion.
-> 35mm film grain adds a handcrafted texture, and the gold-teal palette echoes the Eastern philosophy of harmony with nature.
->
-> **Full Prompt** (copy directly into Jimeng's input field):
-
-```
-10-second Chinese fantasy, realistic Eastern cinematic look, gold-teal palette, ethereal ambient sound.
-0-3s: High-angle aerial shot of an ancient temple amid clouds, slow aerial push, morning mist drifting through valleys, distant bell faintly ringing, Tyndall light beams piercing through cloud layers.
-3-7s: Dolly push through the temple gate into the courtyard, a young man in white raises his hand to catch a falling red leaf, 35mm film grain texture, shallow depth of field focusing on hand details.
-7-10s: Close-up of the young man looking up, slow push-in, wind rises, sleeves and hair sweep to the right side of frame, spiritual light spiraling upward in the courtyard.
-Sound: Ambient sound contracts into a single clear sword ring.
-Forbidden: Any text, subtitles, logos, or watermarks
-```
-
-#### More Use Cases
-
-```
-# AI Comic Drama
-Write a 10-second AI comic-style bossy CEO short, vertical 9:16, with dialogue and exaggerated close-up expressions
-
-# E-commerce Ad
-Write an 8-second luxury watch product ad video prompt, 9:16 vertical
-
-# Short Drama Dialogue
-Write a 12-second plot-twist short drama scene with dialogue
-
-# One-Take
-Write a 15-second one-take museum walkthrough video prompt
-
-# Image-to-Video (I2V)
-I have a character design image — generate a 10-second animation from this first frame
-
-# Video Extension
-Extend this video by 10 seconds with a sunset ending
-
-# Multiframe Storytelling
-I have 5 storyboard keyframe images — create a coherent story video that flows through all frames
-
-# With Reference Assets
-I've uploaded 3 character design images and 1 reference video — generate a 15-second Xianxia fight scene
-```
-
----
-
-## 📁 Project Structure
-
-```
+```text
 seedance-shot-design/
-├── SKILL.md                     # Core instructions (the Skill's brain)
-├── README.md                    # This file
-├── scripts/
-│   ├── validate_prompt.py       # Industrial-grade prompt validation script
-│   └── test_validate.py         # Validation script test cases
-└── references/
-    ├── cinematography.md        # Camera & focal length dictionary (incl. physical mounts & focal psychology)
-    ├── director-styles.md       # Director style parameterized mapping (28+ styles, incl. Cel-Shaded CG)
-    ├── micro-expressions.md     # Acting-level micro-expression system knowledge base (7-zone atlas / 4-tier intensity / 2s emotion arc)
-    ├── seedance-specs.md        # Seedance 2.0 official platform specs
-    ├── quality-anchors.md       # Quality anchors & lighting library (incl. NPR materials / lighting / conflict matrix)
-    ├── scenarios.md             # Vertical scenario templates (20 scenarios + anime variants + video editing + multiframe storytelling + physics damping toolkit)
-    └── audio-tags.md            # Audio & sound effect tag specs (incl. spatial acoustics & material-based onomatopoeia)
+├── SKILL.md
+├── agents/openai.yaml
+├── assets/logo.svg
+├── references/
+│   ├── seedance-specs.md
+│   ├── workflow-router.md
+│   ├── prompt-contracts.md
+│   ├── long-form-storytelling.md
+│   ├── multimodal-references.md
+│   ├── video-editing.md
+│   ├── industrial-workflows.md
+│   ├── cinematography.md
+│   ├── quality-anchors.md
+│   ├── micro-expressions.md
+│   ├── audio-tags.md
+│   ├── director-styles.md
+│   └── scenarios.md
+└── scripts/
+    ├── validate_prompt.py
+    └── test_validate.py
 ```
 
----
+## Platform notes
 
-## 🔬 Validation Script (Standalone Developer Tool)
+- The supplied Seedance 2.5 manual documents 480p and 720p output. `720P+` appears as a UI label, not a separately documented parameter. Verify the current UI before promising anything beyond 720p.
+- Stability guidance is reported as a warning, not confused with a hard upload limit.
+- Prompt syntax uses the exact asset tokens shown by the user's interface, such as `@图片1`, `@视频1`, and `@音频1`.
+- Recognizable living-person likeness, brands, copyrighted characters, and sensitive content still require appropriate authorization and platform-policy compliance.
+- The skill designs and validates prompts; it does not submit a generation job or consume platform credits.
 
-A standalone Python validation tool for developers and CI/CD pipelines. The AI agent applies these same rules natively via its built-in 7-rule validation checklist — no Python execution required during prompt generation.
+## License
 
-```bash
-# Validate text directly
-python scripts/validate_prompt.py --text "your prompt"
-
-# Validate from file
-python scripts/validate_prompt.py --file prompt.txt
-
-# Specify language (auto=auto-detect, cn=Chinese, en=English)
-python scripts/validate_prompt.py --text "your prompt" --lang en
-
-# JSON output (for programmatic processing)
-python scripts/validate_prompt.py --text "your prompt" --json
-```
-
-**Validation Checks:**
-- ❌ Over word limit (Chinese >500 chars / English >1000 words)
-- ❌ Missing professional camera terminology
-- ❌ Filler word hard-block (masterpiece / ultra-clear, etc. → error)
-- ❌ Optical physics conflicts (ultra-wide + bokeh, handheld + perfect symmetry)
-- ❌ Style conflict matrix (IMAX vs VHS, film vs digital, ink-wash vs UE5, Cel-Shaded vs realistic PBR, Slow Motion vs Speed Ramp)
-- ❌ Asset reference overflow (images >9 / videos >3 / audio >3 / total >12)
-- ❌ Long video (>5s) without time-slice hard-block
-- ⚠️ Time-slice gaps or overlaps
-- ⚠️ Declared duration vs slice endpoint mismatch
-- ⚠️ In-segment motion logic conflicts
-- ⚠️ Seedance review-risk bare English camera terms detection (Dolly / Aerial / Crane / Pan / Arc / Dutch / Steadicam)
-- 🌐 Auto language detection (Chinese / English), adapting length standards & detection strategies per language
-- 🎬 Multi-segment cross-segment consistency checks (style preamble / lighting structure / forbidden items)
-
-**Run Tests:**
-```bash
-python -m unittest scripts.test_validate -v
-# 54 tests pass (covering 11 test classes)
-```
-
----
-
-## 🏗️ Design Philosophy
-
-### Progressive Knowledge Loading (Progressive Disclosure)
-
-Following Agent Skills best practices:
-
-- **SKILL.md** (~4000 tokens): Core workflow + structural templates + quality checklist
-- **references/** (three-layer routing): Camera dictionary and quality anchors are always loaded (Always-On); other knowledge bases auto-matched via semantic inference or loaded on explicit user request
-- **scripts/** (standalone developer tool — NOT executed by the agent): Provided for developers and CI/CD pipelines only. The agent validates prompts using its built-in LLM-native 7-rule checklist
-
-### Competitive Advantages
-
-| Dimension | Common Approach | This Skill |
-|-----------|----------------|------------|
-| Compliance | Plain-text suggestions | **Structured 7-rule hard validation (incl. optical / style conflict matrix + review safety detection)** |
-| Director Styles | International directors only | **International + Chinese + Short Drama + AI Comic + Social Media + Anime + Cel-Shaded CG + Xiaohongshu** |
-| Scene Coverage | Biased toward epic films | **20 vertical scenarios + anime variants + video editing + physics damping toolkit** |
-| Sound Design | Brief mentions | **Spatial acoustics + material-based onomatopoeia library** |
-| Lighting | "Add a light" | **Source → Behavior → Tone three-layer + lighting recipes + material library** |
-| Multilingual | Chinese only | **Chinese / English bilingual output, auto language detection** |
-| Review Safety | Not considered | **Camera term disambiguation rules + bare-word auto-detection** |
-
----
-
-## 📋 Changelog
-
-### v2.0.0 (2026-07-23)
-- 🎭 **Acting-Level Micro-Expression System (New Architecture)**: Launched `references/micro-expressions.md` knowledge base (~400 lines) to dramatically upgrade facial performance quality for high-demand narrative shots, eliminating fake, awkward, or cartoonishly exaggerated AI faces.
-- 🧩 **7-Zone Facial Muscle Atlas**: Systematically mapped micro-movements across 7 zones (eyes, brows, lips, nose, jaw/throat, forehead, cheeks) with bilingual prompts and emotional/intensity tags.
-- 📊 **4-Tier Expression Intensity System**: Established L1 Subtle → L2 Restrained (recommended default) → L3 Overt → L4 Explosive intensity grading and gradual transition rules.
-- ⏱️ **2s-Precision Emotion Arc Choreography**: Designed high-density 2s timelines for performance-heavy shots along with 4 narrative arc patterns (Gradual Escalation / Anti-Climax Release / Calm Surface Deep Turbulence / Rollercoaster).
-- 🎬 **Camera & Lighting Linkage for Micro-Expressions**: Integrated shot size / focal length / camera moves / lighting linkage rules; added Micro-Expression Best Practices to `cinematography.md`.
-- 🚨 **Anti-AI-Face Manifesto & Banned Words**: Added mandatory Anti-AI-Face rules in `quality-anchors.md`, banning perfectly symmetrical expressions, instant emotion swaps, and exaggerated cartoonish descriptions.
-
-### v1.9.1 (2026-04-21)
-- 🛡️ **Security Compliance (Round 3)**: Resolved ClawHub OpenClaw "Suspicious" flag — synchronized Step 4 workflow descriptions across ja/ko/es/pt/fr READMEs (from "run Python script" to "7-rule structured validation checklist"); removed all "Python" associations from capability tables and competitive comparisons across all locales; added `execution: none` metadata to SKILL.md frontmatter; added prominent NOT-FOR-AGENT disclaimers to Python scripts
-
-### v1.9.0 (2026-04-18)
-- 🎬 **Narrative Guidance Shot Patterns**: New Section IX in `cinematography.md` — 8 leading/following/reveal shot types (Leading Shot, Following Shot, Side Tracking, Low Angle Follow, Long Lens Follow, Epic Drone Reveal, Reveal Through, Orbit Follow) with bilingual trigger phrases and example prompts
-- 🚁 **Epic Drone Reveal**: Added as a standalone Level 1 camera move — slow rise from behind subject unveiling grand landscape; distinct narrative structure from generic aerial shots
-- 🌿 **Reveal from Behind / Through Shot**: New Level 1 entry for obstacle-penetration shots (camera pushing through bamboo/crowd/curtain to reveal), with safety phrasing guide
-- 🚶 **Leading Shot**: New Level 1 entry for retreating-ahead camera movement conveying journey and protagonist agency
-- ⚡ **Snap Zoom / Crash Zoom**: Added to Level 3 combos — explosive focal-length jump for comedy impact, scare emphasis, and MV beat-sync
-- 🌀 **Orbit Follow**: Added to Level 3 combos — simultaneous orbit + tracking where the pivot point moves with the subject, distinct from static-subject orbits
-
-### v1.8.5 (2026-04-08)
-- 🌐 **Runway Platform Adaptation**: Clarified native asset limits for Runway users (≤5 images, ≤3 videos) and provided explicit moderation bypass strategies for realistic human faces (blurring or NPR restyling).
-- 🎞️ **Start & End Frame Interpolation**: Added a 7th multimodal reference pattern (`@Image1 as start frame, @Image2 as end frame`) to support precise point-to-point transitions.
-- 🎬 **Two New Effects Scenarios**:
-  - `Freeze Time (Bullet Time)`: Camera dramatically weaves through completely frozen scene elements.
-  - `Multishot Video`: Bypasses the "one-take" limitation by triggering the model to auto-generate sharp montage cuts in a single generation.
-
-- 🚀 **Extreme POV Scenarios**: Added new 21st scenario template focusing on "human head-tracking logic", "high-speed projectile FPV (flying swords/arrows)", and "creature flight".
-- 🎧 **Immersive Audio Exclusion**: Introduced strict audio-exclusion directives for POV templates (ONLY ambient sound, NO BGM or dialogue) to prevent AI from breaking immersion.
-- 🧹 **Background Purification Rule**: Clarified that reference entity images must use a "pure white/blank background" to avoid contaminating the video environment in Image-to-Video generation.
-
-### v1.8.4 (2026-04-08)
-- 🔗 **CLI Integration Guide**: New `seedance-specs.md` section mapping Shot Design modes to Jimeng CLI commands (`text2video` / `image2video` / `multiframe2video` / `multimodal2video`), with async task management and VIP channel documentation
-- 🎞️ **Multiframe Storytelling Template**: New scenario template (#20) for `multiframe2video` — upload 2-9 keyframe images and let the engine auto-compose a coherent story video. Includes decision matrix for choosing between multiframe vs. multi-segment storyboard
-- 📚 **Knowledge Base Routing**: Added multiframe and CLI routing entries to Step 2 semantic inference table
-
-### v1.8.3 (2026-04-08)
-- 🎭 **Descriptive Over Narrative Rule**: New core rule (#12) — only write what the camera SEES (visual words), never what characters FEEL (emotion words). All emotions must be converted to visible physical expressions (facial micro-expressions, body language, breathing rhythm, gaze direction)
-- ✍️ **English Present Progressive**: Assembly rules now mandate `-ing` form for English action descriptions (`running` not `runs`) — progressive tense implies continuous motion, matching video's dynamic nature
-- 🎯 **Motion Tone Front-Loading**: Style preamble now explicitly declares overall motion energy (e.g., `dynamic motion, high energy` or `serene, slow-paced atmosphere`) to lock motion baseline early in generation
-
-### v1.8.2 (2026-04-07)
-- 🎥 **One-Shot-One-Move Rule**: New core rule (#10) enforcing a single camera movement per time segment — combining movements (e.g., push-in + pan) causes jitter. Subject motion and camera motion must be described separately
-- 🖼️ **I2V Golden Rule**: New core rule (#11) and dedicated I2V section — when generating video from an image, only describe motion/changes, never re-describe static content already in the first frame. Introduces `preserve composition and colors` anchor phrase
-- 📏 **Optimal Prompt Length**: Added 60–100 word sweet spot guidance — below is vague, above causes concept drift and conflicting instructions
-- 💪 **Motion Intensity Modifiers**: New bilingual quick-reference table in cinematography dictionary with 6 intensity tiers (violent → gentle → gradual) and do/don't examples to eliminate "mushy motion"
-- 🎤 **Rhythm Over Specs**: Assembly rules now explicitly prefer semantic rhythm words (gentle/gradual/smooth) over technical parameters (24fps/f2.8) that Seedance cannot parse
-- 🎬 **Reference Video Best Practices**: New practical constraints for reference clips — ideal 3–8s length, continuous shot (no cuts), single intent (subject OR camera, not both)
-
-### v1.8.1 (2026-04-07)
-- 🛡️ **Security Compliance**: Resolved ClawHub OpenClaw "Suspicious patterns" flag by converting Python-based validation to LLM-native structured 7-rule validation checklist. Python scripts remain as standalone developer tools but are no longer executed by the agent
-- 🎯 **Trigger Phrase Optimization**: Reduced activation trigger phrases from 40+ to 15 high-signal professional terms, lowering unintended activation surface while preserving core discoverability
-
-### v1.8.0 (2026-04-05)
-- 🎤 **Voice & Language Control System**: New timbre cloning via video reference (`语气和音色参考@视频1`), dialect/accent control (Sichuan/Cantonese/Northeast/Taiwanese etc.), multilingual dialogue mixing, special voice styles (documentary narration / stand-up comedy / opera / ASMR)
-- 📹 **Multimodal Reference Guide**: Upgraded from 4 brief tips to a structured guide with 6 core reference patterns (first frame / camera replication / action replication / camera+action separation / timbre reference / effect replication), plus multi-asset character control and consistency preservation guidance
-- 📏 **Video Extension Scenario**: New forward/backward extension templates, seamless continuation techniques, duration cognition correction (generation duration = added seconds, not total)
-- 📋 **Story Completion Scenario**: New storyboard-to-video, comic panel animation, and image-to-emotion-video creative modes
-- 🎬 **Creative Effects Quick Reference**: New VFX trigger keywords — Hitchcock zoom, fisheye lens, particle effects, speed ramp, freeze transition, ink wash style, morphing effects (bilingual)
-- 🎭 **Emotion Performance Guidance**: New emotion specificity table, emotion transition trigger words, emotion reference video usage in short drama chapter
-
-### v1.7.2 (2026-04-02)
-- 🎯 **Trigger Word Expansion**: Massively expanded Skill activation coverage — added 20+ colloquial Chinese triggers (帮我写个视频, 拍一个, 做分镜, 短视频, AI视频, 抖音视频, vlog, 运镜...) and 10+ English triggers (generate a video, make a clip, shoot a scene, video script, drone shot, camera movement...) so the Skill auto-activates on natural, everyday user expressions — not just professional terminology
-
-### v1.7.1 (2026-03-29)
-- 🔒 **Security Compliance Optimization**: Resolved ClawHub security flagging issues for shell execution, process control, and file access patterns while maintaining full functionality
-
-### v1.7.0 (2026-03-28)
-- 🚨 **Step 3 Mandatory Assembly Rules**: Three-layer lighting must be on its own line with all three layers complete; SFX line must start with `SFX:`; prohibition line standardized (no custom additions); freestyle non-template sections forbidden
-- ⛔ **Step 4 Validation Blocking**: Prompts failing validation are now forbidden from being shown to users; clear 5-step validation flow
-- 📋 **Step 5 Format Enforcement**: Output must follow template exactly (Theme + Director's Note + code-block-wrapped prompt); missing any section = non-compliant
-- 🎯 **Step 2 Parameter Extraction Directive**: Knowledge bases must not just be "loaded" — specific parameters must be extracted and embedded into the prompt
-
-### v1.6.0 (2026-03-28)
-- 🧠 **Smart Semantic Intent Routing**: Step 2 knowledge base loading upgraded from "explicit trigger" to three-layer routing — Always-On loads camera dictionary & quality anchors every time, Semantic Intent Inference auto-detects needed knowledge bases from user's natural language, Explicit Override preserves direct user specification
-- 🎯 **Step 1 Smart Inference Principle**: Agent proactively infers parameters (duration / style / scene) from a single user sentence, only asking about genuinely unknown info, limiting follow-up questions to 1-2
-- 📝 Design philosophy updated from "loaded on demand" to "three-layer routing" ensuring every prompt has a quality foundation
-
-### v1.5.0 (2026-03-27)
-- 🎭 **Actor Blocking System**: Three-element positioning (placement + face direction + gaze focus) with emotion modifier vocabulary for multi-character scenes
-- 🎙️ **Voiceover / Dialogue Split**: Distinct templates for on-screen dialogue vs. off-screen voiceover / inner monologue, with anti-lip-sync directive for VO scenes
-- 📐 **Camera Angle Specificity**: Vague → specific angle mapping (e.g., "close-up" → "over-shoulder medium close-up, focus on listener") with 5 comparison pairs
-- 🎬 **Narrative-Motivated Camera Movement**: Camera moves now paired with storytelling purpose (e.g., "slow push-in — revealing inner turmoil")
-- 🔀 **Segment Transition Strategy**: 6 transition types (gaze continuity / emotional escalation / contrast cut / spatial leap / temporal ellipsis / sensory bridge) for multi-shot coherence
-- 🎨 **Short Drama Style Quick-Selector**: 4-dimension combo system (visual type × render style × color tone × genre)
-- 📝 Short drama prompt templates expanded from 1 to 4 variants (CN dialogue / CN voiceover / EN dialogue / EN voiceover)
-- 📝 Multi-segment Director's Note template adds transition strategy declaration
-- 📝 5 complete short drama examples covering: plot-twist dialogue / voiceover monologue / action conflict / 2D anime / transition strategy
-- ✅ 54 tests pass
-
-### v1.4.0 (2026-03-21)
-- 🎬 **Smart Multi-Segment Storyboard**: Videos >15s auto-split into multiple independent prompts (each ≤15s, min ≥8s)
-- 📝 Multi-segment coherence: unified style preamble / three-layer lighting / sound design / transition frames / forbidden items
-- 📝 Step 5 adds multi-segment output format template (CN / EN)
-- 📝 New 60-second desert Kali/Escrima 4-segment full example
-- 🔧 Validation script adds `validate_multi_segment()` cross-segment consistency check
-- ✅ 54 tests pass (incl. 4 new multi-segment validation tests)
-
-### v1.3.0 (2026-03-21)
-- 🌐 **Bilingual Prompt Output**: Chinese users → Chinese, non-Chinese → English, with auto language detection
-- 📝 All structural templates, delivery formats, and multimodal tips now include English versions
-- 🛡️ **Camera Term Disambiguation (Rule 9)**: Chinese uses Chinese camera terms, English uses full phrases — avoids Seedance review false positives
-- 🔧 Validation adds `check_ambiguous_terms()` bare-word detection + `--lang` flag + English word-count length check
-- 🔧 New Slow Motion vs Speed Ramp conflict detection
-- 🔧 `detect_language()` expanded with CJK Extension A + full-width punctuation support
-- 📚 `cinematography.md` adds "Seedance Safe Phrasing" column
-- ✅ 50 tests pass (incl. bilingual + review safety tests)
-
-### v1.2.0 (2026-03-21)
-- 🎨 **Cel-Shaded CG Style**: New complete four-axis parameterized entry (distinct from anime's explosive energy — positioned for contemplative narrative)
-- 🧱 **Anime / NPR Material Library**: Anime skin / hair / cartoon metal / cartoon fabric — 4 non-photorealistic materials
-- 📦 **Anime Game PV Variant**: Scenario template adds Cel-Shaded sub-template + ice-attribute character example
-- ⚠️ Conflict matrix adds: Cel-Shade vs Realistic PBR material
-- 🔧 Validation adds Cel-Shade vs PBR style conflict detection
-
-### v1.1.0 (2026-03-20)
-- 🎬 **Camera Upgrade**: New focal length narrative psychology, dynamic focus paradigms, physical mount chapter (7 specialty rigs)
-- 🎨 **Director Styles**: New Fincher / Deakins / Kurosawa / Makoto Shinkai + Anime Explosion / Xiaohongshu Aesthetic (incl. de-named safe prompts + forbidden items)
-- 💡 **Quality Upgrade**: Anti-plastic manifesto, film stock library (5 types), material texture library (8 types), lighting combo quick-reference (4 sets), organic imperfection library, quality conflict matrix
-- 🎬 **Scene Expansion**: New Game PV / Horror-Thriller / Travel-City / Pet-Cute / Before-After / Meme-Loop, totaling 16 scenarios + physics damping appendix
-- 🎙️ **Sound Upgrade**: Spatial acoustic modifiers (7 types), material-based onomatopoeia refinement (7 pairs)
-- 🔧 **Validation Enhancement**: Filler word warning → error hard-block, optical physics conflict detection, style conflict matrix, duration-aware time-slicing, 35 tests pass
-
-### v1.0.0 (2026-03-19)
-- 🎉 Initial release
-- SKILL.md core workflow
-- 6 professional knowledge base files
-- Python validation script + test cases
-- 20+ director style mappings
-- 10 vertical scenario templates
-
----
-
-## 📄 License
-
-MIT-0 (MIT No Attribution) License
+[MIT-0](LICENSE)

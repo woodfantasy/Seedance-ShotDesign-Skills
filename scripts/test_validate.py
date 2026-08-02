@@ -1,425 +1,394 @@
 #!/usr/bin/env python3
-# ============================================================================
-# ⚠️  STANDALONE DEVELOPER TOOL — NOT EXECUTED BY THE AI AGENT
-# ============================================================================
-# Test cases for validate_prompt.py. This file is for developers and CI/CD
-# pipelines only. The AI agent does NOT execute any Python scripts.
-# ============================================================================
-"""
-validate_prompt.py 的测试用例
-运行: python -m pytest scripts/test_validate.py -v
-"""
+"""Regression tests for the Seedance 2.5 mode-aware prompt validator."""
 
-import os
-import unittest
 import importlib.util
-
-# 使用 importlib 加载同目录模块（避免 sys.path 操作）
-_spec = importlib.util.spec_from_file_location(
-    "validate_prompt",
-    os.path.join(os.path.dirname(__file__), "validate_prompt.py")
-)
-_module = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(_module)
-
-check_length = _module.check_length
-check_time_slices = _module.check_time_slices
-check_camera_language = _module.check_camera_language
-check_cgi_words = _module.check_cgi_words
-check_asset_refs = _module.check_asset_refs
-check_conflict = _module.check_conflict
-validate_prompt = _module.validate_prompt
-_detect_declared_duration = _module._detect_declared_duration
-detect_language = _module.detect_language
-check_ambiguous_terms = _module.check_ambiguous_terms
-validate_multi_segment = _module.validate_multi_segment
+import json
+import subprocess
+import sys
+import unittest
+from pathlib import Path
 
 
-class TestCheckLength(unittest.TestCase):
-    """字数限制校验"""
-
-    def test_cn_within_limit(self):
-        text = "赛博朋克城市夜景" * 10  # 80字符
-        results = check_length(text)
-        self.assertEqual(results[0]["level"], "pass")
-
-    def test_cn_exceed_limit(self):
-        text = "赛" * 501
-        results = check_length(text)
-        self.assertEqual(results[0]["level"], "error")
-        self.assertEqual(results[0]["code"], "LENGTH_EXCEEDED")
-
-    def test_cn_near_limit(self):
-        text = "赛" * 430  # 86%
-        results = check_length(text)
-        self.assertEqual(results[0]["level"], "warning")
-        self.assertEqual(results[0]["code"], "LENGTH_NEAR_LIMIT")
-
-    def test_en_within_limit(self):
-        text = "word " * 100  # 100 words
-        results = check_length(text, lang="en")
-        self.assertEqual(results[0]["level"], "pass")
-
-    def test_en_exceed_limit(self):
-        text = "word " * 1001  # 1001 words
-        results = check_length(text, lang="en")
-        self.assertEqual(results[0]["level"], "error")
-        self.assertEqual(results[0]["code"], "LENGTH_EXCEEDED")
+SCRIPT_DIR = Path(__file__).resolve().parent
+SPEC = importlib.util.spec_from_file_location("validate_prompt", SCRIPT_DIR / "validate_prompt.py")
+validator = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(validator)
 
 
-
-class TestCheckTimeSlices(unittest.TestCase):
-    """时序切片校验"""
-
-    def test_no_time_slices(self):
-        results = check_time_slices("一个女人在街上走路，镜头跟拍")
-        self.assertTrue(any(r["code"] == "NO_TIME_SLICES" for r in results))
-
-    def test_valid_time_slices_cn(self):
-        text = "0-3秒：画面A；3-8秒：画面B；8-12秒：画面C"
-        results = check_time_slices(text)
-        self.assertTrue(any(r["code"] == "TIME_SLICES_OK" for r in results))
-
-    def test_valid_time_slices_en(self):
-        text = "[0-3s] Scene A; [3-8s] Scene B; [8-12s] Scene C"
-        results = check_time_slices(text)
-        self.assertTrue(any(r["code"] == "TIME_SLICES_OK" for r in results))
-
-    def test_overlapping_time_slices(self):
-        text = "0-5秒：画面A；3-8秒：画面B"
-        results = check_time_slices(text)
-        self.assertTrue(any(r["code"] == "TIME_OVERLAP" for r in results))
-
-    def test_not_from_zero(self):
-        text = "3-6秒：画面A；8-10秒：画面B"
-        results = check_time_slices(text)
-        self.assertTrue(any(r["code"] == "TIME_NOT_FROM_ZERO" for r in results))
+def codes(findings, level=None):
+    return {
+        item["code"] for item in findings
+        if level is None or item["level"] == level
+    }
 
 
-class TestCheckCameraLanguage(unittest.TestCase):
-    """运镜专业度检测"""
-
-    def test_has_camera_cn(self):
-        text = "航拍俯拍城市，Dolly In推进，特写面部表情"
-        results = check_camera_language(text)
-        self.assertEqual(results[0]["level"], "pass")
-
-    def test_has_camera_en(self):
-        text = "Tracking shot through the corridor, close-up on face, dolly in"
-        results = check_camera_language(text)
-        self.assertEqual(results[0]["level"], "pass")
-
-    def test_no_camera(self):
-        text = "一个女人穿着红色裙子在花园里散步，阳光明媚，花朵盛开"
-        results = check_camera_language(text)
-        self.assertEqual(results[0]["level"], "error")
-        self.assertEqual(results[0]["code"], "NO_CAMERA_LANGUAGE")
+def add_case(cls, name, function):
+    function.__name__ = name
+    setattr(cls, name, function)
 
 
-class TestCheckCgiWords(unittest.TestCase):
-    """AI塑料感废话检测"""
-
-    def test_clean_text(self):
-        text = "35mm胶片颗粒质感，自然皮肤纹理微瑕"
-        results = check_cgi_words(text)
-        self.assertTrue(any(r["code"] == "CGI_WORDS_CLEAN" for r in results))
-
-    def test_has_cgi_words(self):
-        text = "杰作级画质，超清晰，masterpiece"
-        results = check_cgi_words(text)
-        self.assertTrue(any(r["code"] == "BANNED_WORDS_DETECTED" for r in results))
-        self.assertTrue(any(r["level"] == "error" for r in results))
-
-    def test_soft_resolution(self):
-        text = "8K超高清画面，配合UnrealEngine5渲染"
-        results = check_cgi_words(text)
-        self.assertTrue(any(r["code"] == "RESOLUTION_WORDS" for r in results))
+class TestModeNormalization(unittest.TestCase):
+    def test_unknown_mode_rejected(self):
+        with self.assertRaises(ValueError):
+            validator.normalize_mode("imaginary")
 
 
-class TestCheckAssetRefs(unittest.TestCase):
-    """资产引用校验"""
+MODE_CASES = {
+    "standard": "standard", "generation": "standard", "all_reference": "standard",
+    "first_last": "standard", "全能参考": "standard", "首尾帧": "standard",
+    "ultra_long": "ultra_long", "ultra-long": "ultra_long", "超长视频": "ultra_long",
+    "extension": "extension", "extend": "extension", "视频延长": "extension",
+    "smart_edit": "smart_edit", "edit": "smart_edit", "智能编辑": "smart_edit",
+    "advanced_edit": "advanced_edit", "高级编辑": "advanced_edit", "视频编辑": "advanced_edit",
+    "viewpoint": "viewpoint", "空间视角修改": "viewpoint",
+    "bgm": "bgm", "audio_edit": "bgm", "音轨编辑": "bgm",
+    "creative_transfer": "creative_transfer", "迁移创意": "creative_transfer",
+    "green_screen": "green_screen", "绿幕编辑": "green_screen",
+    "rough_white_model": "rough_white_model", "粗颗粒白模": "rough_white_model",
+    "fine_white_model": "fine_white_model", "细颗粒白模": "fine_white_model",
+    "seamless_transition": "seamless_transition", "视频无缝转场": "seamless_transition",
+    "storyboard": "storyboard", "多宫格分镜": "storyboard",
+}
 
-    def test_no_refs(self):
-        results = check_asset_refs("纯文本提示词，无任何引用")
-        self.assertTrue(any(r["code"] == "NO_ASSET_REFS" for r in results))
-
-    def test_valid_refs(self):
-        text = "@图片1为首帧，参考@视频1的运镜，@音频1为配乐"
-        results = check_asset_refs(text)
-        self.assertTrue(any(r["code"] == "ASSET_REFS_OK" for r in results))
-
-    def test_image_exceeded(self):
-        refs = " ".join([f"@图片{i}" for i in range(1, 11)])
-        results = check_asset_refs(refs)
-        self.assertTrue(any(r["code"] == "IMAGE_REF_EXCEEDED" for r in results))
-
-    def test_video_exceeded(self):
-        refs = "@视频1 @视频2 @视频3 @视频4"
-        results = check_asset_refs(refs)
-        self.assertTrue(any(r["code"] == "VIDEO_REF_EXCEEDED" for r in results))
-
-    def test_total_exceeded(self):
-        refs = " ".join([f"@图片{i}" for i in range(1, 10)])
-        refs += " @视频1 @视频2 @视频3 @音频1"
-        results = check_asset_refs(refs)
-        self.assertTrue(any(r["code"] == "TOTAL_REF_EXCEEDED" for r in results))
+for index, (raw, expected) in enumerate(MODE_CASES.items()):
+    def make_test(value=raw, target=expected):
+        def test(self):
+            self.assertEqual(validator.normalize_mode(value), target)
+        return test
+    add_case(TestModeNormalization, f"test_alias_{index:02d}_{expected}", make_test())
 
 
-class TestCheckConflict(unittest.TestCase):
-    """逻辑冲突检测"""
-
-    def test_no_conflict(self):
-        text = "0-3秒：Fast Tracking追逐；3-8秒：Slow Motion慢镜头回顾"
-        results = check_conflict(text)
-        self.assertTrue(any(r["code"] == "NO_CONFLICT" for r in results))
-
-    def test_speed_conflict(self):
-        text = "快速追逐同时慢动作展示细节"
-        results = check_conflict(text)
-        self.assertTrue(any(r["code"] == "MOTION_CONFLICT" for r in results))
-
-    def test_direction_conflict(self):
-        text = "Dolly In推进同时Pull Out拉远"
-        results = check_conflict(text)
-        self.assertTrue(any(r["code"] == "MOTION_CONFLICT" for r in results))
-
-    def test_optical_conflict_wide_bokeh(self):
-        """14mm超广角 + 浅景深虚化 = 光学冲突"""
-        text = "14mm ultra-wide拍摄，背景浅景深虚化散景"
-        results = check_conflict(text)
-        self.assertTrue(any(r["code"] == "OPTICAL_CONFLICT" for r in results))
-
-    def test_optical_conflict_handheld_symmetry(self):
-        """手持晃动 + 绝对对称 = 构图冲突"""
-        text = "手持微晃拍摄，绝对对称构图"
-        results = check_conflict(text)
-        self.assertTrue(any(r["code"] == "OPTICAL_CONFLICT" for r in results))
-
-    def test_style_conflict_imax_vhs(self):
-        """IMAX清晰 + VHS降解 = 品质冲突"""
-        text = "IMAX 65mm清晰画质，VHS录像带质感"
-        results = check_conflict(text)
-        self.assertTrue(any(r["code"] == "STYLE_CONFLICT" for r in results))
-
-    def test_style_conflict_film_digital(self):
-        """胶片颗粒 + 锐利数码 = 品质冲突"""
-        text = "35mm胶片颗粒质感，锐利数码电商质感"
-        results = check_conflict(text)
-        self.assertTrue(any(r["code"] == "STYLE_CONFLICT" for r in results))
-
-    def test_style_conflict_ink_ue5(self):
-        """水墨 + UE5光追 = 风格冲突"""
-        text = "水墨宣纸笔触，unreal engine光追渲染"
-        results = check_conflict(text)
-        self.assertTrue(any(r["code"] == "STYLE_CONFLICT" for r in results))
-
-    def test_no_style_conflict(self):
-        """正常提示词无冲突"""
-        text = "35mm胶片颗粒，自然光，手持微晃"
-        results = check_conflict(text)
-        self.assertTrue(any(r["code"] == "NO_CONFLICT" for r in results))
-
-    def test_style_conflict_celshade_pbr(self):
-        """三渲二/Cel-Shade + 写实PBR材质 = 风格冲突"""
-        text = "三渲二卡通渲染，写实皮肤纹理with visible pores and subsurface scattering"
-        results = check_conflict(text)
-        self.assertTrue(any(r["code"] == "STYLE_CONFLICT" for r in results))
-
-    def test_no_conflict_celshade_alone(self):
-        """纯三渲二提示词，无写实材质 = 无冲突"""
-        text = ("3D Cel-Shaded Toon渲染，Anime风格硬边阴影，"
-                "粗描边轮廓线，高饱和角色色盘")
-        results = check_conflict(text)
-        self.assertTrue(any(r["code"] == "NO_CONFLICT" for r in results))
-
-    def test_style_conflict_slowmo_speedramp(self):
-        """Slow Motion + Speed Ramp = 速度冲突"""
-        text = "慢镜头特写，Speed Ramp变速加速"
-        results = check_conflict(text)
-        self.assertTrue(any(r["code"] == "STYLE_CONFLICT" for r in results))
+class TestDurationMatrix(unittest.TestCase):
+    pass
 
 
-class TestValidatePromptEndToEnd(unittest.TestCase):
-    """端到端校验"""
+DURATION_CASES = [
+    ("standard", 4, None, True, "DURATION_OK"),
+    ("standard", 30, None, True, "DURATION_OK"),
+    ("standard", 3.9, None, False, "STANDARD_DURATION_OUT_OF_RANGE"),
+    ("standard", 30.1, None, False, "STANDARD_DURATION_OUT_OF_RANGE"),
+    ("ultra_long", 30, None, True, "DURATION_OK"),
+    ("ultra_long", 180, None, True, "DURATION_OK"),
+    ("ultra_long", 29.9, None, False, "ULTRA_LONG_DURATION_OUT_OF_RANGE"),
+    ("ultra_long", 180.1, None, False, "ULTRA_LONG_DURATION_OUT_OF_RANGE"),
+    ("extension", 4, 20, True, "DURATION_OK"),
+    ("extension", 30, 30, True, "DURATION_OK"),
+    ("extension", 3.9, 20, False, "EXTENSION_ADDED_DURATION_OUT_OF_RANGE"),
+    ("extension", 30.1, 20, False, "EXTENSION_ADDED_DURATION_OUT_OF_RANGE"),
+    ("extension", 20, 30.1, False, "EXTENSION_SOURCE_DURATION_OUT_OF_RANGE"),
+    ("extension", 30, 30.1, False, "EXTENSION_FINAL_DURATION_EXCEEDED"),
+    ("extension", 20, None, True, "SOURCE_DURATION_MISSING"),
+    ("smart_edit", 12, 20, True, "DURATION_OK"),
+    ("smart_edit", 25, 25, True, "EDIT_SOURCE_STABILITY_BAND"),
+    ("smart_edit", 25, 31, False, "EDIT_SOURCE_DURATION_OUT_OF_RANGE"),
+    ("green_screen", 4, None, True, "DURATION_OK"),
+    ("storyboard", 30, None, True, "DURATION_OK"),
+    ("seamless_transition", 6, None, True, "DURATION_OK"),
+    ("creative_transfer", 31, None, False, "STANDARD_DURATION_OUT_OF_RANGE"),
+    ("standard", None, None, False, "DURATION_MISSING"),
+    ("bgm", None, None, True, "DURATION_MISSING"),
+]
 
-    def test_good_prompt_passes(self):
-        prompt = (
-            "15秒赛博朋克暴雨追逐，UnrealEngine5渲染，"
-            "0-3秒：Aerial航拍俯冲，摩天楼群刺破铅灰雨云；"
-            "3-7秒：Low Angle仰拍慢镜头，主角从水花中起身；"
-            "7-11秒：微距特写面部雨水滚落，Handheld抖动；"
-            "11-15秒：Slow Crane Up仰拍。"
+for index, (mode, duration, source_duration, no_error, expected_code) in enumerate(DURATION_CASES):
+    def make_test(m=mode, d=duration, s=source_duration, ok=no_error, expected=expected_code):
+        def test(self):
+            result = validator.check_duration(m, d, s)
+            self.assertIn(expected, codes(result))
+            self.assertEqual(not any(item["level"] == "error" for item in result), ok)
+        return test
+    add_case(TestDurationMatrix, f"test_duration_{index:02d}_{mode}", make_test())
+
+
+class TestResolutionMatrix(unittest.TestCase):
+    pass
+
+
+RESOLUTION_CASES = [
+    ("480p", "pass", "RESOLUTION_OK"),
+    ("720p", "pass", "RESOLUTION_OK"),
+    ("720P", "pass", "RESOLUTION_OK"),
+    ("720P+", "warning", "RESOLUTION_UI_LABEL"),
+    ("1080p", "error", "RESOLUTION_UNDOCUMENTED"),
+    ("4k", "error", "RESOLUTION_UNDOCUMENTED"),
+    (None, "info", "RESOLUTION_NOT_SUPPLIED"),
+]
+
+for index, (value, level, expected) in enumerate(RESOLUTION_CASES):
+    def make_test(raw=value, target_level=level, code=expected):
+        def test(self):
+            findings = validator.check_resolution(raw)
+            self.assertIn(code, codes(findings, target_level))
+        return test
+    add_case(TestResolutionMatrix, f"test_resolution_{index:02d}", make_test())
+
+
+class TestLanguageDetection(unittest.TestCase):
+    pass
+
+
+LANGUAGE_CASES = [
+    ("一个女孩在雨中奔跑，镜头跟拍。", "zh"),
+    ("A woman runs through rain while the camera follows.", "en"),
+    ("少女が雨の中を走り、カメラが追う。", "ja"),
+    ("여자가 빗속을 달리고 카메라가 따라간다.", "ko"),
+    ("ตัวละครเดินผ่านสายฝนอย่างช้าๆ", "th"),
+    ("تتحرك الشخصية ببطء أمام الكاميرا", "ar"),
+    ("El personaje entra en la escena con una cámara lenta.", "es"),
+    ("Uma personagem entra em cena e a câmera acompanha.", "pt"),
+    ("Karakter yang berjalan dengan kamera mengikuti adegan.", "id"),
+    ("Nhân vật bước vào cảnh, video không có phụ đề.", "vi"),
+]
+
+for index, (text, expected) in enumerate(LANGUAGE_CASES):
+    def make_test(value=text, target=expected):
+        def test(self):
+            self.assertEqual(validator.detect_language(value), target)
+        return test
+    add_case(TestLanguageDetection, f"test_language_{index:02d}_{expected}", make_test())
+
+
+class TestAssetLimits(unittest.TestCase):
+    def test_no_combined_twelve_file_cap(self):
+        text = " ".join([f"@图片{i}" for i in range(1, 11)] + [f"@视频{i}" for i in range(1, 6)])
+        findings = validator.check_asset_refs(text)
+        self.assertNotIn("TOTAL_REF_EXCEEDED", codes(findings))
+        self.assertFalse(any(item["level"] == "error" for item in findings))
+
+    def test_audio_only_allowed(self):
+        findings = validator.check_asset_refs("只参考@音频1生成抽象影像。", audio_durations=[30])
+        self.assertIn("ASSET_LIMITS_OK", codes(findings, "pass"))
+
+
+ASSET_CASES = [
+    (" ".join(f"@图片{i}" for i in range(1, 31)), {}, True, "ASSET_LIMITS_OK"),
+    ("@图片31", {}, False, "IMAGE_TOKEN_OUT_OF_RANGE"),
+    ("", {"image_count": 31}, False, "IMAGE_COUNT_EXCEEDED"),
+    (" ".join(f"@视频{i}" for i in range(1, 11)), {}, True, "ASSET_LIMITS_OK"),
+    ("@视频11", {}, False, "VIDEO_TOKEN_OUT_OF_RANGE"),
+    ("", {"video_durations": [2] * 11}, False, "VIDEO_COUNT_EXCEEDED"),
+    (" ".join(f"@音频{i}" for i in range(1, 11)), {}, True, "ASSET_LIMITS_OK"),
+    ("@音频11", {}, False, "AUDIO_TOKEN_OUT_OF_RANGE"),
+    ("", {"audio_durations": [2] * 11}, False, "AUDIO_COUNT_EXCEEDED"),
+    ("@视频1", {"video_durations": [1.8]}, True, "ASSET_LIMITS_OK"),
+    ("@视频1", {"video_durations": [30.2]}, True, "ASSET_LIMITS_OK"),
+    ("@视频1", {"video_durations": [1.7]}, False, "VIDEO_DURATION_OUT_OF_RANGE"),
+    ("@视频1", {"video_durations": [30.3]}, False, "VIDEO_DURATION_OUT_OF_RANGE"),
+    ("@视频1 @视频2", {"video_durations": [15.1, 15.1]}, True, "ASSET_LIMITS_OK"),
+    ("@视频1 @视频2", {"video_durations": [15.2, 15.1]}, False, "VIDEO_TOTAL_DURATION_EXCEEDED"),
+    ("@音频1", {"audio_durations": [30]}, True, "ASSET_LIMITS_OK"),
+    ("@音频1", {"audio_durations": [30.1]}, False, "AUDIO_DURATION_OUT_OF_RANGE"),
+    ("@音频1 @音频2", {"audio_durations": [15, 15.1]}, False, "AUDIO_TOTAL_DURATION_EXCEEDED"),
+    ("@Image1 @image1 @图片1", {}, True, "ASSET_LIMITS_OK"),
+    ("@Video10 @Audio10 @Image30", {}, True, "ASSET_LIMITS_OK"),
+]
+
+for index, (text, kwargs, no_error, expected) in enumerate(ASSET_CASES):
+    def make_test(value=text, options=kwargs, ok=no_error, code=expected):
+        def test(self):
+            findings = validator.check_asset_refs(value, **options)
+            self.assertIn(code, codes(findings))
+            self.assertEqual(not any(item["level"] == "error" for item in findings), ok)
+        return test
+    add_case(TestAssetLimits, f"test_asset_{index:02d}", make_test())
+
+
+class TestTimelineParsing(unittest.TestCase):
+    def test_mixed_formats_sorted(self):
+        text = "[00:10-00:20] B；0-5秒：A；第120-240帧：C"
+        slices = validator.parse_time_slices(text, fps=24)
+        self.assertEqual([(item["start"], item["end"]) for item in slices], [(0, 5), (5, 10), (10, 20)])
+
+    def test_frame_fps_override(self):
+        slices = validator.parse_time_slices("第60-120帧", fps=30)
+        self.assertEqual((slices[0]["start"], slices[0]["end"]), (2, 4))
+
+
+TIMELINE_CASES = [
+    ("0-5秒：A；5-10秒：B", 10, "standard", "TIMELINE_OK", False),
+    ("[0-5s] A [5-10s] B", 10, "standard", "TIMELINE_OK", False),
+    ("[00:00-00:20] A [00:20-01:00] B", 60, "ultra_long", "TIMELINE_OK", False),
+    ("第0-120帧：A；第120-240帧：B", 10, "standard", "TIMELINE_OK", False),
+    ("0-6秒：A；5-10秒：B", 10, "standard", "TIMELINE_OVERLAP", True),
+    ("5-0秒：A", 5, "standard", "TIMELINE_REVERSED", True),
+    ("0-4秒：A；5-10秒：B", 10, "standard", "TIMELINE_GAP", False),
+    ("1-5秒：A；5-10秒：B", 10, "standard", "TIMELINE_NOT_FROM_ZERO", False),
+    ("0-5秒：A", 10, "standard", "TIMELINE_DURATION_MISMATCH", False),
+    ("单一动作，固定机位。", 4, "standard", "TIMELINE_OPTIONAL", False),
+    ("单一动作，固定机位。", 10, "standard", "TIMELINE_OPTIONAL", False),
+    ("连续剧情，跟拍。", 11, "standard", "TIMELINE_REQUIRED", True),
+    ("连续剧情，跟拍。", 30, "standard", "TIMELINE_REQUIRED", True),
+    ("连续剧情，跟拍。", 30, "ultra_long", "TIMELINE_REQUIRED", True),
+    ("编辑@视频1，全片替换杯子，保持人物不变。", 12, "smart_edit", "TIMELINE_MISSING", False),
+    ("编辑@视频1，0-3秒替换，3-6秒保持。", 6, "smart_edit", "TIMELINE_OK", False),
+    ("0.0-2.5秒：A；2.5-5.0秒：B", 5, "standard", "TIMELINE_OK", False),
+    ("0–5秒：A；5—10秒：B", 10, "standard", "TIMELINE_OK", False),
+]
+
+for index, (text, duration, mode, expected, has_error) in enumerate(TIMELINE_CASES):
+    def make_test(value=text, seconds=duration, route=mode, code=expected, error=has_error):
+        def test(self):
+            findings = validator.check_time_slices(value, seconds, route)
+            self.assertIn(code, codes(findings))
+            self.assertEqual(any(item["level"] == "error" for item in findings), error)
+        return test
+    add_case(TestTimelineParsing, f"test_timeline_{index:02d}_{mode}", make_test())
+
+
+class TestModeContracts(unittest.TestCase):
+    def assertContractPasses(self, text, mode):
+        findings = validator.check_mode_contract(text, mode)
+        self.assertFalse(any(item["level"] == "error" for item in findings), findings)
+
+    def test_ultra_long_complete(self):
+        self.assertContractPasses("【角色 Bible】一致。【故事概述】开端发展。【结尾】收束。", "ultra_long")
+
+    def test_ultra_long_missing_bible(self):
+        self.assertIn("LONGFORM_BIBLE_MISSING", codes(validator.check_mode_contract("故事概述，结尾收束", "ultra_long"), "error"))
+
+    def test_extension_complete(self):
+        self.assertContractPasses("参考@视频1向后延长20秒，新增部分从尾帧交接状态开始，原视频保持不变。", "extension")
+
+    def test_extension_missing_direction(self):
+        self.assertIn("EXTENSION_DIRECTION_MISSING", codes(validator.check_mode_contract("@视频1延长10秒", "extension"), "error"))
+
+    def test_smart_edit_complete(self):
+        self.assertContractPasses("编辑@视频1，全片将白杯替换为玻璃杯，人物、镜头保持不变。", "smart_edit")
+
+    def test_advanced_edit_needs_annotation(self):
+        findings = validator.check_mode_contract("编辑@视频1，全片移除杯子，人物保持不变。", "advanced_edit")
+        self.assertIn("ANNOTATION_LOCATOR_MISSING", codes(findings, "error"))
+
+    def test_advanced_edit_complete(self):
+        self.assertContractPasses("编辑@视频1，全片移除红框内杯子，红框外人物、镜头保持不变。", "advanced_edit")
+
+    def test_viewpoint_complete(self):
+        self.assertContractPasses("将@视频1机位改为右后方视角，保持房间空间布局、比例和动作不变。", "viewpoint")
+
+    def test_bgm_complete(self):
+        self.assertContractPasses("编辑@视频1：移除BGM，保留对白和环境音，画面保持不变。", "bgm")
+
+    def test_creative_transfer_complete(self):
+        self.assertContractPasses("参考@视频1的运镜轨迹和节奏，不要迁移原人物、背景和音轨。", "creative_transfer")
+
+    def test_green_screen_complete(self):
+        self.assertContractPasses("将@视频1绿幕前景合成到@图片1，去除绿色溢色，匹配透视、光线和接触阴影。", "green_screen")
+
+    def test_rough_white_model_complete(self):
+        self.assertContractPasses("@视频1是粗颗粒白模，将蓝色人形映射为@图片1，去除轨迹线和灰色材质。", "rough_white_model")
+
+    def test_fine_white_model_complete(self):
+        self.assertContractPasses("将@视频1细颗粒白模render为成片，人物对应@图片1，不要保留相机锥体。", "fine_white_model")
+
+    def test_transition_complete(self):
+        self.assertContractPasses("不修改@视频1和@视频2，@视频1尾帧红伞遮挡并匹配@视频2首帧红幕作为锚点。", "seamless_transition")
+
+    def test_storyboard_complete(self):
+        self.assertContractPasses("@图片1为六宫格，顺序左上到右下，镜头1开始，保持人物和场景连续一致。", "storyboard")
+
+
+class TestConflictsAndQuality(unittest.TestCase):
+    def test_audio_contradiction_is_error(self):
+        findings = validator.check_conflict("全片无声音，同时保留对白。")
+        self.assertIn("AUDIO_CONTRADICTION", codes(findings, "error"))
+
+    def test_motion_conflict_is_warning(self):
+        self.assertIn("MOTION_CONFLICT", codes(validator.check_conflict("0-5秒：快速又缓慢推进。"), "warning"))
+
+    def test_vague_quality_is_warning(self):
+        self.assertIn("VAGUE_QUALITY_LANGUAGE", codes(validator.check_cgi_words("杰作，高画质。"), "warning"))
+
+    def test_no_universal_length_error(self):
+        findings = validator.check_length("光" * 5000, "zh")
+        self.assertEqual(codes(findings), {"PROMPT_SIZE_REPORTED"})
+        self.assertFalse(any(item["level"] == "error" for item in findings))
+
+    def test_bare_camera_term_warns(self):
+        self.assertIn("AMBIGUOUS_CAMERA_TERM", codes(validator.check_ambiguous_terms("Use Dolly then stop."), "warning"))
+
+    def test_full_camera_phrase_passes(self):
+        self.assertIn("NO_AMBIGUOUS_CAMERA_TERMS", codes(validator.check_ambiguous_terms("Use a dolly tracking shot."), "pass"))
+
+
+class TestEndToEnd(unittest.TestCase):
+    def test_standard_thirty_seconds(self):
+        prompt = """30秒现实主义短片，720p。镜头缓慢跟拍。
+0-10秒：女孩进入车站。10-20秒：她发现车票。20-30秒：特写车票后收束。"""
+        result = validator.validate_prompt(prompt, mode="standard", duration=30, resolution="720p")
+        self.assertTrue(result["passed"], result)
+
+    def test_ultra_long_ninety_seconds(self):
+        prompt = """全片时长90秒，720p。【角色 Bible】面孔服装连续。【故事概述】寻找失踪列车。
+【连续性】车票始终在右手。00:00-00:30 第一幕，跟拍进入。00:30-01:10 转折。01:10-01:30 结尾收束。"""
+        result = validator.validate_prompt(prompt, mode="ultra_long", duration=90, resolution="720p")
+        self.assertTrue(result["passed"], result)
+
+    def test_extension_valid_final_forty_five(self):
+        prompt = """参考@视频1向后延长20秒，新增部分从尾帧交接状态开始，原视频保持不变。
+0-10秒：跟拍延续奔跑。10-20秒：人物停下并收束。"""
+        result = validator.validate_prompt(prompt, mode="extension", duration=20, source_duration=25)
+        self.assertTrue(result["passed"], result)
+
+    def test_extension_invalid_final_sixty_one(self):
+        result = validator.validate_prompt(
+            "参考@视频1向后延长30秒，新增部分从尾帧开始，原视频保持不变。0-30秒：镜头跟拍。",
+            mode="extension", duration=30, source_duration=31,
         )
-        result = validate_prompt(prompt)
-        self.assertTrue(result["passed"])
-        self.assertEqual(result["summary"]["errors"], 0)
-
-    def test_bad_prompt_fails(self):
-        prompt = "赛" * 501  # 超长 + 无运镜
-        result = validate_prompt(prompt)
         self.assertFalse(result["passed"])
-        self.assertGreater(result["summary"]["errors"], 0)
+        self.assertIn("EXTENSION_SOURCE_DURATION_OUT_OF_RANGE", codes(result["results"], "error"))
 
-    def test_minimal_prompt_warnings(self):
-        prompt = "一个女人走在路上"
-        result = validate_prompt(prompt)
-        # 会通过（无error），但有warning
-        self.assertFalse(result["passed"])  # 缺少运镜会报error
+    def test_bgm_edit_does_not_require_camera(self):
+        prompt = "编辑@视频1：移除背景音乐，保留对白和环境音，画面保持不变。"
+        result = validator.validate_prompt(prompt, mode="bgm", duration=12, source_duration=12)
+        self.assertTrue(result["passed"], result)
+        self.assertIn("CAMERA_NOT_REQUIRED", codes(result["results"], "info"))
 
+    def test_empty_prompt_fails(self):
+        result = validator.validate_prompt("", mode="standard", duration=10)
+        self.assertFalse(result["passed"])
+        self.assertIn("PROMPT_EMPTY", codes(result["results"], "error"))
 
-class TestDurationAwareSlices(unittest.TestCase):
-    """时长感知的时间切片检测"""
+    def test_duration_inferred_from_prompt(self):
+        prompt = "时长：8秒，固定机位，一个玻璃球缓慢滚动。"
+        result = validator.validate_prompt(prompt, mode="standard")
+        self.assertEqual(result["duration"], 8)
+        self.assertTrue(result["passed"], result)
 
-    def test_long_video_no_slices_is_error(self):
-        """10秒视频无时间切片 = error"""
-        text = "10秒赛博朋克夜景，主角在雨中奔跑"
-        results = check_time_slices(text)
-        self.assertTrue(any(r["code"] == "LONG_VIDEO_NO_SLICES" for r in results))
-        self.assertTrue(any(r["level"] == "error" for r in results))
+    def test_frame_timeline_end_to_end(self):
+        prompt = "时长10秒，跟拍。第0-120帧：人物走近；第120-240帧：人物停下。"
+        result = validator.validate_prompt(prompt, mode="standard", fps=24)
+        self.assertTrue(result["passed"], result)
 
-    def test_short_video_no_slices_is_warning(self):
-        """5秒视频无时间切片 = warning"""
-        text = "5秒微距拍摄，水滴碰撞"
-        results = check_time_slices(text)
-        self.assertTrue(any(r["code"] == "NO_TIME_SLICES" for r in results))
-        self.assertTrue(any(r["level"] == "warning" for r in results))
+    def test_legacy_1080p_claim_rejected(self):
+        result = validator.validate_prompt("时长8秒，固定机位。", mode="standard", resolution="1080p")
+        self.assertFalse(result["passed"])
+        self.assertIn("RESOLUTION_UNDOCUMENTED", codes(result["results"], "error"))
 
-    def test_duration_mismatch(self):
-        """声明15秒但切片只到10秒"""
-        text = "15秒赛博朋克夜景，0-3秒：画面A；3-7秒：画面B；7-10秒：画面C"
-        results = check_time_slices(text)
-        self.assertTrue(any(r["code"] == "DURATION_MISMATCH" for r in results))
-
-    def test_detect_declared_duration(self):
-        self.assertEqual(_detect_declared_duration("10秒赛博朋克"), 10)
-        self.assertEqual(_detect_declared_duration("15秒大片"), 15)
-        self.assertEqual(_detect_declared_duration("一只猫在睡觉"), 0)
+    def test_native_japanese_not_forced_to_english(self):
+        result = validator.validate_prompt("8秒。固定カメラで少女が窓を開ける。", mode="standard", duration=8)
+        self.assertEqual(result["language"], "ja")
 
 
-class TestDetectLanguage(unittest.TestCase):
-    """Language auto-detection"""
-
-    def test_chinese_text(self):
-        self.assertEqual(detect_language("赛博朋克城市夜景，航拍俯冲"), "cn")
-
-    def test_english_text(self):
-        self.assertEqual(detect_language("Cyberpunk city night, aerial dive"), "en")
-
-    def test_mixed_mostly_chinese(self):
-        self.assertEqual(detect_language("赛博朋克城市夜景Aerial航拍"), "cn")
-
-    def test_mixed_mostly_english(self):
-        self.assertEqual(detect_language("Cyberpunk night scene, Dolly In push, 特写"), "en")
-
-
-class TestEnglishPromptEndToEnd(unittest.TestCase):
-    """English prompt end-to-end"""
-
-    def test_good_english_prompt_passes(self):
-        prompt = (
-            "15s cyberpunk rain chase, UE5 rendering. "
-            "0-3s: Aerial drone shot dive over skyscrapers. "
-            "3-7s: Low angle shot slow-motion, hero rising. "
-            "7-11s: ECU face detail, rain rolling. "
-            "11-15s: Slow crane shot up, silhouette."
-        )
-        result = validate_prompt(prompt, lang="en")
-        self.assertTrue(result["passed"])
-        self.assertEqual(result["language"], "en")
-
-
-class TestCheckAmbiguousTerms(unittest.TestCase):
-    """审核风险裸英文运镜词检测"""
-
-    def test_bare_dolly_in_cn_warns(self):
-        """中文提示词中裸写 Dolly 应触发警告"""
-        text = "Dolly穿过寺门进入庭院"
-        results = check_ambiguous_terms(text, lang="cn")
-        self.assertTrue(any(r["code"] == "AMBIGUOUS_CAMERA_TERM" for r in results))
-
-    def test_dolly_tracking_shot_en_passes(self):
-        """英文提示词中 dolly tracking shot 完整短语应通过"""
-        text = "dolly tracking shot slowly pushing forward"
-        results = check_ambiguous_terms(text, lang="en")
-        self.assertTrue(any(r["code"] == "NO_AMBIGUOUS_TERMS" for r in results))
-
-    def test_chinese_camera_words_pass(self):
-        """纯中文运镜词应通过"""
-        text = "航拍缓慢推进，推轨穿过寺门，摇臂升降揭示仙境"
-        results = check_ambiguous_terms(text, lang="cn")
-        self.assertTrue(any(r["code"] == "NO_AMBIGUOUS_TERMS" for r in results))
-
-    def test_bare_aerial_in_en_warns(self):
-        """英文提示词中裸写 Aerial 无后缀应触发警告"""
-        text = "Aerial slow descent through clouds"
-        results = check_ambiguous_terms(text, lang="en")
-        self.assertTrue(any(r["code"] == "AMBIGUOUS_CAMERA_TERM" for r in results))
-
-    def test_aerial_drone_shot_en_passes(self):
-        """英文 aerial drone shot 完整短语应通过"""
-        text = "aerial drone shot over the city"
-        results = check_ambiguous_terms(text, lang="en")
-        self.assertTrue(any(r["code"] == "NO_AMBIGUOUS_TERMS" for r in results))
-
-
-class TestMultiSegmentValidation(unittest.TestCase):
-    """多段分镜校验"""
-
-    STYLE_LINE = "15秒落日沙漠武术，写实电影质感，暗金暖色调，苍芒孤寂氛围。"
-    LIGHTING = "光影：落日低角度逆光暗金+沙面散射暖光，热浪折射柔化轮廓，暗金暖底调。"
-    NEGATIVE = "禁止：任何文字、字幕、LOGO或水印"
-
-    def _make_segment(self, style=None, lighting=None, negative=None):
-        s = style or self.STYLE_LINE
-        l = lighting or self.LIGHTING
-        n = negative or self.NEGATIVE
-        return (
-            f"{s}\n"
-            f"0-3秒：航拍缓慢下降，广袤沙漠延伸至地平线。\n"
-            f"3-7秒：推轨缓推至中景，武者双手握棍起势。\n"
-            f"7-11秒：侧面跟拍，棍棒横扫掀起扩散。\n"
-            f"11-15秒：缓慢推进背影，画面趋于静止。\n"
-            f"{l}\n"
-            f"音效：风卷沙面、棍棒破空。\n"
-            f"{n}"
+class TestCLI(unittest.TestCase):
+    def run_cli(self, *args):
+        return subprocess.run(
+            [sys.executable, str(SCRIPT_DIR / "validate_prompt.py"), *args],
+            text=True, capture_output=True, check=False,
         )
 
-    def test_consistent_segments_pass(self):
-        """风格/光影/禁止项一致的多段应通过跨段检查"""
-        segments = [self._make_segment() for _ in range(4)]
-        result = validate_multi_segment(segments, lang="cn")
-        self.assertEqual(result["segment_count"], 4)
-        self.assertTrue(any(
-            r["code"] == "CROSS_SEGMENT_OK" for r in result["cross_segment"]
-        ))
+    def test_json_success_exit_zero(self):
+        completed = self.run_cli("--mode", "standard", "--duration", "8", "--prompt", "固定机位，玻璃球缓慢滚动。", "--json")
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+        self.assertTrue(json.loads(completed.stdout)["passed"])
 
-    def test_inconsistent_style_warns(self):
-        """风格总纲不一致应触发警告"""
-        seg1 = self._make_segment(style="15秒落日沙漠武术，写实电影质感，暗金暖色调。")
-        seg2 = self._make_segment(style="15秒赛博朋克夜景，霾虹灯光，冷蓝色调。")
-        result = validate_multi_segment([seg1, seg2], lang="cn")
-        self.assertTrue(any(
-            r["code"] == "INCONSISTENT_STYLE_ANCHOR" for r in result["cross_segment"]
-        ))
+    def test_json_failure_exit_one(self):
+        completed = self.run_cli("--mode", "standard", "--duration", "31", "--prompt", "固定机位。", "--json")
+        self.assertEqual(completed.returncode, 1)
+        self.assertFalse(json.loads(completed.stdout)["passed"])
 
-    def test_inconsistent_lighting_warns(self):
-        """光影不一致应触发警告"""
-        seg1 = self._make_segment()
-        seg2 = self._make_segment(lighting="光影：霾虹冷光+湿气折射，冷蓝绿色调。")
-        result = validate_multi_segment([seg1, seg2], lang="cn")
-        self.assertTrue(any(
-            r["code"] == "INCONSISTENT_LIGHTING" for r in result["cross_segment"]
-        ))
-
-    def test_inconsistent_negative_warns(self):
-        """禁止项不一致应触发警告"""
-        seg1 = self._make_segment()
-        seg2 = self._make_segment(negative="禁止：任何文字")
-        result = validate_multi_segment([seg1, seg2], lang="cn")
-        self.assertTrue(any(
-            r["code"] == "INCONSISTENT_NEGATIVE" for r in result["cross_segment"]
-        ))
+    def test_unknown_mode_exit_two(self):
+        completed = self.run_cli("--mode", "unknown", "--duration", "8", "--prompt", "固定机位。")
+        self.assertEqual(completed.returncode, 2)
 
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(verbosity=2)

@@ -1,639 +1,727 @@
 #!/usr/bin/env python3
-# ============================================================================
-# ⚠️  STANDALONE DEVELOPER TOOL — NOT EXECUTED BY THE AI AGENT
-# ============================================================================
-# This script is a standalone validation tool for developers and CI/CD
-# pipelines. The AI agent performs equivalent validation using its built-in
-# LLM-native 7-rule checklist and does NOT import or execute this file.
-# ============================================================================
-"""
-Seedance 2.0 提示词工业级校验模块
-供 Agent 在生成提示词后进行自动化质量审查。
+"""Mode-aware validator for Seedance 2.5 shot-design prompts.
 
-用法（函数调用）:
-    from validate_prompt import validate_prompt
-    result = validate_prompt("你的提示词内容")
-    # result["passed"] == True 表示校验通过
+The validator distinguishes documented platform limits from stability guidance.
+It never enforces the legacy 15-second, 9/3/3/12-file, 1080p, or universal
+prompt-length rules.
+
+Examples:
+    python3 scripts/validate_prompt.py --mode standard --duration 30 \
+        --prompt-file prompt.txt
+    python3 scripts/validate_prompt.py --mode extension --duration 20 \
+        --source-duration 25 --prompt "参考@视频1，向后延长20秒……"
 """
 
-import re
+from __future__ import annotations
+
+import argparse
 import json
+import re
+import sys
+from pathlib import Path
 
 
-# Seedance 为中国自研模型，同时支持中英文提示词
+MODE_ALIASES = {
+    "standard": "standard",
+    "generation": "standard",
+    "all_reference": "standard",
+    "first_last": "standard",
+    "全能参考": "standard",
+    "首尾帧": "standard",
+    "ultra_long": "ultra_long",
+    "ultra-long": "ultra_long",
+    "超长视频": "ultra_long",
+    "extension": "extension",
+    "extend": "extension",
+    "视频延长": "extension",
+    "smart_edit": "smart_edit",
+    "smart-edit": "smart_edit",
+    "edit": "smart_edit",
+    "智能编辑": "smart_edit",
+    "advanced_edit": "advanced_edit",
+    "advanced-edit": "advanced_edit",
+    "高级编辑": "advanced_edit",
+    "视频编辑": "advanced_edit",
+    "viewpoint": "viewpoint",
+    "空间视角修改": "viewpoint",
+    "bgm": "bgm",
+    "audio_edit": "bgm",
+    "音轨编辑": "bgm",
+    "creative_transfer": "creative_transfer",
+    "creative-transfer": "creative_transfer",
+    "迁移创意": "creative_transfer",
+    "green_screen": "green_screen",
+    "green-screen": "green_screen",
+    "绿幕编辑": "green_screen",
+    "rough_white_model": "rough_white_model",
+    "rough-white-model": "rough_white_model",
+    "粗颗粒白模": "rough_white_model",
+    "fine_white_model": "fine_white_model",
+    "fine-white-model": "fine_white_model",
+    "细颗粒白模": "fine_white_model",
+    "seamless_transition": "seamless_transition",
+    "seamless-transition": "seamless_transition",
+    "视频无缝转场": "seamless_transition",
+    "storyboard": "storyboard",
+    "multi_panel": "storyboard",
+    "多宫格分镜": "storyboard",
+}
+
+GENERATION_MODES = {
+    "standard", "ultra_long", "extension", "creative_transfer",
+    "green_screen", "rough_white_model", "fine_white_model", "storyboard",
+}
+EDIT_MODES = {"smart_edit", "advanced_edit", "viewpoint", "bgm"}
+STANDARD_WINDOW_MODES = {
+    "standard", "creative_transfer", "green_screen", "rough_white_model",
+    "fine_white_model", "seamless_transition", "storyboard",
+}
+
+ASSET_RE = re.compile(
+    r"@(图片|视频|音频|image|video|audio)\s*(\d+)", re.IGNORECASE
+)
 
 
-def detect_language(text):
-    """检测提示词语言：中文字符占比超30%则为中文，否则为英文。
-    覆盖 CJK Unified (U+4E00–U+9FFF)、CJK Extension A (U+3400–U+4DBF)、
-    CJK 符号与标点 (U+3000–U+303F)、全角标点 (U+FF00–U+FFEF)。
-    """
-    def is_cjk(c):
-        cp = ord(c)
-        return (
-            0x4E00 <= cp <= 0x9FFF or    # CJK Unified Ideographs
-            0x3400 <= cp <= 0x4DBF or    # CJK Extension A
-            0x3000 <= cp <= 0x303F or    # CJK Symbols and Punctuation
-            0xFF00 <= cp <= 0xFFEF       # Fullwidth Forms
+def finding(level: str, code: str, message: str, **values):
+    item = {"level": level, "code": code, "message": message}
+    item.update(values)
+    return item
+
+
+def normalize_mode(mode: str | None) -> str:
+    if not mode:
+        return "standard"
+    key = mode.strip().lower().replace(" ", "_")
+    if key not in MODE_ALIASES:
+        raise ValueError(
+            f"Unsupported mode '{mode}'. Choose one of: "
+            + ", ".join(sorted(set(MODE_ALIASES.values())))
         )
-    chinese_chars = sum(1 for c in text if is_cjk(c))
-    total_chars = max(len(text.strip()), 1)
-    return "cn" if chinese_chars / total_chars > 0.3 else "en"
+    return MODE_ALIASES[key]
 
 
-def check_length(text, lang="cn"):
-    """检查提示词长度是否合规（中文≤500字符 / 英文≤1000词）"""
-    results = []
+def detect_language(text: str) -> str:
+    """Return a useful language hint without forcing non-Chinese text to English."""
+    if re.search(r"[\u3040-\u30ff]", text):
+        return "ja"
+    if re.search(r"[\uac00-\ud7af]", text):
+        return "ko"
+    if re.search(r"[\u0e00-\u0e7f]", text):
+        return "th"
+    if re.search(r"[\u0600-\u06ff]", text):
+        return "ar"
+    cjk = len(re.findall(r"[\u3400-\u9fff]", text))
+    letters = len(re.findall(r"[^\W\d_]", text, re.UNICODE))
+    if cjk and cjk / max(letters, 1) >= 0.25:
+        return "zh"
+    lower = f" {text.lower()} "
+    lexical = {
+        "es": [" el ", " la ", " una ", " vídeo ", " personaje "],
+        "pt": [" uma ", " vídeo ", " personagem ", " câmera ", " não "],
+        "id": [" yang ", " dengan ", " video ", " adegan "],
+        "ms": [" yang ", " dengan ", " video ", " babak "],
+        "vi": [" video ", " nhân vật ", " cảnh ", " không "],
+    }
+    scores = {lang: sum(token in lower for token in tokens) for lang, tokens in lexical.items()}
+    best = max(scores, key=scores.get)
+    return best if scores[best] >= 2 else "en"
 
-    if lang == "cn":
-        length = len(text)
-        max_len = 500
-        unit = "字符"
-    else:
-        length = len(text.split())
-        max_len = 1000
-        unit = "words"
 
-    if length > max_len:
-        results.append({
-            "level": "error",
-            "code": "LENGTH_EXCEEDED",
-            "message": f"长度超标！当前 {length} {unit}，上限 {max_len} {unit}。"
-                       f"模型注意力会严重衰减，请删减形容词并合并长句。",
-            "value": length,
-            "limit": max_len
+def _clock_to_seconds(minutes: str, seconds: str) -> float:
+    return int(minutes) * 60 + float(seconds)
+
+
+def parse_time_slices(text: str, fps: float = 24.0) -> list[dict]:
+    """Parse seconds, mm:ss, and frame-range timestamps."""
+    slices = []
+    occupied = []
+
+    clock_pattern = re.compile(
+        r"(?<!\d)(\d{1,2}):(\d{2}(?:\.\d+)?)\s*[-–—~至]\s*"
+        r"(\d{1,2}):(\d{2}(?:\.\d+)?)(?!\d)"
+    )
+    for match in clock_pattern.finditer(text):
+        start = _clock_to_seconds(match.group(1), match.group(2))
+        end = _clock_to_seconds(match.group(3), match.group(4))
+        slices.append({"start": start, "end": end, "kind": "clock", "raw": match.group(0)})
+        occupied.append(match.span())
+
+    second_pattern = re.compile(
+        r"(?<![:\d])(\d+(?:\.\d+)?)\s*[-–—~至]\s*"
+        r"(\d+(?:\.\d+)?)\s*(?:秒|s(?:ec(?:onds?)?)?)(?![A-Za-z])",
+        re.IGNORECASE,
+    )
+    for match in second_pattern.finditer(text):
+        if any(match.start() >= a and match.end() <= b for a, b in occupied):
+            continue
+        slices.append({
+            "start": float(match.group(1)), "end": float(match.group(2)),
+            "kind": "seconds", "raw": match.group(0),
         })
-    elif length > max_len * 0.85:
-        results.append({
-            "level": "warning",
-            "code": "LENGTH_NEAR_LIMIT",
-            "message": f"长度接近上限：{length}/{max_len} {unit} "
-                       f"({length/max_len*100:.0f}%)。建议适当精简。",
-            "value": length,
-            "limit": max_len
-        })
-    else:
-        results.append({
-            "level": "pass",
-            "code": "LENGTH_OK",
-            "message": f"长度合规：{length}/{max_len} {unit}。",
-            "value": length,
-            "limit": max_len
-        })
-    return results
+
+    frame_pattern = re.compile(
+        r"(?:第\s*)?(\d+)\s*[-–—~至]\s*(\d+)\s*帧"
+    )
+    if fps > 0:
+        for match in frame_pattern.finditer(text):
+            slices.append({
+                "start": int(match.group(1)) / fps,
+                "end": int(match.group(2)) / fps,
+                "kind": "frames", "raw": match.group(0),
+            })
+
+    unique = {}
+    for item in slices:
+        key = (round(item["start"], 3), round(item["end"], 3))
+        unique[key] = item
+    return sorted(unique.values(), key=lambda item: (item["start"], item["end"]))
 
 
-def _detect_declared_duration(text):
-    """从提示词中提取声明的时长（秒）"""
+def _detect_declared_duration(text: str) -> float | None:
+    head = text[:300]
     patterns = [
-        r'(\d+)\s*秒',
-        r'(\d+)\s*[sS](?:ec|econds?)?(?:\s|，|,|$)',
+        r"(?:全片|目标|视频|新增|生成|added\s+)?(?:时长|duration|length)\s*[：:=]?\s*(\d+(?:\.\d+)?)\s*(秒|s|分钟|min(?:utes?)?)",
+        r"^\s*(\d+(?:\.\d+)?)\s*(秒|s|分钟|min(?:utes?)?)(?=\s|[，,。:：\[【])",
     ]
-    durations = []
-    for pat in patterns:
-        for m in re.finditer(pat, text[:60]):  # 时长声明通常在开头
-            durations.append(int(m.group(1)))
-    return max(durations) if durations else 0
-
-
-def check_time_slices(text):
-    """检查时序切片逻辑（时长感知版）"""
-    results = []
-    # 匹配多种时间戳格式: [0-3s], [0-3秒], 0-3s：, 0-3秒：
-    patterns = [
-        r'\[(\d+)-(\d+)s\]',
-        r'\[(\d+)-(\d+)秒\]',
-        r'(\d+)-(\d+)s[：:·]',
-        r'(\d+)-(\d+)秒[：:·]',
-        r'(\d+)-(\d+)s\s*[：:]',
-        r'(\d+)-(\d+)秒\s*[：:]',
-    ]
-
-    all_slices = []
     for pattern in patterns:
-        matches = re.findall(pattern, text)
-        for m in matches:
-            start, end = int(m[0]), int(m[1])
-            all_slices.append((start, end))
+        match = re.search(pattern, head, re.IGNORECASE | re.MULTILINE)
+        if match:
+            value = float(match.group(1))
+            return value * 60 if match.group(2).lower().startswith(("分", "min")) else value
+    return None
 
-    # 去重
-    all_slices = sorted(set(all_slices))
-    declared_duration = _detect_declared_duration(text)
 
-    if not all_slices:
-        # 时长感知：>5s 无时间切片为 error，≤5s 为 warning
-        if declared_duration > 5:
-            results.append({
-                "level": "error",
-                "code": "LONG_VIDEO_NO_SLICES",
-                "message": f"声明时长 {declared_duration}秒 但未使用时间切片！"
-                           f"超过5秒的视频必须使用时序切片（如 0-3秒：...；3-7秒：...），"
-                           f"否则画面动作会揉作一团。"
-            })
+def check_length(text: str, lang: str | None = None) -> list[dict]:
+    """Report length as information; the 2.5 manual gives no prompt ceiling."""
+    words = len(re.findall(r"\S+", text))
+    return [finding(
+        "info", "PROMPT_SIZE_REPORTED",
+        f"Prompt size: {len(text)} characters / {words} whitespace-delimited words. "
+        "Seedance 2.5's manual states no universal prompt-length ceiling.",
+        characters=len(text), words=words,
+    )]
+
+
+def check_duration(mode: str, duration: float | None, source_duration: float | None = None) -> list[dict]:
+    results = []
+    if duration is None:
+        level = "error" if mode in GENERATION_MODES or mode == "ultra_long" else "warning"
+        return [finding(level, "DURATION_MISSING", "Declare the output or added duration for mode-aware validation.")]
+
+    if mode in STANDARD_WINDOW_MODES and not 4 <= duration <= 30:
+        results.append(finding(
+            "error", "STANDARD_DURATION_OUT_OF_RANGE",
+            f"{mode} duration is {duration:g}s; documented standard generation range is 4–30s.",
+            value=duration, minimum=4, maximum=30,
+        ))
+    elif mode == "ultra_long" and not 30 <= duration <= 180:
+        results.append(finding(
+            "error", "ULTRA_LONG_DURATION_OUT_OF_RANGE",
+            f"Ultra-long duration is {duration:g}s; documented range is 30–180s.",
+            value=duration, minimum=30, maximum=180,
+        ))
+    elif mode == "extension":
+        if not 4 <= duration <= 30:
+            results.append(finding(
+                "error", "EXTENSION_ADDED_DURATION_OUT_OF_RANGE",
+                f"Added duration is {duration:g}s; each extension adds 4–30s.",
+                value=duration, minimum=4, maximum=30,
+            ))
+        if source_duration is None:
+            results.append(finding(
+                "warning", "SOURCE_DURATION_MISSING",
+                "Provide the source-video duration to verify the 30s source and 60s final limits.",
+            ))
         else:
-            results.append({
-                "level": "warning",
-                "code": "NO_TIME_SLICES",
-                "message": "未检测到时序切片（如 [0-3s] 或 0-3秒：）。"
-                           "若生成长视频(>5s)，画面动作极易粘连崩坏。"
-            })
-    else:
-        # 检查时间段是否有重叠
-        for i in range(len(all_slices) - 1):
-            if all_slices[i][1] > all_slices[i + 1][0]:
-                results.append({
-                    "level": "warning",
-                    "code": "TIME_OVERLAP",
-                    "message": f"时间段重叠：[{all_slices[i][0]}-{all_slices[i][1]}s] "
-                               f"与 [{all_slices[i+1][0]}-{all_slices[i+1][1]}s]。"
-                })
-
-        # 检查起始是否从0开始
-        if all_slices[0][0] != 0:
-            results.append({
-                "level": "warning",
-                "code": "TIME_NOT_FROM_ZERO",
-                "message": f"时间戳未从0开始，首段为 [{all_slices[0][0]}-{all_slices[0][1]}s]。"
-            })
-
-        # 检查声明时长与切片末端是否匹配
-        if declared_duration > 0:
-            last_end = all_slices[-1][1]
-            if abs(last_end - declared_duration) > 2:
-                results.append({
-                    "level": "warning",
-                    "code": "DURATION_MISMATCH",
-                    "message": f"声明时长 {declared_duration}秒，但时间切片结束于 {last_end}秒，"
-                               f"差距 {abs(last_end - declared_duration)}秒。请检查是否遗漏时间段。"
-                })
-
-        if not results:
-            results.append({
-                "level": "pass",
-                "code": "TIME_SLICES_OK",
-                "message": f"检测到 {len(all_slices)} 个时间段，时序逻辑正常。"
-            })
-
-    return results
-
-
-def check_camera_language(text):
-    """检查是否包含专业运镜指令"""
-    results = []
-    camera_words_cn = [
-        "特写", "广角", "跟拍", "摇", "推", "拉", "升降", "环绕",
-        "航拍", "俯拍", "仰拍", "平移", "跟踪", "手持", "云台",
-        "斯坦尼康", "穿越机", "微距", "一镜到底", "慢镜头",
-        "全景", "近景", "中景", "远景", "浅景深"
-    ]
-    camera_words_en = [
-        "close-up", "wide", "tracking", "dolly", "pan", "tilt",
-        "crane", "orbit", "aerial", "pov", "handheld", "steadicam",
-        "zoom", "push", "pull", "arc", "gimbal", "fpv", "macro",
-        "slow motion", "low angle", "high angle", "dutch",
-        "shot", "mm"  # 如 85mm, 50mm
-    ]
-
-    text_lower = text.lower()
-    found_cn = [w for w in camera_words_cn if w in text]
-    found_en = [w for w in camera_words_en if w in text_lower]
-
-    if not found_cn and not found_en:
-        results.append({
-            "level": "error",
-            "code": "NO_CAMERA_LANGUAGE",
-            "message": "缺乏专业运镜指令。画面将随机生成，如同监控探头。"
-                       "请添加具体的运镜术语（如 Dolly In, 航拍, Tracking Shot）。"
-        })
-    else:
-        all_found = found_cn + found_en
-        results.append({
-            "level": "pass",
-            "code": "CAMERA_OK",
-            "message": f"检测到 {len(all_found)} 个运镜术语：{', '.join(all_found[:5])}"
-                       f"{'...' if len(all_found) > 5 else ''}。"
-        })
-    return results
-
-
-def check_cgi_words(text):
-    """检查是否包含易产生 AI 塑料感的废话（硬阻断）"""
-    results = []
-    # 硬黑名单：直接阻断（error），这些词无任何合理使用场景
-    banned_hard = {
-        "cn": ["超清晰", "杰作", "高画质", "超高画质", "超精细",
-               "极致画质", "完美画质"],
-        "en": ["masterpiece", "ultra-sharp", "best quality",
-               "extremely detailed", "hyper-realistic",
-               "ultra hd", "super resolution"]
-    }
-    # 软警告：4k/8k 在品质锚定语境下可能有意义，仅作警告
-    soft_warn = ["4k", "8k", "4K", "8K"]
-
-    found_hard = []
-    found_soft = []
-    text_lower = text.lower()
-
-    for word_list in banned_hard.values():
-        for w in word_list:
-            if w.lower() in text_lower:
-                found_hard.append(w)
-
-    for w in soft_warn:
-        if w in text:
-            found_soft.append(w)
-
-    if found_hard:
-        results.append({
-            "level": "error",
-            "code": "BANNED_WORDS_DETECTED",
-            "message": f"❌ 检测到廉价 AI 塑料感词汇：{', '.join(found_hard)}。"
-                       f"请立即使用 quality-anchors.md 中的胶片型号/材质质感/有机瑕疵进行替换！"
-        })
-    if found_soft:
-        results.append({
-            "level": "warning",
-            "code": "RESOLUTION_WORDS",
-            "message": f"检测到分辨率词汇：{', '.join(found_soft)}。"
-                       f"若用于品质锚定（如配合渲染引擎声明）可保留，否则建议移除。"
-        })
-
-    if not found_hard and not found_soft:
-        results.append({
-            "level": "pass",
-            "code": "CGI_WORDS_CLEAN",
-            "message": "未检测到AI塑料感废话词汇。"
-        })
-    return results
-
-
-def check_asset_refs(text):
-    """检查多模态资产引用是否超限"""
-    results = []
-    img_refs_cn = re.findall(r'@图片(\d+)', text)
-    img_refs_en = re.findall(r'@image(\d+)', text, re.IGNORECASE)
-    vid_refs_cn = re.findall(r'@视频(\d+)', text)
-    vid_refs_en = re.findall(r'@video(\d+)', text, re.IGNORECASE)
-    aud_refs_cn = re.findall(r'@音频(\d+)', text)
-    aud_refs_en = re.findall(r'@audio(\d+)', text, re.IGNORECASE)
-
-    # 中英文引用分别匹配，用 set() 按数字去重（如 @Image1 和 @image1 只计一次）
-    img_count = len(set(img_refs_cn + img_refs_en))
-    vid_count = len(set(vid_refs_cn + vid_refs_en))
-    aud_count = len(set(aud_refs_cn + aud_refs_en))
-    total = img_count + vid_count + aud_count
-
-    if img_count > 9:
-        results.append({
-            "level": "error",
-            "code": "IMAGE_REF_EXCEEDED",
-            "message": f"图片引用超限：{img_count}/9。"
-        })
-    if vid_count > 3:
-        results.append({
-            "level": "error",
-            "code": "VIDEO_REF_EXCEEDED",
-            "message": f"视频引用超限：{vid_count}/3。"
-        })
-    if aud_count > 3:
-        results.append({
-            "level": "error",
-            "code": "AUDIO_REF_EXCEEDED",
-            "message": f"音频引用超限：{aud_count}/3。"
-        })
-    if total > 12:
-        results.append({
-            "level": "error",
-            "code": "TOTAL_REF_EXCEEDED",
-            "message": f"混合文件总数超限：{total}/12（图片{img_count}+视频{vid_count}+音频{aud_count}）。"
-        })
+            if source_duration <= 0 or source_duration > 30:
+                results.append(finding(
+                    "error", "EXTENSION_SOURCE_DURATION_OUT_OF_RANGE",
+                    f"Source duration is {source_duration:g}s; an extension source must be no longer than 30s.",
+                ))
+            if source_duration + duration > 60:
+                results.append(finding(
+                    "error", "EXTENSION_FINAL_DURATION_EXCEEDED",
+                    f"Source {source_duration:g}s + added {duration:g}s = {source_duration + duration:g}s; final video must not exceed 60s.",
+                ))
+    elif mode in EDIT_MODES and source_duration is not None:
+        if source_duration <= 0 or source_duration > 30.2:
+            results.append(finding(
+                "error", "EDIT_SOURCE_DURATION_OUT_OF_RANGE",
+                f"Source duration is {source_duration:g}s; referenced video tolerance is about 1.8–30.2s.",
+            ))
+        elif source_duration > 20:
+            results.append(finding(
+                "warning", "EDIT_SOURCE_STABILITY_BAND",
+                f"Source duration is {source_duration:g}s; editing sources of 20s or less are recommended for stability.",
+            ))
 
     if not results:
-        if total > 0:
-            results.append({
-                "level": "pass",
-                "code": "ASSET_REFS_OK",
-                "message": f"资产引用合规：图片{img_count}/9，视频{vid_count}/3，"
-                           f"音频{aud_count}/3，总计{total}/12。"
-            })
-        else:
-            results.append({
-                "level": "pass",
-                "code": "NO_ASSET_REFS",
-                "message": "纯文本模式，无资产引用。"
-            })
+        results.append(finding("pass", "DURATION_OK", f"Duration {duration:g}s is valid for {mode}."))
     return results
 
 
-def check_conflict(text):
-    """检查运动冲突 + 光学物理冲突 + 风格冲突"""
+def check_resolution(resolution: str | None) -> list[dict]:
+    if not resolution:
+        return [finding("info", "RESOLUTION_NOT_SUPPLIED", "Resolution was not supplied to the validator.")]
+    normalized = resolution.strip().lower().replace(" ", "")
+    if normalized in {"480p", "720p"}:
+        return [finding("pass", "RESOLUTION_OK", f"Documented output resolution selected: {normalized}.")]
+    if normalized == "720p+":
+        return [finding(
+            "warning", "RESOLUTION_UI_LABEL",
+            "720P+ appears as a UI label in the manual, not as a separately documented output parameter.",
+        )]
+    return [finding(
+        "error", "RESOLUTION_UNDOCUMENTED",
+        f"'{resolution}' is not a documented Seedance 2.5 output resolution in the supplied manual; use 480p or 720p, or verify the current UI.",
+    )]
+
+
+def _asset_inventory(text: str) -> dict[str, list[int]]:
+    inventory = {"image": [], "video": [], "audio": []}
+    type_map = {"图片": "image", "image": "image", "视频": "video", "video": "video", "音频": "audio", "audio": "audio"}
+    for type_name, index in ASSET_RE.findall(text):
+        inventory[type_map[type_name.lower()]].append(int(index))
+    return {name: sorted(set(indices)) for name, indices in inventory.items()}
+
+
+def check_asset_refs(
+    text: str,
+    image_count: int | None = None,
+    video_durations: list[float] | None = None,
+    audio_durations: list[float] | None = None,
+) -> list[dict]:
+    inventory = _asset_inventory(text)
+    inferred = {name: len(indices) for name, indices in inventory.items()}
+    counts = {
+        "image": image_count if image_count is not None else inferred["image"],
+        "video": len(video_durations) if video_durations is not None else inferred["video"],
+        "audio": len(audio_durations) if audio_durations is not None else inferred["audio"],
+    }
+    limits = {"image": 30, "video": 10, "audio": 10}
     results = []
+    labels = {"image": "Image", "video": "Video", "audio": "Audio"}
+    for asset_type, limit in limits.items():
+        if counts[asset_type] > limit:
+            results.append(finding(
+                "error", f"{asset_type.upper()}_COUNT_EXCEEDED",
+                f"{labels[asset_type]} count is {counts[asset_type]}; documented limit is {limit}.",
+            ))
+        if inventory[asset_type] and max(inventory[asset_type]) > limit:
+            results.append(finding(
+                "error", f"{asset_type.upper()}_TOKEN_OUT_OF_RANGE",
+                f"Highest {asset_type} token is {max(inventory[asset_type])}; documented maximum index is {limit}.",
+            ))
 
-    # === 运动逻辑冲突（按时间段分割检查） ===
-    motion_conflicts = [
-        (["快速", "高速", "急速", "fast", "rapid"],
-         ["慢动作", "slow motion", "慢镜头", "缓慢"],
-         "速度冲突：快速与慢动作同段出现"),
-        (["推进", "push in", "dolly in", "zoom in"],
-         ["拉远", "pull out", "dolly out", "zoom out"],
-         "运动冲突：推进与拉远同段出现"),
-    ]
+    if video_durations is not None:
+        for index, value in enumerate(video_durations, 1):
+            if not 1.8 <= value <= 30.2:
+                results.append(finding(
+                    "error", "VIDEO_DURATION_OUT_OF_RANGE",
+                    f"Video {index} duration is {value:g}s; accepted tolerance is about 1.8–30.2s.",
+                ))
+        if sum(video_durations) > 30.2:
+            results.append(finding(
+                "error", "VIDEO_TOTAL_DURATION_EXCEEDED",
+                f"Aggregate referenced-video duration is {sum(video_durations):g}s; maximum tolerance is about 30.2s.",
+            ))
 
-    segments = re.split(r'\d+-\d+[s秒][：:；;]?', text)
-    for seg in segments:
-        seg_lower = seg.lower()
-        for group_a, group_b, desc in motion_conflicts:
-            has_a = any(w in seg_lower for w in group_a)
-            has_b = any(w in seg_lower for w in group_b)
-            if has_a and has_b:
-                results.append({
-                    "level": "warning",
-                    "code": "MOTION_CONFLICT",
-                    "message": f"同一段内{desc}。"
-                               f"模型接收矛盾信号会导致画面撕裂或果冻效应。"
-                })
-                break
-
-    # === 光学物理冲突（全文检查） ===
-    optical_conflicts = [
-        (["14mm", "ultra-wide", "超广角", "ultra wide"],
-         ["bokeh", "浅景深", "虚化", "奶油般", "creamy bokeh", "shallow depth"],
-         "光学冲突！超广角(14mm)物理上无法产生强烈背景虚化，会造成 AI 渲染崩溃。请修改焦段或景深描述"),
-        (["手持", "handheld", "手持晃动", "手持微晃"],
-         ["绝对对称", "perfectly symmetrical", "完美对称", "严格对称"],
-         "构图冲突！手持晃动不可能保持绝对对称构图，请选择三脚架/云台或放弃对称"),
-    ]
-
-    text_lower = text.lower()
-    for group_a, group_b, desc in optical_conflicts:
-        has_a = any(w in text_lower for w in group_a)
-        has_b = any(w in text_lower for w in group_b)
-        if has_a and has_b:
-            results.append({
-                "level": "error",
-                "code": "OPTICAL_CONFLICT",
-                "message": f"❌ {desc}。"
-            })
-
-    # === 风格冲突矩阵（全文检查） ===
-    style_conflicts = [
-        (["imax", "65mm清晰", "65mm", "imax清晰"],
-         ["vhs", "录像带", "scan lines", "扫描线", "低分辨率"],
-         "品质冲突！IMAX极致清晰与VHS模拟降解不可混用，请二选一"),
-        (["胶片颗粒", "film grain", "有机噪点", "胶片质感"],
-         ["锐利数码", "sharp digital", "电商质感", "锐利电商"],
-         "品质冲突！胶片有机颗粒与锐利数码质感互斥——电商禁胶片，影片禁数码锐"),
-        (["水墨", "ink wash", "宣纸", "写意", "水墨画"],
-         ["ue5", "unreal engine", "光追", "ray tracing", "写实渲染"],
-         "风格冲突！水墨写意与UE5写实光追互斥，若要融合请用'3D渲染水墨质感'"),
-        (["cel-shad", "toon render", "卡通渲染", "三渲二", "cel shad",
-          "赛璐璐", "cel-shaded", "toon渲染"],
-         ["subsurface scattering", "sss透光", "皮肤毛孔", "visible pores",
-          "micro-imperfections", "微瑕疵", "写实皮肤", "realistic skin"],
-         "风格冲突！三渲二/Cel-Shade卡通渲染与写实PBR材质(SSS/毛孔/微瑕疵)互斥——"
-         "三渲二应使用动画化材质（硬边阴影+色块填充），不要叠加写实材质词"),
-        (["slow motion", "慢镜头", "慢动作"],
-         ["speed ramp", "变速"],
-         "速度冲突！Slow Motion 慢镜头与 Speed Ramp 变速不可在同一时间切片内同时使用——"
-         "请分时间切片使用，慢镜和变速不在同段重叠"),
-    ]
-
-    for group_a, group_b, desc in style_conflicts:
-        has_a = any(w in text_lower for w in group_a)
-        has_b = any(w in text_lower for w in group_b)
-        if has_a and has_b:
-            results.append({
-                "level": "error",
-                "code": "STYLE_CONFLICT",
-                "message": f"❌ {desc}。"
-            })
+    if audio_durations is not None:
+        for index, value in enumerate(audio_durations, 1):
+            if value <= 0 or value > 30:
+                results.append(finding(
+                    "error", "AUDIO_DURATION_OUT_OF_RANGE",
+                    f"Audio {index} duration is {value:g}s; each audio must be no longer than 30s.",
+                ))
+        if sum(audio_durations) > 30:
+            results.append(finding(
+                "error", "AUDIO_TOTAL_DURATION_EXCEEDED",
+                f"Aggregate audio duration is {sum(audio_durations):g}s; maximum is 30s.",
+            ))
 
     if not results:
-        results.append({
-            "level": "pass",
-            "code": "NO_CONFLICT",
-            "message": "未检测到逻辑/光学/风格冲突。"
-        })
+        results.append(finding(
+            "pass", "ASSET_LIMITS_OK",
+            f"Asset limits pass: {counts['image']} images, {counts['video']} videos, {counts['audio']} audios. No undocumented mixed-total cap applied.",
+            **counts,
+        ))
     return results
 
 
-def check_ambiguous_terms(text, lang="cn"):
-    """检测可能触发 Seedance 审核的裸英文运镜术语（可被误判为人名/品牌名）"""
+def check_time_slices(
+    text: str,
+    duration: float | None = None,
+    mode: str = "standard",
+    fps: float = 24.0,
+) -> list[dict]:
+    slices = parse_time_slices(text, fps=fps)
     results = []
-    # 高风险裸词：可作为人名/品牌名
-    high_risk = {
-        "Dolly": "推轨推进 / dolly tracking shot",
-        "Aerial": "航拍 / aerial drone shot",
-        "Crane": "摇臂升降 / crane shot",
-        "Pan": "水平摇摄 / pan shot",
-        "Arc": "弧形环绕 / arc shot",
-        "Dutch": "荷兰角倾斜 / dutch angle shot",
-        "Steadicam": "斯坦尼康稳定 / steadicam stabilized shot",
-    }
-    # 安全后缀：如果裸词后面紧跟这些词，说明上下文明确，风险降低
-    safe_suffixes = [
-        "shot", "camera", "movement", "drone", "tracking",
-        "angle", "stabilized", "jib", "in", "out", "up", "down",
-        "left", "right", "zoom", "back", "forward"
-    ]
+    timeline_required = mode == "ultra_long" or (
+        mode in {"standard", "extension", "creative_transfer", "storyboard"}
+        and duration is not None and duration > 10
+    )
+    if not slices:
+        if timeline_required:
+            return [finding(
+                "error", "TIMELINE_REQUIRED",
+                f"{mode} at {duration:g}s requires timestamped beats for temporal control.",
+            )]
+        return [finding(
+            "pass" if duration is not None and duration <= 10 else "warning",
+            "TIMELINE_OPTIONAL" if duration is not None and duration <= 10 else "TIMELINE_MISSING",
+            "No timeline found; this is acceptable for one simple action up to 10s." if duration is not None and duration <= 10
+            else "No timeline found; add an effective edit window or timestamped beats if timing matters.",
+        )]
 
+    for item in slices:
+        if item["end"] <= item["start"]:
+            results.append(finding(
+                "error", "TIMELINE_REVERSED",
+                f"Timestamp '{item['raw']}' ends before or at its start.",
+            ))
+    for previous, current in zip(slices, slices[1:]):
+        if current["start"] < previous["end"] - 0.01:
+            results.append(finding(
+                "error", "TIMELINE_OVERLAP",
+                f"'{previous['raw']}' overlaps '{current['raw']}'.",
+            ))
+        elif current["start"] > previous["end"] + 0.5:
+            results.append(finding(
+                "warning", "TIMELINE_GAP",
+                f"Gap from {previous['end']:g}s to {current['start']:g}s is not directed.",
+            ))
+
+    if mode not in EDIT_MODES and mode not in {"viewpoint", "bgm", "seamless_transition"}:
+        if slices[0]["start"] > 0.1:
+            results.append(finding(
+                "warning", "TIMELINE_NOT_FROM_ZERO",
+                f"Timeline starts at {slices[0]['start']:g}s instead of 0s.",
+            ))
+        if duration is not None and abs(slices[-1]["end"] - duration) > 0.5:
+            results.append(finding(
+                "warning", "TIMELINE_DURATION_MISMATCH",
+                f"Timeline ends at {slices[-1]['end']:g}s but target duration is {duration:g}s.",
+            ))
+
+    if not results:
+        results.append(finding(
+            "pass", "TIMELINE_OK",
+            f"Parsed {len(slices)} ordered time ranges using seconds, clock time, or {fps:g}fps frames.",
+        ))
+    return results
+
+
+def check_camera_language(text: str, mode: str = "standard") -> list[dict]:
+    if mode in EDIT_MODES or mode in {"bgm", "seamless_transition"}:
+        return [finding("info", "CAMERA_NOT_REQUIRED", "This mode does not require adding camera direction.")]
+    terms = [
+        "特写", "近景", "中景", "远景", "全景", "跟拍", "推近", "拉远", "摇摄", "环绕",
+        "航拍", "俯拍", "仰拍", "手持", "固定机位", "一镜到底", "浅景深", "镜头",
+        "close-up", "wide shot", "tracking shot", "dolly", "pan shot", "tilt shot", "orbit",
+        "aerial shot", "pov", "handheld", "locked-off", "camera", "lens",
+    ]
+    found = [term for term in terms if term in text.lower()]
+    if not found:
+        return [finding(
+            "warning", "CAMERA_LANGUAGE_MISSING",
+            "No concrete shot size, viewpoint, or camera behavior found; add one when it serves the story.",
+        )]
+    return [finding("pass", "CAMERA_LANGUAGE_OK", f"Camera direction found: {', '.join(found[:5])}.")]
+
+
+def check_cgi_words(text: str) -> list[dict]:
+    vague = [
+        word for word in ("超清晰", "杰作", "高画质", "超高画质", "完美画质", "masterpiece", "best quality", "ultra hd")
+        if word.lower() in text.lower()
+    ]
+    if vague:
+        return [finding(
+            "warning", "VAGUE_QUALITY_LANGUAGE",
+            f"Vague quality language found ({', '.join(vague)}); prefer concrete light, material, texture, and motion behavior.",
+        )]
+    return [finding("pass", "QUALITY_LANGUAGE_OK", "No vague quality-booster language found.")]
+
+
+def _segments_for_conflict(text: str, fps: float = 24.0) -> list[str]:
+    ranges = list(re.finditer(
+        r"(?:\d{1,2}:\d{2}(?:\.\d+)?|\d+(?:\.\d+)?)\s*[-–—~至]\s*"
+        r"(?:\d{1,2}:\d{2}(?:\.\d+)?|\d+(?:\.\d+)?)\s*(?:秒|s)?",
+        text, re.IGNORECASE,
+    ))
+    if not ranges:
+        return [text]
+    return [text[m.end(): ranges[i + 1].start() if i + 1 < len(ranges) else len(text)] for i, m in enumerate(ranges)]
+
+
+def check_conflict(text: str) -> list[dict]:
+    results = []
+    pairs = [
+        (("快速", "高速", "fast", "rapid"), ("缓慢", "慢动作", "slow motion"), "simultaneous fast and slow motion"),
+        (("推进", "推近", "push in", "dolly in"), ("拉远", "pull out", "dolly out"), "simultaneous push-in and pull-out"),
+    ]
+    for segment in _segments_for_conflict(text):
+        lower = segment.lower()
+        for left, right, description in pairs:
+            if any(term in lower for term in left) and any(term in lower for term in right):
+                results.append(finding(
+                    "warning", "MOTION_CONFLICT",
+                    f"A single time range contains {description}; clarify sequence or intent.",
+                ))
+
+    lower = text.lower()
+    if any(term in lower for term in ("14mm", "超广角", "ultra-wide")) and any(
+        term in lower for term in ("强烈背景虚化", "creamy bokeh", "极浅景深")
+    ):
+        results.append(finding(
+            "warning", "OPTICAL_TRADEOFF",
+            "Extreme wide-angle optics and extremely shallow background blur are in tension; clarify whether this is a stylized effect.",
+        ))
+    if ("无声音" in text or "total silence" in lower) and any(
+        term in lower for term in ("保留对白", "保留环境音", "keep dialogue", "keep ambience")
+    ):
+        results.append(finding(
+            "error", "AUDIO_CONTRADICTION",
+            "The prompt requests total silence while also preserving audio stems.",
+        ))
+    if not results:
+        results.append(finding("pass", "NO_CONFLICT", "No direct timing, optical, or audio contradiction detected."))
+    return results
+
+
+def check_ambiguous_terms(text: str, lang: str | None = None) -> list[dict]:
+    risky = {
+        "Dolly": "dolly tracking shot", "Aerial": "aerial drone shot", "Crane": "crane shot",
+        "Pan": "pan shot", "Arc": "arc shot", "Dutch": "dutch angle shot",
+    }
     found = []
-    for bare_word, safe_alt in high_risk.items():
-        # 用正则查找裸词（前后非英文字母，不区分大小写）
-        pattern = r'(?<![a-zA-Z])' + re.escape(bare_word) + r'(?![a-zA-Z])'
-        matches = list(re.finditer(pattern, text, re.IGNORECASE))
-        for m in matches:
-            # 检查后面是否有安全后缀
-            after = text[m.end():m.end()+20].strip().lower()
-            has_safe_suffix = any(after.startswith(s) for s in safe_suffixes)
-            if not has_safe_suffix:
-                found.append((bare_word, safe_alt))
-                break  # 每个裸词只报一次
-
+    for word, alternative in risky.items():
+        for match in re.finditer(rf"(?<![A-Za-z]){word}(?![A-Za-z])", text, re.IGNORECASE):
+            tail = text[match.end():match.end() + 18].strip().lower()
+            if not any(tail.startswith(suffix) for suffix in ("shot", "camera", "tracking", "in", "out", "left", "right", "angle", "drone")):
+                found.append(f"{word}→{alternative}")
+                break
     if found:
-        if lang == "cn":
-            word_list = ", ".join(f"`{w}`" for w, _ in found)
-            alt_list = "; ".join(f"{w}→{a.split(' / ')[0]}" for w, a in found)
-            results.append({
-                "level": "warning",
-                "code": "AMBIGUOUS_CAMERA_TERM",
-                "message": f"检测到裸英文运镜词 {word_list}，"
-                           f"Seedance 可能误判为人名而触发违规。"
-                           f"建议改用中文：{alt_list}"
-            })
-        else:
-            word_list = ", ".join(f"`{w}`" for w, _ in found)
-            alt_list = "; ".join(f"{w}→{a.split(' / ')[1]}" for w, a in found)
-            results.append({
-                "level": "warning",
-                "code": "AMBIGUOUS_CAMERA_TERM",
-                "message": f"Bare camera terms {word_list} detected — "
-                           f"Seedance may flag these as person names. "
-                           f"Use full phrases: {alt_list}"
-            })
-    else:
-        results.append({
-            "level": "pass",
-            "code": "NO_AMBIGUOUS_TERMS",
-            "message": "未检测到审核风险裸英文运镜词。"
-        })
+        return [finding(
+            "warning", "AMBIGUOUS_CAMERA_TERM",
+            "Bare English camera terms may be ambiguous; use full phrases: " + "; ".join(found),
+        )]
+    return [finding("pass", "NO_AMBIGUOUS_CAMERA_TERMS", "No bare ambiguous English camera term found.")]
+
+
+def _contains(text: str, terms: tuple[str, ...] | list[str]) -> bool:
+    lower = text.lower()
+    return any(term.lower() in lower for term in terms)
+
+
+def check_mode_contract(text: str, mode: str) -> list[dict]:
+    results = []
+
+    def require(condition: bool, code: str, message: str, level: str = "error"):
+        if not condition:
+            results.append(finding(level, code, message))
+
+    video_tokens = _asset_inventory(text)["video"]
+    image_tokens = _asset_inventory(text)["image"]
+
+    if mode == "ultra_long":
+        require(_contains(text, ("bible", "连续性", "continuity")), "LONGFORM_BIBLE_MISSING", "Ultra-long prompts need a continuity/character bible.")
+        require(_contains(text, ("故事概述", "story overview", "开端", "第一幕", "act 1")), "LONGFORM_STORY_MISSING", "Ultra-long prompts need a story overview or act structure.")
+        require(_contains(text, ("结尾", "收束", "resolution", "ending", "尾声")), "LONGFORM_ENDING_MISSING", "Ultra-long prompts need an explicit ending or resolution.")
+    elif mode == "extension":
+        require(bool(video_tokens), "EXTENSION_SOURCE_MISSING", "Extension requires a source-video token such as @视频1.")
+        require(_contains(text, ("向后", "向前", "forward", "backward", "extend after", "extend before")), "EXTENSION_DIRECTION_MISSING", "State forward/backward extension direction.")
+        require(_contains(text, ("延长", "新增", "added", "extend")), "EXTENSION_ADDED_SCOPE_MISSING", "State that the duration applies to the added portion.")
+        require(_contains(text, ("交接状态", "首帧", "尾帧", "boundary state", "last frame", "first frame")), "EXTENSION_BOUNDARY_MISSING", "Describe the source boundary state.", "warning")
+        require(_contains(text, ("原视频保持不变", "原视频不变", "source unchanged", "original unchanged")), "EXTENSION_PRESERVE_MISSING", "State that the original source portion remains unchanged.", "warning")
+    elif mode in {"smart_edit", "advanced_edit"}:
+        require(bool(video_tokens), "EDIT_SOURCE_MISSING", "Video editing requires a source-video token.")
+        require(_contains(text, ("替换", "移除", "删除", "添加", "改为", "修改", "→", "replace", "remove", "add", "change", "recolor")), "EDIT_CHANGE_MISSING", "State the A→B change or removal/addition.")
+        require(_contains(text, ("保持", "保留", "不变", "preserve", "keep", "unchanged")), "EDIT_PRESERVE_LIST_MISSING", "List the content that must remain unchanged.")
+        require(bool(parse_time_slices(text)) or _contains(text, ("全片", "throughout", "entire video", "从第", "起")), "EDIT_TIME_SCOPE_MISSING", "State the effective edit time or 'entire video'.", "warning")
+        if mode == "advanced_edit":
+            require(_contains(text, ("红框", "箭头", "地标", "红线", "框内", "左侧", "右侧", "box", "arrow", "landmark", "line")), "ANNOTATION_LOCATOR_MISSING", "Advanced editing needs the annotation and intended side/region.")
+    elif mode == "viewpoint":
+        require(bool(video_tokens), "VIEWPOINT_SOURCE_MISSING", "Viewpoint modification requires a source-video token.")
+        require(_contains(text, ("机位", "视角", "pov", "viewpoint", "angle", "camera")), "VIEWPOINT_TARGET_MISSING", "Specify the target viewpoint, height, angle, or camera path.")
+        require(_contains(text, ("空间", "布局", "比例", "几何", "geometry", "layout", "scale")), "VIEWPOINT_GEOMETRY_MISSING", "State which spatial geometry must remain coherent.", "warning")
+    elif mode == "bgm":
+        require(bool(video_tokens), "BGM_SOURCE_MISSING", "BGM separation requires a source-video token.")
+        require(_contains(text, ("移除背景音乐", "移除bgm", "remove background music", "remove bgm")), "BGM_REMOVAL_MISSING", "Explicitly request removal of BGM/background music.")
+        require(_contains(text, ("保留对白", "保留人声", "保留环境音", "keep dialogue", "keep speech", "keep ambience")), "BGM_STEMS_MISSING", "State which speech, ambience, or foley stems remain.")
+        require(_contains(text, ("画面", "visual", "video")) and _contains(text, ("不变", "保持", "unchanged", "preserve")), "BGM_VISUAL_PRESERVE_MISSING", "State that requested visual content remains unchanged.")
+    elif mode == "creative_transfer":
+        require(bool(video_tokens), "TRANSFER_SOURCE_MISSING", "Creative transfer needs a source-video reference.")
+        require(_contains(text, ("运镜", "节奏", "情绪", "机制", "轨迹", "创意", "camera", "rhythm", "emotion", "mechanism", "form")), "TRANSFER_ATTRIBUTE_MISSING", "Name the abstract form to transfer.")
+        require(_contains(text, ("不要迁移", "不参考", "exclude", "do not transfer", "不带入")), "TRANSFER_EXCLUSION_MISSING", "Exclude unwanted source identity, scene, brand, text, or audio.", "warning")
+    elif mode == "green_screen":
+        require(bool(video_tokens), "GREEN_FOREGROUND_MISSING", "Green-screen editing needs a foreground video.")
+        require(bool(image_tokens) or len(video_tokens) >= 2, "GREEN_BACKGROUND_MISSING", "Bind an image or second video as the background.")
+        require(_contains(text, ("绿幕", "绿色背景", "green screen", "green spill", "绿色溢色")), "GREEN_KEYING_MISSING", "Request green-background and spill removal.")
+        require(_contains(text, ("透视", "光线", "接触阴影", "perspective", "lighting", "contact shadow")), "GREEN_INTEGRATION_MISSING", "Match perspective, lighting, and contact shadow.", "warning")
+    elif mode in {"rough_white_model", "fine_white_model"}:
+        require(bool(video_tokens), "WHITE_MODEL_SOURCE_MISSING", "White-model rendering needs a source video.")
+        require(_contains(text, ("白模", "blockout", "previs", "proxy")), "WHITE_MODEL_TYPE_MISSING", "Identify the source as a white model/blockout/previs.")
+        require(_contains(text, ("映射", "对应", "map", "render")), "WHITE_MODEL_MAPPING_MISSING", "Map proxies to final characters, props, or materials.")
+        require(_contains(text, ("去除", "不要保留", "remove", "轨迹线", "相机锥体", "helper", "debug")), "WHITE_MODEL_HELPERS_MISSING", "Remove gray materials and production helper geometry.", "warning")
+    elif mode == "seamless_transition":
+        require(len(video_tokens) >= 2, "TRANSITION_TWO_SOURCES_REQUIRED", "Seamless transition requires two source-video tokens.")
+        require(_contains(text, ("不修改", "保持原视频", "unchanged", "do not modify")), "TRANSITION_SOURCE_PRESERVE_MISSING", "State that both source clips remain unchanged.")
+        require(_contains(text, ("尾帧", "首帧", "锚点", "遮挡", "match", "anchor", "last frame", "first frame")), "TRANSITION_BRIDGE_MISSING", "Define the A→bridge→B anchor or mechanism.")
+    elif mode == "storyboard":
+        require(bool(image_tokens), "STORYBOARD_IMAGE_MISSING", "Multi-panel storyboard generation needs an image token.")
+        require(_contains(text, ("顺序", "左上", "右上", "panel", "reading order", "镜头1")), "STORYBOARD_ORDER_MISSING", "Declare panel reading order and shot mapping.")
+        require(_contains(text, ("保持", "连续", "一致", "continuity", "consistent")), "STORYBOARD_CONTINUITY_MISSING", "State identity and scene continuity across panels.", "warning")
+
+    if not results:
+        results.append(finding("pass", "MODE_CONTRACT_OK", f"Required {mode} prompt contract fields are present."))
     return results
 
 
-def validate_multi_segment(segments, lang=None):
-    """校验多段分镜提示词：逐段独立校验 + 跨段一致性检查。
-    segments: list of str, 每段提示词文本。
-    """
+def validate_prompt(
+    text: str,
+    lang: str | None = None,
+    mode: str = "standard",
+    duration: float | None = None,
+    source_duration: float | None = None,
+    resolution: str | None = None,
+    image_count: int | None = None,
+    video_durations: list[float] | None = None,
+    audio_durations: list[float] | None = None,
+    fps: float = 24.0,
+) -> dict:
+    """Run Seedance 2.5 hard-limit, timeline, contract, and conflict checks."""
+    if not text or not text.strip():
+        result = finding("error", "PROMPT_EMPTY", "Prompt is empty.")
+        return {
+            "version": "2.5", "mode": normalize_mode(mode), "language": lang or "unknown",
+            "duration": duration, "passed": False,
+            "summary": {"errors": 1, "warnings": 0, "passed": 0, "infos": 0},
+            "results": [result],
+        }
+
+    normalized_mode = normalize_mode(mode)
+    language = lang or detect_language(text)
+    declared = _detect_declared_duration(text)
+    effective_duration = duration if duration is not None else declared
+
+    results = []
+    results.extend(check_length(text, language))
+    results.extend(check_duration(normalized_mode, effective_duration, source_duration))
+    results.extend(check_resolution(resolution))
+    results.extend(check_asset_refs(text, image_count, video_durations, audio_durations))
+    results.extend(check_time_slices(text, effective_duration, normalized_mode, fps))
+    results.extend(check_mode_contract(text, normalized_mode))
+    results.extend(check_camera_language(text, normalized_mode))
+    results.extend(check_cgi_words(text))
+    results.extend(check_conflict(text))
+    results.extend(check_ambiguous_terms(text, language))
+
+    summary = {
+        "errors": sum(item["level"] == "error" for item in results),
+        "warnings": sum(item["level"] == "warning" for item in results),
+        "passed": sum(item["level"] == "pass" for item in results),
+        "infos": sum(item["level"] == "info" for item in results),
+    }
+    return {
+        "version": "2.5", "mode": normalized_mode, "language": language,
+        "duration": effective_duration, "source_duration": source_duration,
+        "resolution": resolution, "passed": summary["errors"] == 0,
+        "summary": summary, "results": results,
+    }
+
+
+def validate_multi_segment(segments: list[str], lang: str | None = None) -> dict:
+    """Validate deliberately segmented projects, normally for >180s or episodic work."""
     if not segments:
-        return {"passed": False, "error": "无提示词段落"}
-
-    if lang is None:
-        lang = detect_language(segments[0])
-
-    per_segment = []
-    for i, seg in enumerate(segments):
-        result = validate_prompt(seg, lang=lang)
-        result["segment"] = i + 1
-        per_segment.append(result)
-
-    # === 跨段一致性检查 ===
-    cross_results = []
-
-    # 1. 风格总纲一致：比较每段的第一行（去除时长前缀后）
-    first_lines = []
-    for seg in segments:
-        line = seg.strip().split('\n')[0] if seg.strip() else ""
-        first_lines.append(line)
-
-    if len(set(first_lines)) > 1:
-        cross_results.append({
-            "level": "warning",
-            "code": "INCONSISTENT_STYLE_ANCHOR",
-            "message": "跨段一致性警告：各段首行风格总纲不一致。"
-                       "多段分镜应使用相同的风格/色调总纲句以确保视觉连贯。"
-        })
-
-    # 2. 光影结构一致：检测包含「光影」或「Lighting」的行
-    def extract_lighting(text):
-        for line in text.strip().split('\n'):
-            if '光影' in line or 'Lighting' in line or 'lighting' in line:
-                return line.strip()
-        return ""
-
-    lighting_lines = [extract_lighting(seg) for seg in segments]
-    non_empty = [l for l in lighting_lines if l]
-    if non_empty and len(set(non_empty)) > 1:
-        cross_results.append({
-            "level": "warning",
-            "code": "INCONSISTENT_LIGHTING",
-            "message": "跨段一致性警告：各段光影描述不一致。"
-                       "多段分镜应保持统一的光影三层结构以确保拼接无缝。"
-        })
-
-    # 3. 禁止项一致：检测包含「禁止」或「Negative」的行
-    def extract_negative(text):
-        for line in text.strip().split('\n'):
-            if '禁止' in line or 'Negative' in line or 'negative' in line:
-                return line.strip()
-        return ""
-
-    neg_lines = [extract_negative(seg) for seg in segments]
-    non_empty_neg = [n for n in neg_lines if n]
-    if non_empty_neg and len(set(non_empty_neg)) > 1:
-        cross_results.append({
-            "level": "warning",
-            "code": "INCONSISTENT_NEGATIVE",
-            "message": "跨段一致性警告：各段禁止项声明不一致。"
-                       "多段分镜应使用统一的禁止项。"
-        })
-
-    if not cross_results:
-        cross_results.append({
-            "level": "pass",
-            "code": "CROSS_SEGMENT_OK",
-            "message": f"跨段一致性检查通过：{len(segments)} 段风格/光影/禁止项一致。"
-        })
-
-    all_passed = all(r["passed"] for r in per_segment)
-    cross_errors = [r for r in cross_results if r["level"] == "error"]
-    overall_passed = all_passed and len(cross_errors) == 0
-
+        return {"passed": False, "error": "No prompt segments supplied."}
+    segment_results = [validate_prompt(segment, lang=lang, mode="standard") for segment in segments]
+    cross = []
+    for label, terms, code in (
+        ("continuity", ("连续性", "continuity", "bible"), "CROSS_CONTINUITY_MISSING"),
+        ("handoff", ("交接", "尾帧", "首帧", "handoff", "boundary"), "CROSS_HANDOFF_MISSING"),
+    ):
+        if not all(_contains(segment, terms) for segment in segments):
+            cross.append(finding(
+                "warning", code,
+                f"Not every deliberate segment declares its {label} state.",
+            ))
+    if not cross:
+        cross.append(finding("pass", "CROSS_SEGMENT_OK", "Continuity and handoff language appears in every segment."))
     return {
-        "language": lang,
-        "segment_count": len(segments),
-        "passed": overall_passed,
-        "per_segment": per_segment,
-        "cross_segment": cross_results
+        "version": "2.5", "segment_count": len(segments),
+        "passed": all(item["passed"] for item in segment_results) and not any(item["level"] == "error" for item in cross),
+        "per_segment": segment_results, "cross_segment": cross,
     }
 
 
-def validate_prompt(text, lang=None):
-    """执行完整校验流程"""
-    if lang is None:
-        lang = detect_language(text)
-
-    all_results = []
-    all_results.extend(check_length(text, lang))
-    all_results.extend(check_time_slices(text))
-    all_results.extend(check_camera_language(text))
-    all_results.extend(check_cgi_words(text))
-    all_results.extend(check_asset_refs(text))
-    all_results.extend(check_conflict(text))
-    all_results.extend(check_ambiguous_terms(text, lang))
-
-    errors = [r for r in all_results if r["level"] == "error"]
-    warnings = [r for r in all_results if r["level"] == "warning"]
-    passed = [r for r in all_results if r["level"] == "pass"]
-    infos = [r for r in all_results if r["level"] == "info"]
-
-    return {
-        "language": lang,
-        "passed": len(errors) == 0,
-        "summary": {
-            "errors": len(errors),
-            "warnings": len(warnings),
-            "passed": len(passed),
-            "infos": len(infos)
-        },
-        "results": all_results
-    }
-
-
-def format_report(validation):
-    """格式化输出校验报告"""
-    lines = []
-    lines.append("")
-    lines.append("=" * 50)
-    lines.append("  Seedance 2.0 提示词审查报告")
-    lines.append("=" * 50)
-    lang = validation.get("language", "cn")
-    lang_display = "中文 (Chinese)" if lang == "cn" else "English"
-    lines.append(f"  语言: {lang_display}")
-    lines.append("")
-
-    icon_map = {
-        "error": "❌",
-        "warning": "⚠️ ",
-        "pass": "✅",
-        "info": "ℹ️ "
-    }
-
-    for r in validation["results"]:
-        icon = icon_map.get(r["level"], "  ")
-        lines.append(f"  {icon} [{r['code']}] {r['message']}")
-
-    lines.append("")
-    lines.append("-" * 50)
-    s = validation["summary"]
-    if validation["passed"]:
-        lines.append(f"  结论: 审查通过 ✅ "
-                     f"({s['passed']}项通过, {s['warnings']}项警告, {s['infos']}项提示)")
-        lines.append("  可向用户交付最终提示词。")
-    else:
-        lines.append(f"  结论: 审查未通过 ❌ "
-                     f"({s['errors']}项错误, {s['warnings']}项警告)")
-        lines.append("  请根据上述错误重新精简并重写提示词，然后再次校验！")
-    lines.append("")
-
+def format_report(validation: dict) -> str:
+    icons = {"error": "❌", "warning": "⚠️", "pass": "✅", "info": "ℹ️"}
+    lines = [
+        "", "=" * 58, "Seedance 2.5 prompt validation report", "=" * 58,
+        f"Mode: {validation.get('mode', 'n/a')} | Language: {validation.get('language', 'n/a')} | Duration: {validation.get('duration', 'n/a')}", "",
+    ]
+    for item in validation.get("results", []):
+        lines.append(f"{icons.get(item['level'], '•')} [{item['code']}] {item['message']}")
+    summary = validation.get("summary", {})
+    lines.extend([
+        "", "-" * 58,
+        ("PASS" if validation.get("passed") else "FAIL")
+        + f" — {summary.get('errors', 0)} errors, {summary.get('warnings', 0)} warnings",
+    ])
     return "\n".join(lines)
 
+
+def _float_list(value: str | None) -> list[float] | None:
+    if value is None:
+        return None
+    if not value.strip():
+        return []
+    return [float(part.strip()) for part in value.split(",")]
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Validate a Seedance 2.5 shot-design prompt.")
+    source = parser.add_mutually_exclusive_group()
+    source.add_argument("--prompt", help="Prompt text.")
+    source.add_argument("--prompt-file", type=Path, help="UTF-8 prompt file.")
+    parser.add_argument("--mode", default="standard", help="Seedance route/mode.")
+    parser.add_argument("--duration", type=float, help="Output duration; for extension, added duration.")
+    parser.add_argument("--source-duration", type=float, help="Source-video duration in seconds.")
+    parser.add_argument("--resolution", help="Requested output resolution (480p or 720p).")
+    parser.add_argument("--image-count", type=int, help="Uploaded image count if not inferable from tokens.")
+    parser.add_argument("--video-durations", help="Comma-separated referenced-video durations.")
+    parser.add_argument("--audio-durations", help="Comma-separated referenced-audio durations.")
+    parser.add_argument("--fps", type=float, default=24.0, help="FPS for frame anchors; default 24.")
+    parser.add_argument("--lang", help="Override detected language code.")
+    parser.add_argument("--json", action="store_true", help="Print JSON instead of a human report.")
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = build_parser()
+    args = parser.parse_args(argv)
+    if args.prompt_file:
+        text = args.prompt_file.read_text(encoding="utf-8")
+    elif args.prompt is not None:
+        text = args.prompt
+    elif not sys.stdin.isatty():
+        text = sys.stdin.read()
+    else:
+        parser.error("provide --prompt, --prompt-file, or pipe prompt text on stdin")
+
+    try:
+        result = validate_prompt(
+            text, lang=args.lang, mode=args.mode, duration=args.duration,
+            source_duration=args.source_duration, resolution=args.resolution,
+            image_count=args.image_count,
+            video_durations=_float_list(args.video_durations),
+            audio_durations=_float_list(args.audio_durations), fps=args.fps,
+        )
+    except (ValueError, OSError) as exc:
+        parser.error(str(exc))
+    print(json.dumps(result, ensure_ascii=False, indent=2) if args.json else format_report(result))
+    return 0 if result["passed"] else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
