@@ -77,6 +77,27 @@ Keep each person's face, hair, costume, body scale, props, screen position, and 
 
 Video/audio subject counts of 1–5 are the most stable; 6–10 may reduce stability. Image subjects of 1–8 are most stable; 9–12 may reduce stability. These are warnings, not platform rejection limits.
 
+### Identity anchoring for multi-shot projects
+
+When a character must remain recognizable across three or more separate shots or generations, add identity anchors beyond the standard role ledger.
+
+**Unique physical markers:** Assign each character 2–3 permanently visible distinguishing details that the model can latch onto across different poses, lighting, and angles. These should be specific enough to survive generation variance.
+
+```text
+林澈的跨镜头锚点：左眉浅疤（始终可见）、右手无名指银色戒指、深蓝旧夹克左胸口袋别一支钢笔。
+米娅的跨镜头锚点：红色丝巾系在左腕、右耳单颗珍珠耳坠、黑色Moleskine笔记本始终在右手或右侧口袋。
+```
+
+**Multi-angle reference images:** For projects with five or more shots, provide reference images from multiple viewpoints (front, three-quarter, profile) rather than a single face shot. This helps the model maintain identity when the character turns.
+
+**Continuity bible integration:** List the identity anchors as invariants in the continuity bible from `long-form-storytelling.md`. They must not change unless the script deliberately removes or transforms them.
+
+```text
+【不变量 — 角色锚点】
+林澈的左眉浅疤、银戒指和蓝夹克口袋钢笔在所有镜头中保持可见。
+米娅的红丝巾、珍珠耳坠和黑色笔记本在所有镜头中保持可见。
+```
+
 ## Manage dense image sets
 
 The engine may accept up to 30 images, but uploading more images is not automatically better.

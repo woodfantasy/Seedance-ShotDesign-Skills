@@ -202,3 +202,65 @@ X-N秒：[转场触发与后续渲染]。
 ...
 全局保持[人物、服装、比例、场景地理、光照和风格]一致；不新增无关角色或道具。
 ```
+
+## Keyframe-first two-stage generation
+
+Use this contract when a multi-shot project requires precise visual consistency across shots and the user wants to lock composition, lighting, and identity before injecting motion. The workflow produces two prompts per shot: a T2I keyframe prompt and an I2V motion prompt.
+
+> When to use: long-form narratives with many shots, multi-character scenes requiring cross-shot consistency, or any case where lighting and composition must remain stable while camera and action vary. Not needed for simple single-shot requests.
+
+### Stage 1: T2I keyframe prompt (hero frame)
+
+Lock everything the camera will see before anything moves. The output is a still image that becomes the `@图片` anchor for Stage 2.
+
+```text
+【关键帧目标】
+镜头[编号]的定帧，用于锁定构图、光影和角色身份。
+
+【角色身份】
+[角色名]：[面孔、发型、体型、服装、唯一辨识标记（如左眉浅疤/银色戒指/红色围巾）]。
+[角色名]：...
+
+【场景与构图】
+[景别]，[角度]，[焦段]，[人物位置/朝向/姿态]，[前景/背景/层次关系]。
+
+【光影与材质】
+[光源方向、色温、软硬]，[大气效果]，[材质锚定词]，[胶片/渲染引擎]。
+[将全部光影细节集中在此处，不放入 Stage 2。]
+
+【风格基调】
+[品质锚定]，[色调公式]，[有机瑕疵]。
+
+【禁止】
+不要出现运动模糊、动态姿态、或暗示时间流逝的元素。画面应是可信的单帧静止画。
+```
+
+### Stage 2: I2V motion prompt (motion layer)
+
+Take the approved keyframe as `@图片1` (first frame) and inject only motion, camera, and sound. Do not repeat lighting or composition parameters.
+
+```text
+【素材说明】
+@图片1为 Stage 1 生成的定帧，用作首帧；保持其中的人物身份、构图、光影和材质不变。
+
+【运动设计】
+0-X秒：[角色动作及因果链：准备→发力→接触→反应→恢复]。
+X-N秒：[后续动作，从上一段状态自然延续]。
+
+【运镜】
+[运镜动作 + 速度修饰 + 情绪修饰]。运镜指令仅控制摄影机轨迹，不改变光源位置或色调。
+
+【声音设计】
+[对白（角色/语言/原文/语气）]；[环境音/音效]；[BGM进入时间和情绪]。
+
+【连续性保护】
+保持@图片1中的[角色身份/服装/道具/场景地理/光照方向/色调]不变。
+不要引入@图片1中不存在的人物、道具或场景元素。
+光影不因运镜变化而改变基调——摄影机移动时光源保持空间固定。
+```
+
+### When to split vs. merge
+
+- Use the two-stage contract when the project involves three or more related shots that must maintain visual coherence.
+- If the user only needs a single quick shot, use the standard or complex 30-second contract instead.
+- The keyframe prompt and motion prompt must remain separate prompts submitted in sequence, not merged into one.

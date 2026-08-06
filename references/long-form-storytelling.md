@@ -141,6 +141,27 @@ Do not let the final interval become generic slow motion. Close at least two of 
 
 Specify the last stable image and audio tail. If the video is designed for a later extension, state a controlled open ending without pretending it is a full resolution.
 
+## Generation efficiency notes
+
+Different shot types have significantly different first-generation success rates. Being aware of this helps avoid wasting iterations on prompts that are structurally unlikely to succeed in a single pass.
+
+**General complexity hierarchy** (from most to least reliable):
+
+1. Static environment / landscape / product hero — highest reliability
+2. Single subject, simple action — high
+3. Single subject, complex action (dance, martial arts, detailed hand work) — medium
+4. Multi-subject, simple interaction (dialogue, walking together) — medium
+5. Multi-subject, complex interaction (fight, ensemble, crowd) — lower
+6. Extreme physics (explosions, fluid, destruction, fast vehicles) — lowest
+
+**Practical guidance for long-form projects:**
+
+- Before committing to a complex 180-second prompt, test a simplified version (fewer actions, shorter duration, one character) to validate that the baseline look, lighting, and identity hold.
+- Start with Tier 1–2 shots to establish the visual world, then progressively add complexity.
+- For Tier 5–6 shots, expect to iterate more. Consider using the keyframe-first two-stage contract or the white-model pipeline to constrain the generation space.
+- When overall acceptance rate drops, diagnose the pattern using [failure-diagnosis.md](../references/failure-diagnosis.md) rather than re-rolling blindly.
+
+
 ## Validate the result
 
 - Duration and aspect ratio are stated explicitly.

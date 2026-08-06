@@ -78,6 +78,8 @@ Read conditionally:
 | Face performance, restrained emotion, emotional arc | [micro-expressions.md](references/micro-expressions.md) |
 | Dialogue, SFX, voice, accent, multilingual speech | [audio-tags.md](references/audio-tags.md) |
 | Genre or vertical use case | [scenarios.md](references/scenarios.md) and [director-styles.md](references/director-styles.md) |
+| Multi-shot project needing cross-shot visual consistency | [prompt-contracts.md](references/prompt-contracts.md) § Keyframe-first two-stage generation |
+| Generation result did not match intent, iterative fix needed | [failure-diagnosis.md](references/failure-diagnosis.md) |
 
 Extract concrete phrases or structures from the selected references. Do not merely name a style library without applying it.
 
@@ -149,6 +151,8 @@ Otherwise apply the equivalent native checklist:
 - prompt language and dialogue language match the brief.
 
 Revise until no error remains. Warnings may remain only when they describe a conscious user tradeoff.
+
+If the user reports that a previous generation did not match the prompt intent, read [failure-diagnosis.md](references/failure-diagnosis.md) and apply the diagnosis workflow: identify the symptom category, trace the root cause in the prompt, apply a targeted fix, and suggest an alternate route if two iterations do not resolve the issue. Do not blindly re-roll the entire prompt.
 
 ## Mode-specific directing rules
 
